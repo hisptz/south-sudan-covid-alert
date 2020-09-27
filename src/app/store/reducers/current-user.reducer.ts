@@ -25,7 +25,7 @@ export const initialState: State = adapter.getInitialState({
   systemInfo: {},
 });
 
-export const reducer = createReducer(
+export const currentUserReducer = createReducer(
   initialState,
   on(CurrentUserActions.addCurrentUser, (state, action) => ({
     ...state,
@@ -54,6 +54,10 @@ export const reducer = createReducer(
   ),
   on(CurrentUserActions.clearCurrentUsers, (state) => adapter.removeAll(state))
 );
+
+export function reducer(state: State | undefined, action: Action) {
+  return currentUserReducer(state, action);
+}
 
 export const {
   selectIds,

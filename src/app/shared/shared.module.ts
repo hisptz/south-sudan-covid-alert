@@ -7,6 +7,7 @@ import { services } from './services';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
 import { materialModules } from './material-modules';
+import { modules } from './modules';
 
 @NgModule({
   imports: [
@@ -16,11 +17,12 @@ import { materialModules } from './material-modules';
     NgxPaginationModule,
     NgPipesModule,
     ...materialModules,
+    ...modules
   ],
   declarations: [
     ...sharedComponents
   ],
-  exports: [...sharedComponents, ...materialModules, NgPipesModule, NgxPaginationModule],
+  exports: [...sharedComponents, ...materialModules, NgPipesModule, NgxPaginationModule, ...modules],
   providers: [...services]
 })
 export class SharedModule { }

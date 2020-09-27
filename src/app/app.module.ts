@@ -14,6 +14,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { effects } from './store/effects';
 import { SharedModule } from './shared/shared.module';
 import { pagesComponent } from './pages';
+import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RouteSerializer } from './utils';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -24,18 +28,9 @@ import { pagesComponent } from './pages';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
     SharedModule,
-    NgxDhis2MenuModule,
-    NgxDhis2HttpClientModule.forRoot({
-      version: 1,
-      namespace: 'dhis',
-      models: {
-        organisationUnits: 'id,level',
-        organisationUnitLevels: 'id,level',
-        organisationUnitGroups: 'id',
-      },
-    }),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -43,10 +38,11 @@ import { pagesComponent } from './pages';
         strictActionImmutability: true,
       }
     }),
+    StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot(effects)
   ],
-  providers: [],
+  providers: [{ provide: RouterStateSerializer, useClass: RouteSerializer }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
