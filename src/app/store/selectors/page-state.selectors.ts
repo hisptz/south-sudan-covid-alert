@@ -7,7 +7,7 @@ export const getPageState = createSelector(
     (state: fromMainReducer.AppState) => state.pageState
 );
 
-export const getDownloadDashboardGraphStatus = createSelector(
+export const getEvents = createSelector(
     getPageState,
-    fromPageStateReducer.getDownloadDashboardGraphStatusState
+    fromPageStateReducer.getEventsState
 );

@@ -13,7 +13,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { effects } from './store/effects';
 import { SharedModule } from './shared/shared.module';
-import { HomeComponent } from './pages/home/home.component';
 import { pagesComponent } from './pages';
 
 @NgModule({

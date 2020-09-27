@@ -2,14 +2,23 @@ import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { PageState, NotificationState } from '../models';
 
-export const downloadDashboardGraphs = createAction(
-  '[PageState/API] Download Dashbord Graphs',
+export const loadEvents = createAction(
+  '[PageState/API] Load events'
+);
+
+export const loadNotification = createAction(
+  '[PageState/API] Load Notification',
+  props<{ payload: any }>()
+);
+
+export const showNotification = createAction(
+  '[PageState/API] Show notification',
   props<{ payload: boolean }>()
 );
 
-export const addPageState = createAction(
-  '[PageState/API] Add PageState',
-  props<{ pageState: PageState }>()
+export const addEvents = createAction(
+  '[PageState/API] Add Events',
+  props<{ payload: any }>()
 );
 
 export const upsertPageState = createAction(

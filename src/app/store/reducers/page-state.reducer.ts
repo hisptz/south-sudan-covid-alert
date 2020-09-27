@@ -9,7 +9,7 @@ export interface State extends EntityState<PageState> {
   // additional entities state properties
   notification: NotificationState;
   notificationStatus: boolean;
-  downloadGraphs: boolean;
+  events: any;
 }
 
 export const adapter: EntityAdapter<PageState> = createEntityAdapter<
@@ -20,13 +20,13 @@ export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   notification: { message: '', statusCode: 0 },
   notificationStatus: false,
-  downloadGraphs: false
+  events: {}
 });
 
 const pageStateReducer = createReducer(
   initialState,
-  on(PageStateActions.addPageState, (state, action) =>
-    adapter.addOne(action.pageState, state)
+  on(PageStateActions.addEvents, (state, action) =>
+    ({...state, events: action.payload })
   ),
   on(PageStateActions.upsertPageState, (state, action) =>
     adapter.upsertOne(action.pageState, state)
@@ -46,19 +46,12 @@ const pageStateReducer = createReducer(
   on(PageStateActions.deletePageState, (state, action) =>
     adapter.removeOne(action.id, state)
   ),
-  on(PageStateActions.updateNotification, (state, action) => ({
-    ...state,
-    notification: action.payload,
-    notificationStatus: true,
-  })),
-  on(PageStateActions.updateNotificationStatus, (state, action) => ({
-    ...state,
-    notificationStatus: action.payload,
-  })),
-  on(PageStateActions.downloadDashboardGraphs, (state, action) => ({
-    ...state,
-    downloadGraphs: action.payload
-  })),
+  on(PageStateActions.loadNotification,
+    (state, action) => ({...state, notification: action.payload, notificationStatus: true })
+  ),
+  on(PageStateActions.showNotification,
+    (state, action) => ({...state, notificationStatus: action.payload })
+  ),
   on(PageStateActions.clearPageStates, (state) => adapter.removeAll(state))
 );
 
@@ -73,4 +66,4 @@ export const {
   selectTotal,
 } = adapter.getSelectors();
 
-export const getDownloadDashboardGraphStatusState = (state: State) => state.downloadGraphs;
+export const getEventsState = (state: State) => state.events;

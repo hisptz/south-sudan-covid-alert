@@ -7,7 +7,6 @@ import { apiLink } from '../../../assets/configurations/apiLink';
 @Injectable()
 export class CurrentUserService {
   apiUrl = apiLink;
-  // apiUrl = APIURL;
 
   constructor(private httpClient: HttpClient) {}
 
