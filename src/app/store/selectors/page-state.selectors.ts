@@ -11,3 +11,8 @@ export const getEvents = createSelector(
     getPageState,
     fromPageStateReducer.getEventsState
 );
+
+export const getEventsLoading = createSelector(
+    getPageState,
+    fromPageStateReducer.getEventsLoadingState
+);

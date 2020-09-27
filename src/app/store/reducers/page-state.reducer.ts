@@ -11,6 +11,7 @@ export interface State extends EntityState<PageState> {
   notification: NotificationState;
   notificationStatus: boolean;
   events: any;
+  eventsLoading: boolean;
 }
 
 export const adapter: EntityAdapter<PageState> = createEntityAdapter<
@@ -21,13 +22,16 @@ export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   notification: { message: '', statusCode: 0 },
   notificationStatus: false,
-  events: {}
+  events: {},
+  eventsLoading: true
 });
 
 const pageStateReducer = createReducer(
   initialState,
   on(PageStateActions.addEvents, (state, action) =>
-    ({...state, events: fromHelpers.removeAnalyticsheaders(action.payload,
+    ({...state,
+      eventsLoading: false,
+      events: fromHelpers.removeAnalyticsheaders(action.payload,
       ['Event', 'Program stage', 'Geometry', 'Longitude', 'Latitude', 'Organisation unit code', 'Organisation unit'])
     })
   ),
@@ -70,3 +74,4 @@ export const {
 } = adapter.getSelectors();
 
 export const getEventsState = (state: State) => state.events;
+export const getEventsLoadingState = (state: State) => state.eventsLoading;

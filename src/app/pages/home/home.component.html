@@ -23,7 +23,7 @@
 
 
         <!-- Progressive Loader -->
-        <mat-progress-bar mode="indeterminate" class="ml-2"></mat-progress-bar>
+        <mat-progress-bar mode="indeterminate" class="ml-2" *ngIf="(eventsLoading$ | async)"></mat-progress-bar>
         <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
@@ -39,7 +39,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let row of ((eventsAnalytics$ | async).rows |
-                     filterBy: ['0'] : searchText |
+                     filterBy: ['0','1','2','3'] : searchText |
                      paginate: { itemsPerPage: itemsPerPage, currentPage: page});let i = index;trackBy: trackByFn;">
                   <td> {{ i + 10 * (page - 1) + 1 }} </td>
                   <td *ngFor="let item of row"> {{ item }} </td>
@@ -52,7 +52,7 @@
                 </tr>
               </tbody>
               <tbody class="w-100"
-                *ngIf="((eventsAnalytics$ | async).rows | filterBy: ['0', 1, 2] : searchText).length < 1 && (eventsAnalytics$ | async).rows.length > 0">
+                *ngIf="((eventsAnalytics$ | async).rows | filterBy: ['0','1','2','3'] : searchText).length < 1 && (eventsAnalytics$ | async).rows.length > 0">
                 <tr>
                   <td colspan="10">
                     <label class="text-muted text-center w-100 h3"> Session not found</label>
@@ -60,7 +60,7 @@
                 </tr>
               </tbody>
               <tfoot
-                *ngIf="((eventsAnalytics$ | async).rows | filterBy: ['0', 1, 2] : searchText).length > 0">
+                *ngIf="((eventsAnalytics$ | async).rows | filterBy: ['0','1','2','3'] : searchText).length > 0">
                 <tr>
                   <td [attr.colspan]="(eventsAnalytics$ | async).headers.length + 2">
                     <app-pagination 

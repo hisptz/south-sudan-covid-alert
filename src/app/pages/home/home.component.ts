@@ -15,12 +15,14 @@ import { FilterByPipe } from 'ngx-pipes';
 export class HomeComponent implements OnInit {
 
   eventsAnalytics$: Observable<any>;
+  eventsLoading$: Observable<any>;
   page = 1;
   itemsPerPage = 10;
   searchText = '';
 
   constructor(private store: Store<AppState>) {
     this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
+    this.eventsLoading$ = store.select(fromSelectors.getEventsLoading);
   }
 
   ngOnInit() {

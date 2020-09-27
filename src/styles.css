@@ -18,29 +18,6 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 
-/* Modify Scor-bar CSS
- - WebKit-based browsers (such as Chrome and Safari)
-*/
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-  display: none;
-}
-::-webkit-scrollbar-button {
-  background: #f1f1f1;
-  display: none;
-  /* background:#888; */
-}
-::-webkit-scrollbar-track-piece {
-  background: #f1f1f1;
-  display: none;
-  /* #f1f1f1 */
-}
-::-webkit-scrollbar-thumb {
-  background:#cccccc;
-  display: none;
-}
-/* Modify Scor-bar CSS */
 
 
 .icon-font-size {
