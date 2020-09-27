@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { CurrentUser } from '../states/current-user.model';
+import { CurrentUser } from '../models';
 
 export const loadCurrentUser = createAction(
   '[CurrentUser/API] Load CurrentUsers'
