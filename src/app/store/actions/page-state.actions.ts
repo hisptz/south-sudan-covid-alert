@@ -1,11 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
+import { PageState, NotificationState } from '../models';
 
-import { PageState } from './page-state.model';
-
-export const loadPageStates = createAction(
-  '[PageState/API] Load PageStates', 
-  props<{ pageStates: PageState[] }>()
+export const downloadDashboardGraphs = createAction(
+  '[PageState/API] Download Dashbord Graphs',
+  props<{ payload: boolean }>()
 );
 
 export const addPageState = createAction(
@@ -43,11 +42,13 @@ export const deletePageState = createAction(
   props<{ id: string }>()
 );
 
-export const deletePageStates = createAction(
-  '[PageState/API] Delete PageStates',
-  props<{ ids: string[] }>()
+export const updateNotification = createAction(
+  '[PageState/API] Update Notification',
+  props<{ payload: NotificationState }>()
 );
 
-export const clearPageStates = createAction(
-  '[PageState/API] Clear PageStates'
+export const updateNotificationStatus = createAction(
+  '[PageState/API] Update Notification Status',
+  props<{ payload: boolean }>()
 );
+export const clearPageStates = createAction('[PageState/API] Clear PageStates');

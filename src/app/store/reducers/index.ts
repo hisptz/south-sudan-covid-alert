@@ -5,19 +5,27 @@ import {
   createSelector,
   MetaReducer
 } from '@ngrx/store';
-import { environment } from '../../environments/environment';
-import * as fromPageState from '../page-state.reducer';
+import { environment } from '../../../environments/environment';
+import * as fromPageState from './page-state.reducer';
+import * as fromCurrentUser from './current-user.reducer';
+import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 
 
-export interface State {
+export interface AppState {
 
-  [fromPageState.pageStatesFeatureKey]: fromPageState.State;
+  pageState: fromPageState.State;
+  currentUser: fromCurrentUser.State;
+  router: RouterReducerState;
 }
 
-export const reducers: ActionReducerMap<State> = {
+export const reducers: ActionReducerMap<AppState> = {
 
-  [fromPageState.pageStatesFeatureKey]: fromPageState.reducer,
+  pageState: fromPageState.reducer,
+  currentUser: fromCurrentUser.reducer,
+  router: routerReducer,
 };
 
+export const getRootState = (state: AppState) => state;
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+
+export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];

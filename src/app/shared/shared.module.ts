@@ -4,12 +4,16 @@ import {RouterModule} from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { sharedComponents } from './components';
 import { services } from './services';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgPipesModule } from 'ngx-pipes';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    NgxPaginationModule,
+    NgPipesModule,
   ],
   declarations: [
     ...sharedComponents

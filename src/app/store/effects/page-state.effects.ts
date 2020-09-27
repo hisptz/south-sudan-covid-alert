@@ -6,8 +6,6 @@ import { Actions, createEffect } from '@ngrx/effects';
 @Injectable()
 export class PageStateEffects {
 
-
-
   constructor(private actions$: Actions) {}
 
 }

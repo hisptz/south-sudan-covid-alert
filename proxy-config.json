@@ -1,0 +1,15 @@
+{
+  "/api": {
+    "target": "https://southsudanhis.org/covid19southsudan",
+    "secure": "false",
+    "auth": "dashboard:Dhis@2020",
+    "changeOrigin": true
+  },
+  "/": {
+    "target": "https://southsudanhis.org/covid19southsudan",
+    "secure": "false",
+    "auth": "dashboard:Dhis@2020",
+    "changeOrigin": true
+  }
+}
+  
