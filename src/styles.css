@@ -170,7 +170,14 @@ button:focus { outline: none !important; }
   height: 36px;
 }
 
+.overflow-x-auto {
+  overflow-x: auto;
+}
 
+.table-visualization {
+  width: 100%;
+  overflow-x: auto;
+}
 
 
 /**

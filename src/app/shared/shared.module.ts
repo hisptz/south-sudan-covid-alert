@@ -20,7 +20,7 @@ import { materialModules } from './material-modules';
   declarations: [
     ...sharedComponents
   ],
-  exports: [...sharedComponents, ...materialModules,],
+  exports: [...sharedComponents, ...materialModules, NgPipesModule, NgxPaginationModule],
   providers: [...services]
 })
 export class SharedModule { }

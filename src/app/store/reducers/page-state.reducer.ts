@@ -2,6 +2,7 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as PageStateActions from '../actions/page-state.actions';
 import { PageState, NotificationState } from '../models';
+import * as fromHelpers from '../../shared/helpers';
 
 export const pageStatesFeatureKey = 'pageStates';
 
@@ -26,7 +27,9 @@ export const initialState: State = adapter.getInitialState({
 const pageStateReducer = createReducer(
   initialState,
   on(PageStateActions.addEvents, (state, action) =>
-    ({...state, events: action.payload })
+    ({...state, events: fromHelpers.removeAnalyticsheaders(action.payload,
+      ['Event', 'Program stage', 'Geometry', 'Longitude', 'Latitude', 'Organisation unit code', 'Organisation unit'])
+    })
   ),
   on(PageStateActions.upsertPageState, (state, action) =>
     adapter.upsertOne(action.pageState, state)
