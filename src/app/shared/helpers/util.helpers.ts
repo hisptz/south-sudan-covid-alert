@@ -21,3 +21,33 @@ export function removeAnalyticsheaders(analytics, headersToRemove) {
     });
     return newAnalytics;
 }
+
+export function transformAnalytics(analytics) {
+    const headers = analytics.headers;
+    const transformedData = (analytics.rows || []).map(row => {
+        return {
+            psi: row[itemIndex(headers, 'Event')],
+            eventdate: row[itemIndex(headers, 'Event date')],
+            nameofcaller: row[itemIndex(headers, 'Name of caller')],
+            sex: row[itemIndex(headers, 'Sex')],
+            age: row[itemIndex(headers, 'Age')],
+            phone: row[itemIndex(headers, 'Phone number')],
+            callmissed: row[itemIndex(headers, 'Was call missed or picked')],
+            reasoncalling: row[itemIndex(headers, 'Reason for calling 6666')],
+            orgunitname: row[itemIndex(headers, 'Organisation unit name')],
+            orgunitid: row[itemIndex(headers, 'Organisation unit')],
+            specificquestion: row[itemIndex(headers, 'Specific question about Diseases ')],
+            callermeetcase: row[itemIndex(headers, 'Did the caller meet case definition of COVID19 Cases')],
+            actiontaken: row[itemIndex(headers, 'Action Taken')],
+            casereferred: row[itemIndex(headers, 'Case Referred to')]
+        };
+    });
+    return transformedData;
+}
+
+export function itemIndex(headers, headername) {
+    const itemindex = (headers || []).findIndex(
+        head => head.column === headername
+    );
+    return itemindex;
+}

@@ -14,7 +14,7 @@
               All Registered
             </button>
             <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height">
-                Reported
+                Reported to RRT
             </button>
           </div>
         </div>
@@ -27,32 +27,53 @@
         <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
-        <div class="row w-100 ml-2" *ngIf="(eventsAnalytics$ | async).rows">
+        <div class="row w-100 ml-2" *ngIf="(eventsAnalytics$ | async)">
           <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
             <table class="table table-hover w-100">
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
-                  <th *ngFor="let header of (eventsAnalytics$ | async).headers">{{ header.column }}</th>
+                  <th> Call date </th>
+                  <th> Name of caller </th>
+                  <th> Age </th>
+                  <th> Sex </th>
+                  <th> Phone number </th>
+                  <th> Was call missed or picked </th>
+                  <th> Reason for calling 6666 </th>
+                  <th> Specific question about Diseases </th>
+                  <th> Did the caller meet case definition of COVID19 Cases </th>
+                  <th> Action Taken </th>
+                  <th> Case Referred to </th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let row of ((eventsAnalytics$ | async).rows |
-                     filterBy: ['0','1','2','3'] : searchText |
+                <tr *ngFor="let row of ((eventsAnalytics$ | async) |
+                     filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText |
                      paginate: { itemsPerPage: itemsPerPage, currentPage: page});let i = index;trackBy: trackByFn;">
                   <td> {{ i + 10 * (page - 1) + 1 }} </td>
-                  <td *ngFor="let item of row"> {{ item }} </td>
+                  <td> {{ row.eventdate }} </td>
+                  <td> {{ row.nameofcaller }} </td>
+                  <td> {{ row.age }} </td>
+                  <td> {{ row.sex }} </td>
+                  <td> {{ row.phone }} </td>
+                  <td> {{ row.callmissed }} </td>
+                  <td> {{ row.reasoncalling }} </td>
+                  <td> {{ row.specificquestion }} </td>
+                  <td> {{ row.callermeetcase === '1' ? 'Yes' : 'No' }} </td>
+                  <td> {{ row.actiontaken }} </td>
+                  <td> {{ row.casereferred }} </td>
                  
                   <td>
-                    <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height">
+                    <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height"
+                    *ngIf="row.callermeetcase !== '1'">
                       Report to RRT
                     </button>
                   </td>
                 </tr>
               </tbody>
               <tbody class="w-100"
-                *ngIf="((eventsAnalytics$ | async).rows | filterBy: ['0','1','2','3'] : searchText).length < 1 && (eventsAnalytics$ | async).rows.length > 0">
+                *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText).length < 1 && (eventsAnalytics$ | async).length > 0">
                 <tr>
                   <td colspan="10">
                     <label class="text-muted text-center w-100 h3"> Session not found</label>
@@ -60,9 +81,9 @@
                 </tr>
               </tbody>
               <tfoot
-                *ngIf="((eventsAnalytics$ | async).rows | filterBy: ['0','1','2','3'] : searchText).length > 0">
+                *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText).length > 0">
                 <tr>
-                  <td [attr.colspan]="(eventsAnalytics$ | async).headers.length + 2">
+                  <td [attr.colspan]="13">
                     <app-pagination 
                       [itemsPerPage]="itemsPerPage"
                       [pageInterval]="itemsPerPage"

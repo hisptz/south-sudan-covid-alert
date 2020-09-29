@@ -22,7 +22,7 @@ export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   notification: { message: '', statusCode: 0 },
   notificationStatus: false,
-  events: {},
+  events: [],
   eventsLoading: true
 });
 
@@ -31,8 +31,7 @@ const pageStateReducer = createReducer(
   on(PageStateActions.addEvents, (state, action) =>
     ({...state,
       eventsLoading: false,
-      events: fromHelpers.removeAnalyticsheaders(action.payload,
-      ['Event', 'Program stage', 'Geometry', 'Longitude', 'Latitude', 'Organisation unit code', 'Organisation unit'])
+      events: fromHelpers.transformAnalytics(action.payload)
     })
   ),
   on(PageStateActions.upsertPageState, (state, action) =>
