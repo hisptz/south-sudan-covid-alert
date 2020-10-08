@@ -16,6 +16,9 @@ import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router
 import { RouteSerializer } from './utils';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { NgxDhis2MenuModule } from '@iapps/ngx-dhis2-menu';
+import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
+import { services } from './shared/services';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    
     SharedModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
@@ -38,7 +42,17 @@ import { FormsModule } from '@angular/forms';
     }),
     StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot(effects)
+    EffectsModule.forRoot(effects),
+    NgxDhis2HttpClientModule.forRoot({
+      version: 1,
+      namespace: 'covid19-alert',
+      models: {
+        organisationUnits: 'id,name,level',
+        organisationUnitLevels: 'id,level',
+        organisationUnitGroups: 'id',
+      },
+    }),
+    NgxDhis2MenuModule,
   ],
   providers: [{ provide: RouterStateSerializer, useClass: RouteSerializer }],
   bootstrap: [AppComponent]

@@ -1,106 +1,300 @@
-<div class="container-fluid px-0">
-    <div class="row mx-0 w-100">
+<mat-tab-group>
+  <mat-tab label="All Registered">
+    <div class="container-fluid px-0">
+      <div class="row mx-0 w-100">
         <!-- Search field with buttons -->
         <div class="row w-100 mx-0 mb-2">
           <div class="col-sm">
             <div class="input-group">
-              <mat-form-field class="w-50">
-                <input matInput type="text" placeholder="Search" (keyup)="searchingItems($event)">
+              <mat-form-field class="w-50" appearance="outline">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Search"
+                  (keyup)="searchingItems($event)"
+                />
               </mat-form-field>
             </div>
-          </div>
-          <div class="col-sm pr-0 d-flex justify-content-end">
-            <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height">
-              All Registered
-            </button>
-            <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height">
-                Reported to RRT
-            </button>
           </div>
         </div>
         <!-- Search field with buttons -->
         <!-- {{eventsAnalytics$ | async | json }} -->
 
-
         <!-- Progressive Loader -->
-        <mat-progress-bar mode="indeterminate" class="ml-2" *ngIf="(eventsLoading$ | async)"></mat-progress-bar>
+        <mat-progress-bar
+          mode="indeterminate"
+          class="ml-2"
+          *ngIf="eventsLoading$ | async"
+        ></mat-progress-bar>
         <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
-        <div class="row w-100 ml-2" *ngIf="(eventsAnalytics$ | async)">
+        <div class="row w-100 ml-2" *ngIf="eventsAnalytics$ | async">
           <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
             <table class="table table-hover w-100">
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
-                  <th> Call date </th>
-                  <th> Name of caller </th>
-                  <th> Age </th>
-                  <th> Sex </th>
-                  <th> Phone number </th>
-                  <th> Was call missed or picked </th>
-                  <th> Reason for calling 6666 </th>
-                  <th> Specific question about Diseases </th>
-                  <th> Did the caller meet case definition of COVID19 Cases </th>
-                  <th> Action Taken </th>
-                  <th> Case Referred to </th>
+                  <th>Call date</th>
+                  <th>Name of caller</th>
+                  <th>Age</th>
+                  <th>Sex</th>
+                  <th>Phone number</th>
+                  <th>Was call missed or picked</th>
+                  <th>Reason for calling 6666</th>
+                  <th>Specific question about Diseases</th>
+                  <th>Did the caller meet case definition of COVID19 Cases</th>
+                  <th>Action Taken</th>
+                  <th>Case Referred to</th>
+                  <th>Reported to RRT</th>
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr *ngFor="let row of ((eventsAnalytics$ | async) |
-                     filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText |
-                     paginate: { itemsPerPage: itemsPerPage, currentPage: page});let i = index;trackBy: trackByFn;">
-                  <td> {{ i + 10 * (page - 1) + 1 }} </td>
-                  <td> {{ row.eventdate }} </td>
-                  <td> {{ row.nameofcaller }} </td>
-                  <td> {{ row.age }} </td>
-                  <td> {{ row.sex }} </td>
-                  <td> {{ row.phone }} </td>
-                  <td> {{ row.callmissed }} </td>
-                  <td> {{ row.reasoncalling }} </td>
-                  <td> {{ row.specificquestion }} </td>
-                  <td> {{ row.callermeetcase === '1' ? 'Yes' : 'No' }} </td>
-                  <td> {{ row.actiontaken }} </td>
-                  <td> {{ row.casereferred }} </td>
-                 
+              <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
+                <tr
+                  *ngFor="
+                    let row of eventAnalytics
+                      | filterBy
+                        : [
+                            'nameofcaller',
+                            'reasoncalling',
+                            'specificquestion',
+                            'actiontaken',
+                            'casereferred'
+                          ]
+                        : searchText
+                      | paginate
+                        : { itemsPerPage: itemsPerPage, currentPage: page };
+                    let i = index;
+                    trackBy: trackByFn
+                  "
+                >
+                  <td>{{ i + 10 * (page - 1) + 1 }}</td>
+                  <td>{{ row?.eventdate | date }}</td>
+                  <td>{{ row?.nameofcaller }}</td>
+                  <td>{{ row?.age }}</td>
+                  <td>{{ row?.sex }}</td>
+                  <td>{{ row?.phone }}</td>
+                  <td>{{ row?.callmissed }}</td>
+                  <td>{{ row?.reasoncalling }}</td>
+                  <td>{{ row?.specificquestion }}</td>
+                  <td>{{ row?.callermeetcase === "1" ? "Yes" : "No" }}</td>
+                  <td>{{ row?.actiontaken }}</td>
+                  <td>{{ row?.casereferred }}</td>
+                  <td>{{ row?.reportedToRRT }}</td>
+
                   <td>
-                    <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height"
-                    *ngIf="row.callermeetcase !== '1'">
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      class="mt-2 ml-2 button-height"
+                      *ngIf="row.reportedToRRT !== 'Yes'"
+                      (click)="updateReportToRRT(row)"
+                    >
                       Report to RRT
                     </button>
                   </td>
                 </tr>
               </tbody>
-              <tbody class="w-100"
-                *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText).length < 1 && (eventsAnalytics$ | async).length > 0">
+              <tbody
+                class="w-100"
+                *ngIf="
+                  (
+                    eventsAnalytics$
+                    | async
+                    | filterBy
+                      : [
+                          'nameofcaller',
+                          'reasoncalling',
+                          'specificquestion',
+                          'actiontaken',
+                          'casereferred'
+                        ]
+                      : searchText
+                  )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
+                "
+              >
                 <tr>
                   <td colspan="10">
-                    <label class="text-muted text-center w-100 h3"> Session not found</label>
+                    <label class="text-muted text-center w-100 h3">
+                      Session not found</label
+                    >
                   </td>
                 </tr>
               </tbody>
               <tfoot
-                *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText).length > 0">
-                <tr>
-                  <td [attr.colspan]="13">
-                    <app-pagination 
-                      [itemsPerPage]="itemsPerPage"
-                      [pageInterval]="itemsPerPage"
-                      [pageIntervalFactor]="1"
-                      [currentPage]="page"
-                      [dataArray]="(eventsAnalytics$ | async).rows"
-                      [maxSize]="(eventsAnalytics$ | async).rows.length"
-                      (changeCurrentPage)="onCurrentPageUpdate($event)"
-                      (updateItemsPerPage)="onUpdatePageSize($event)">
-                    </app-pagination>
-                  </td>
-                </tr>
-              </tfoot>
+                  *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText)?.length > 0">
+                  <tr>
+                    <td [attr.colspan]="13">
+                      <app-pagination 
+                        [itemsPerPage]="itemsPerPage"
+                        [pageInterval]="itemsPerPage"
+                        [pageIntervalFactor]="1"
+                        [currentPage]="page"
+                        [dataArray]="(eventsAnalytics$ | async)"
+                        [maxSize]="(eventsAnalytics$ | async).length"
+                        (changeCurrentPage)="onCurrentPageUpdate($event)"
+                        (updateItemsPerPage)="onUpdatePageSize($event)">
+                      </app-pagination>
+                    </td>
+                  </tr>
+                </tfoot>
             </table>
           </mat-card>
         </div>
         <!-- End of Table card section  -->
+      </div>
+    </div>
+  </mat-tab>
 
-  </div>
-</div>
+
+
+  <mat-tab label="Reported to RRT"> 
+    
+    <div class="container-fluid px-0">
+      <div class="row mx-0 w-100">
+        <!-- Search field with buttons -->
+        <div class="row w-100 mx-0 mb-2">
+          <div class="col-sm">
+            <div class="input-group">
+              <mat-form-field class="w-50" appearance="outline">
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Search"
+                  (keyup)="searchingItems($event)"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <!-- Search field with buttons -->
+        <!-- {{eventsAnalytics$ | async | json }} -->
+
+        <!-- Progressive Loader -->
+        <mat-progress-bar
+          mode="indeterminate"
+          class="ml-2"
+          *ngIf="eventsLoading$ | async"
+        ></mat-progress-bar>
+        <!-- End of Progressive Loader -->
+
+        <!-- Table card section  -->
+        <div class="row w-100 ml-2" *ngIf="eventsAnalytics$ | async">
+         
+          <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
+          
+            <table class="table table-hover w-100">
+              <thead>
+                <tr class="text-muted">
+                  <th>SN</th>
+                  <th>Call date</th>
+                  <th>Name of caller</th>
+                  <th>Age</th>
+                  <th>Sex</th>
+                  <th>Phone number</th>
+                  <th>Was call missed or picked</th>
+                  <th>Reason for calling 6666</th>
+                  <th>Specific question about Diseases</th>
+                  <th>Did the caller meet case definition of COVID19 Cases</th>
+                  <th>Action Taken</th>
+                  <th>Case Referred to</th>
+                  <!-- <th>Actions</th> -->
+                </tr>
+              </thead>
+              <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
+                <tr
+                  *ngFor="
+                    let row of getEventsWithCallerMeetCase(eventAnalytics)
+                      | filterBy
+                        : [
+                            'nameofcaller',
+                            'reasoncalling',
+                            'specificquestion',
+                            'actiontaken',
+                            'casereferred'
+                          ]
+                        : searchText
+                      | paginate
+                        : { itemsPerPage: itemsPerPage, currentPage: page };
+                    let i = index;
+                    trackBy: trackByFn
+                  "
+                >
+                  <td>{{ i + 10 * (page - 1) + 1 }}</td>
+                  <td>{{ row.eventdate }}</td>
+                  <td>{{ row.nameofcaller }}</td>
+                  <td>{{ row.age }}</td>
+                  <td>{{ row.sex }}</td>
+                  <td>{{ row.phone }}</td>
+                  <td>{{ row.callmissed }}</td>
+                  <td>{{ row.reasoncalling }}</td>
+                  <td>{{ row.specificquestion }}</td>
+                  <td>{{ row.callermeetcase === "1" ? "Yes" : "No" }}</td>
+                  <td>{{ row.actiontaken }}</td>
+                  <td>{{ row.casereferred }}</td>
+
+                  <!-- <td>
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      class="mt-2 ml-2 button-height"
+                      *ngIf="row.callermeetcase !== '1'"
+                    >
+                      Report to RRT
+                    </button>
+                  </td> -->
+                </tr>
+              </tbody>
+              <tbody
+                class="w-100"
+                *ngIf="
+                  (
+                    eventsAnalytics$
+                    | async
+                    | filterBy
+                      : [
+                          'nameofcaller',
+                          'reasoncalling',
+                          'specificquestion',
+                          'actiontaken',
+                          'casereferred'
+                        ]
+                      : searchText
+                  )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
+                "
+              >
+                <tr>
+                  <td colspan="10">
+                    <label class="text-muted text-center w-100 h3">
+                      Session not found</label
+                    >
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot
+                  *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText)?.length > 0">
+                  <tr>
+                    <td [attr.colspan]="13">
+                      <app-pagination 
+                        [itemsPerPage]="itemsPerPage"
+                        [pageInterval]="itemsPerPage"
+                        [pageIntervalFactor]="1"
+                        [currentPage]="page"
+                        [dataArray]="(eventsAnalytics$ | async)"
+                        [maxSize]="(eventsAnalytics$ | async)?.length"
+                        (changeCurrentPage)="onCurrentPageUpdate($event)"
+                        (updateItemsPerPage)="onUpdatePageSize($event)">
+                      </app-pagination>
+                    </td>
+                  </tr>
+                </tfoot>
+            </table>
+          </mat-card>
+        </div>
+        <!-- End of Table card section  -->
+      </div>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>
