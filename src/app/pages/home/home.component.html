@@ -35,7 +35,7 @@
           *ngIf="eventsAnalytics$ | async"
         >
           <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
-            <table class="table table-hover w-100">
+            <table class="table table-bordered w-100">
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
@@ -72,11 +72,16 @@
                     let i = index;
                     trackBy: trackByFn
                   "
-                  (click)="showEventData(row)"
                 >
                   <td>{{ i + 10 * (page - 1) + 1 }}</td>
                   <td>{{ row?.eventdate | date }}</td>
-                  <td>{{ row?.nameofcaller }}</td>
+                  <td
+                    class="cursor-pointer"
+                    matRipple
+                    (click)="showEventData(row)"
+                  >
+                    {{ row?.nameofcaller }}
+                  </td>
                   <!-- <td>{{ row?.age }}</td>
                   <td>{{ row?.sex }}</td>
                   <td>{{ row?.phone }}</td> -->
@@ -203,9 +208,13 @@
         <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
-        <div class="row w-100 ml-2" [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"  *ngIf="eventsAnalytics$ | async">
+        <div
+          class="row w-100 ml-2"
+          [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
+          *ngIf="eventsAnalytics$ | async"
+        >
           <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-            <table class="table table-hover">
+            <table class="table table-bordered">
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
@@ -238,14 +247,18 @@
                         : searchText
                       | paginate
                         : { itemsPerPage: itemsPerPage, currentPage: page };
-                    let i = index;
+                    let i = index
                   "
-                  (click)="showEventData(row)"
-
                 >
                   <td>{{ i + 10 * (page - 1) + 1 }}</td>
                   <td>{{ row.eventdate }}</td>
-                  <td>{{ row.nameofcaller }}</td>
+                  <td
+                    class="cursor-pointer"
+                    matRipple
+                    (click)="showEventData(row)"
+                  >
+                    {{ row.nameofcaller }}
+                  </td>
                   <td>{{ row.age }}</td>
                   <td>{{ row.sex }}</td>
                   <td>{{ row.phone }}</td>
@@ -269,7 +282,6 @@
                 </tr>
               </tbody>
               <tbody
-               
                 *ngIf="
                   (
                     eventsAnalytics$

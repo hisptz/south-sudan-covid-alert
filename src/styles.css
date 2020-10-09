@@ -327,4 +327,7 @@ button:focus { outline: none !important; }
   -webkit-animation-name: fadeInUpBig;
   animation-name: fadeInUpBig;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 
