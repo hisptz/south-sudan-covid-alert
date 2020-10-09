@@ -1,4 +1,4 @@
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="eventToShow = null">
   <mat-tab label="All Registered">
     <div class="container-fluid px-0">
       <div class="row mx-0 w-100">
@@ -6,7 +6,7 @@
         <div class="row w-100 mx-0 mb-2">
           <div class="col-sm">
             <div class="input-group">
-              <mat-form-field class="w-50" appearance="outline">
+              <mat-form-field class="w-25" appearance="outline">
                 <input
                   matInput
                   type="text"
@@ -29,7 +29,11 @@
         <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
-        <div class="row w-100 ml-2" *ngIf="eventsAnalytics$ | async">
+        <div
+          class="ml-2"
+          [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
+          *ngIf="eventsAnalytics$ | async"
+        >
           <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
             <table class="table table-hover w-100">
               <thead>
@@ -37,9 +41,9 @@
                   <th>SN</th>
                   <th>Call date</th>
                   <th>Name of caller</th>
-                  <th>Age</th>
+                  <!-- <th>Age</th>
                   <th>Sex</th>
-                  <th>Phone number</th>
+                  <th>Phone number</th> -->
                   <th>Was call missed or picked</th>
                   <th>Reason for calling 6666</th>
                   <th>Specific question about Diseases</th>
@@ -68,13 +72,14 @@
                     let i = index;
                     trackBy: trackByFn
                   "
+                  (click)="showEventData(row)"
                 >
                   <td>{{ i + 10 * (page - 1) + 1 }}</td>
                   <td>{{ row?.eventdate | date }}</td>
                   <td>{{ row?.nameofcaller }}</td>
-                  <td>{{ row?.age }}</td>
+                  <!-- <td>{{ row?.age }}</td>
                   <td>{{ row?.sex }}</td>
-                  <td>{{ row?.phone }}</td>
+                  <td>{{ row?.phone }}</td> -->
                   <td>{{ row?.callmissed }}</td>
                   <td>{{ row?.reasoncalling }}</td>
                   <td>{{ row?.specificquestion }}</td>
@@ -97,7 +102,6 @@
                 </tr>
               </tbody>
               <tbody
-                class="w-100"
                 *ngIf="
                   (
                     eventsAnalytics$
@@ -123,34 +127,53 @@
                 </tr>
               </tbody>
               <tfoot
-                  *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText)?.length > 0">
-                  <tr>
-                    <td [attr.colspan]="13">
-                      <app-pagination 
-                        [itemsPerPage]="itemsPerPage"
-                        [pageInterval]="itemsPerPage"
-                        [pageIntervalFactor]="1"
-                        [currentPage]="page"
-                        [dataArray]="(eventsAnalytics$ | async)"
-                        [maxSize]="(eventsAnalytics$ | async).length"
-                        (changeCurrentPage)="onCurrentPageUpdate($event)"
-                        (updateItemsPerPage)="onUpdatePageSize($event)">
-                      </app-pagination>
-                    </td>
-                  </tr>
-                </tfoot>
+                *ngIf="
+                  (
+                    eventsAnalytics$
+                    | async
+                    | filterBy
+                      : [
+                          'nameofcaller',
+                          'reasoncalling',
+                          'specificquestion',
+                          'actiontaken',
+                          'casereferred'
+                        ]
+                      : searchText
+                  )?.length > 0
+                "
+              >
+                <tr>
+                  <td [attr.colspan]="13">
+                    <app-pagination
+                      [itemsPerPage]="itemsPerPage"
+                      [pageInterval]="itemsPerPage"
+                      [pageIntervalFactor]="1"
+                      [currentPage]="page"
+                      [dataArray]="eventsAnalytics$ | async"
+                      [maxSize]="(eventsAnalytics$ | async).length"
+                      (changeCurrentPage)="onCurrentPageUpdate($event)"
+                      (updateItemsPerPage)="onUpdatePageSize($event)"
+                    >
+                    </app-pagination>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </mat-card>
         </div>
         <!-- End of Table card section  -->
+        <div class="info-section mr-2 ml-4" *ngIf="eventToShow">
+          <app-view-event
+            [event]="eventToShow"
+            (closeEvent)="closeEventDataSection($event)"
+          ></app-view-event>
+        </div>
       </div>
     </div>
   </mat-tab>
 
-
-
-  <mat-tab label="Reported to RRT"> 
-    
+  <mat-tab label="Reported to RRT">
     <div class="container-fluid px-0">
       <div class="row mx-0 w-100">
         <!-- Search field with buttons -->
@@ -180,11 +203,9 @@
         <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
-        <div class="row w-100 ml-2" *ngIf="eventsAnalytics$ | async">
-         
-          <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
-          
-            <table class="table table-hover w-100">
+        <div class="row w-100 ml-2" [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"  *ngIf="eventsAnalytics$ | async">
+          <mat-card class="w-100 mb-4 p-0 overflow-hidden">
+            <table class="table table-hover">
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
@@ -218,8 +239,9 @@
                       | paginate
                         : { itemsPerPage: itemsPerPage, currentPage: page };
                     let i = index;
-                    trackBy: trackByFn
                   "
+                  (click)="showEventData(row)"
+
                 >
                   <td>{{ i + 10 * (page - 1) + 1 }}</td>
                   <td>{{ row.eventdate }}</td>
@@ -247,7 +269,7 @@
                 </tr>
               </tbody>
               <tbody
-                class="w-100"
+               
                 *ngIf="
                   (
                     eventsAnalytics$
@@ -273,28 +295,49 @@
                 </tr>
               </tbody>
               <tfoot
-                  *ngIf="((eventsAnalytics$ | async) | filterBy: ['nameofcaller','reasoncalling','specificquestion','actiontaken', 'casereferred'] : searchText)?.length > 0">
-                  <tr>
-                    <td [attr.colspan]="13">
-                      <app-pagination 
-                        [itemsPerPage]="itemsPerPage"
-                        [pageInterval]="itemsPerPage"
-                        [pageIntervalFactor]="1"
-                        [currentPage]="page"
-                        [dataArray]="(eventsAnalytics$ | async)"
-                        [maxSize]="(eventsAnalytics$ | async)?.length"
-                        (changeCurrentPage)="onCurrentPageUpdate($event)"
-                        (updateItemsPerPage)="onUpdatePageSize($event)">
-                      </app-pagination>
-                    </td>
-                  </tr>
-                </tfoot>
+                *ngIf="
+                  (
+                    eventsAnalytics$
+                    | async
+                    | filterBy
+                      : [
+                          'nameofcaller',
+                          'reasoncalling',
+                          'specificquestion',
+                          'actiontaken',
+                          'casereferred'
+                        ]
+                      : searchText
+                  )?.length > 0
+                "
+              >
+                <tr>
+                  <td [attr.colspan]="11">
+                    <app-pagination
+                      [itemsPerPage]="itemsPerPage"
+                      [pageInterval]="itemsPerPage"
+                      [pageIntervalFactor]="1"
+                      [currentPage]="page"
+                      [dataArray]="eventsAnalytics$ | async"
+                      [maxSize]="(eventsAnalytics$ | async)?.length"
+                      (changeCurrentPage)="onCurrentPageUpdate($event)"
+                      (updateItemsPerPage)="onUpdatePageSize($event)"
+                    >
+                    </app-pagination>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </mat-card>
         </div>
         <!-- End of Table card section  -->
+        <div class="info-section mr-2 ml-4" *ngIf="eventToShow">
+          <app-view-event
+            [event]="eventToShow"
+            (closeEvent)="closeEventDataSection($event)"
+          ></app-view-event>
+        </div>
       </div>
     </div>
-
   </mat-tab>
 </mat-tab-group>

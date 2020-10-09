@@ -38,6 +38,9 @@ export function transformAnalytics(analytics) {
       reasoncalling: row[itemIndex(headers, 'Reason for calling 6666')],
       orgunitname: row[itemIndex(headers, 'Organisation unit name')],
       orgunitid: row[itemIndex(headers, 'Organisation unit')],
+      signsreported: row[itemIndex(headers, 'which signs & symptoms did they reported?')],
+      recordissues: row[itemIndex(headers, 'Record any myths, issues, concerns')],
+      nameofcallhandler: row[itemIndex(headers, 'Name of Phone Call Handler')],
       specificquestion:
         row[itemIndex(headers, 'Specific question about Diseases ')],
       callermeetcase:

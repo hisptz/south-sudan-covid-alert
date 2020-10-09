@@ -1,0 +1,40 @@
+<div class="w-100">
+  <div class="w-100">
+    <button
+      style="
+        float: right;
+        border: 1px solid lightgray;
+        border-radius: 0;
+        margin-bottom: 1em;
+      "
+      (click)="closeSection()"
+      mat-icon-button
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <th>Name</th>
+        <td>{{ event?.nameofcaller }}</td>
+      </tr>
+      <tr>
+        <th>Location</th>
+        <td>{{ event?.orgunitname }}</td>
+      </tr>
+      <tr>
+        <th>Sex</th>
+        <td>{{ event?.sex }}</td>
+      </tr>
+      <tr>
+        <th>Age</th>
+        <td>{{ event?.age }}</td>
+      </tr>
+      <tr>
+        <th>Phone number</th>
+        <td>{{ event?.phone }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -19,11 +19,13 @@ import { FormsModule } from '@angular/forms';
 import { NgxDhis2MenuModule } from '@iapps/ngx-dhis2-menu';
 import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
 import { services } from './shared/services';
+import { ViewEventComponent } from './pages/home/view-event/view-event.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ...pagesComponent
+    ...pagesComponent,
+    ViewEventComponent
   ],
   imports: [
     BrowserModule,

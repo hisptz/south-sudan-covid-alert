@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
@@ -15,7 +16,8 @@ import {
 export class ReportEffects {
   constructor(
     private actions$: Actions,
-    private reportService: ReportRrtService
+    private reportService: ReportRrtService,
+    private snackBar: MatSnackBar
   ) {}
 
   @Effect()
@@ -25,6 +27,9 @@ export class ReportEffects {
       mergeMap((action) => {
         return this.reportService.reportToRRT(action.data, action.id).pipe(
           map((data) => {
+            this.snackBar.open('Reported to analytics successfully, changes will take place after analytics has been run', null ,{
+              duration: 3000,
+            });
             return loadEvents();
           }),
           catchError((error: any) => {
