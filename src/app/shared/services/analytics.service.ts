@@ -1,8 +1,10 @@
 // import { HttpClientService } from './http-client.service';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
 import { apiLink } from '../../../assets/configurations/apiLink';
+import * as fromHelpers from '../../shared/helpers';
 
 @Injectable()
 export class AnalyticsService {
@@ -22,5 +24,23 @@ export class AnalyticsService {
     'dimension=qpjm7pHJYu0.FEJYpBRI2tw&dimension=qpjm7pHJYu0.PSabDGnGtw8&dimension=qpjm7pHJYu0.JHvOHr5nmSi&' +
     'dimension=qpjm7pHJYu0.ZRo6gpevFmy&stage=qpjm7pHJYu0&displayProperty=NAME&outputType=EVENT&desc=eventdate&paging=false';
     return this.httpClient.get(url);
+  }
+  getPendingReportedEvents(): Observable<any> {
+    const url = this.apiUrl + `dataStore/covidAlertConfig/pendingReportedEvents`;
+    return this.httpClient.get(url).pipe(catchError((error) => throwError(error)));
+  }
+  getPendingReportedEventsPromise() {
+    return new Promise((resolve, reject) => {
+      this.getPendingReportedEvents()
+        .pipe(take(1))
+        .subscribe(
+          (data) => {
+            resolve(data);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+    });
   }
 }
