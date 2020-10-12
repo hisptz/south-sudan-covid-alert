@@ -4,3 +4,12 @@
 .info-section {
     width: 30%;
 }
+td .reported-text {
+    color: #2C5D98;
+}
+td .pending-text {
+    color: #BDBDBD;
+}
+:host ::ng-deep .mat-tab-body-content  {
+    overflow: hidden !important;
+}

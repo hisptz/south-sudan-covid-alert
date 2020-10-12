@@ -20,6 +20,14 @@ export const addEvents = createAction(
   '[PageState/API] Add Events',
   props<{ payload: any }>()
 );
+export const addEventsSuccess = createAction(
+  '[PageState/API] Add Events Success',
+  props<{ events: Array<any> }>()
+);
+export const addEventsFailure = createAction(
+  '[PageState/API] Add Events Failure',
+  props<{ payload: any }>()
+);
 
 export const upsertPageState = createAction(
   '[PageState/API] Upsert PageState',
