@@ -34,7 +34,7 @@
           [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
           *ngIf="eventsAnalytics$ | async"
         >
-          <mat-card class="w-100 mb-4 p-0 overflow-x-auto">
+          <mat-card class="w-100 mb-4 p-0 overflow-hidden">
             <table class="table table-bordered w-100">
               <thead>
                 <tr class="text-muted">
@@ -108,8 +108,7 @@
                     color="warn"
                     disabled
                     class="mt-2 ml-2 button-height"
-                    *ngIf="row.reportedToRRT !== 'No' && row.isReportToRRTPending"
-                    (click)="updateReportToRRT(row)"
+                    *ngIf="row.reportedToRRT === 'No' && row.isReportToRRTPending"
                   >
                     <mat-icon>report_problem</mat-icon> Report to RRT pending
                   </button>
@@ -188,7 +187,7 @@
     </div>
   </mat-tab>
 
-  <mat-tab label="Reported to RRT">
+  <mat-tab class="overflow-hidden" label="Reported to RRT">
     <div class="container-fluid px-0">
       <div class="row mx-0 w-100">
         <!-- Search field with buttons -->
@@ -219,12 +218,12 @@
 
         <!-- Table card section  -->
         <div
-          class="row w-100 ml-2"
+          class="row w-100 ml-2 overflow-hidden"
           [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
           *ngIf="eventsAnalytics$ | async"
         >
           <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-            <table class="table table-bordered">
+            <table class="table table-bordered overflow-hidden">
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
@@ -239,7 +238,6 @@
                   <th>Did the caller meet case definition of COVID19 Cases</th>
                   <th>Action Taken</th>
                   <th>Case Referred to</th>
-                  <!-- <th>Actions</th> -->
                 </tr>
               </thead>
               <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
@@ -278,17 +276,6 @@
                   <td>{{ row.callermeetcase === "1" ? "Yes" : "No" }}</td>
                   <td>{{ row.actiontaken }}</td>
                   <td>{{ row.casereferred }}</td>
-
-                  <!-- <td>
-                    <button
-                      mat-stroked-button
-                      color="primary"
-                      class="mt-2 ml-2 button-height"
-                      *ngIf="row.callermeetcase !== '1'"
-                    >
-                      Report to RRT
-                    </button>
-                  </td> -->
                 </tr>
               </tbody>
               <tbody
@@ -334,7 +321,7 @@
                 "
               >
                 <tr>
-                  <td [attr.colspan]="11">
+                  <td [attr.colspan]="13">
                     <app-pagination
                       [itemsPerPage]="itemsPerPage"
                       [pageInterval]="itemsPerPage"
