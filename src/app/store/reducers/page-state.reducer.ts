@@ -23,17 +23,20 @@ export const initialState: State = adapter.getInitialState({
   notification: { message: '', statusCode: 0 },
   notificationStatus: false,
   events: [],
-  eventsLoading: true
+  eventsLoading: true,
 });
 
 const pageStateReducer = createReducer(
   initialState,
-  on(PageStateActions.addEvents, (state, action) =>
-    ({...state,
-      eventsLoading: false,
-      events: fromHelpers.transformAnalytics(action.payload)
-    })
-  ),
+  on(PageStateActions.addEvents, (state, action) => ({
+    ...state,
+    eventsLoading: true,
+  })),
+  on(PageStateActions.addEventsSuccess, (state, { events }) => ({
+    ...state,
+    eventsLoading: false,
+    events,
+  })),
   on(PageStateActions.upsertPageState, (state, action) =>
     adapter.upsertOne(action.pageState, state)
   ),
@@ -52,12 +55,15 @@ const pageStateReducer = createReducer(
   on(PageStateActions.deletePageState, (state, action) =>
     adapter.removeOne(action.id, state)
   ),
-  on(PageStateActions.loadNotification,
-    (state, action) => ({...state, notification: action.payload, notificationStatus: true })
-  ),
-  on(PageStateActions.showNotification,
-    (state, action) => ({...state, notificationStatus: action.payload })
-  ),
+  on(PageStateActions.loadNotification, (state, action) => ({
+    ...state,
+    notification: action.payload,
+    notificationStatus: true,
+  })),
+  on(PageStateActions.showNotification, (state, action) => ({
+    ...state,
+    notificationStatus: action.payload,
+  })),
   on(PageStateActions.clearPageStates, (state) => adapter.removeAll(state))
 );
 
