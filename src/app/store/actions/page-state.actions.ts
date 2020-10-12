@@ -22,7 +22,7 @@ export const addEvents = createAction(
 );
 export const addEventsSuccess = createAction(
   '[PageState/API] Add Events Success',
-  props<{ payload: any }>()
+  props<{ events: Array<any> }>()
 );
 export const addEventsFailure = createAction(
   '[PageState/API] Add Events Failure',
