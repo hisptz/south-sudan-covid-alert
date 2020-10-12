@@ -1,19 +1,19 @@
-import { Component, OnInit } from "@angular/core";
-import { AppState } from "../../store/reducers";
-import { Store } from "@ngrx/store";
-import * as fromSelectors from "../../store/selectors";
-import * as fromActions from "../../store/actions";
-import { Observable } from "rxjs";
-import { FilterByPipe } from "ngx-pipes";
-import { map, flattenDeep } from "lodash";
-import { getFormattedPayload } from "src/app/shared/helpers/get-formatted-payload.helper";
-import { updateReportToRRT } from "src/app/store/actions/report.actions";
-import { MatSnackBar } from "@angular/material";
+import { Component, OnInit } from '@angular/core';
+import { AppState } from '../../store/reducers';
+import { Store } from '@ngrx/store';
+import * as fromSelectors from '../../store/selectors';
+import * as fromActions from '../../store/actions';
+import { Observable } from 'rxjs';
+import { FilterByPipe } from 'ngx-pipes';
+import { map, flattenDeep } from 'lodash';
+import { getFormattedPayload } from 'src/app/shared/helpers/get-formatted-payload.helper';
+import { updateReportToRRT } from 'src/app/store/actions/report.actions';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.css"],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
   providers: [FilterByPipe],
 })
 export class HomeComponent implements OnInit {
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   eventsLoading$: Observable<any>;
   page = 1;
   itemsPerPage = 10;
-  searchText = "";
+  searchText = '';
   eventToShow = null;
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
@@ -56,27 +56,26 @@ export class HomeComponent implements OnInit {
     return flattenDeep(
       map(eventsAnalytics || [], (eventAnalytic) => {
         return eventAnalytic &&
-          eventAnalytic.reportedToRRT &&
-          eventAnalytic.reportedToRRT === "Yes"
+          (eventAnalytic.reportedToRRT &&
+          eventAnalytic.reportedToRRT === 'Yes') 
           ? eventAnalytic
           : [];
       })
     );
   }
   updateReportToRRT(event) {
-    this._snackBar.open("Reporting to RRT", null, {
+    this._snackBar.open('Reporting to RRT', null, {
       duration: 3000,
     });
     const payload = getFormattedPayload(event);
-    const id = event && event.psi ? event.psi : "";
-    console.log({ payload });
+    const id = event && event.psi ? event.psi : '';
     this.store.dispatch(updateReportToRRT({ data: payload, id }));
   }
   showEventData(event) {
     this.eventToShow = event;
   }
   closeEventDataSection(data) {
-    console.log({ data });
+
     if (data && data.closeView) {
       this.eventToShow = null;
     }
