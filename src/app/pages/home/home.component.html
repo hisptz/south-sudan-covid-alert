@@ -98,11 +98,21 @@
                       mat-stroked-button
                       color="primary"
                       class="mt-2 ml-2 button-height"
-                      *ngIf="row.reportedToRRT !== 'Yes'"
+                      *ngIf="row.reportedToRRT !== 'Yes' && !row.isReportToRRTPending"
                       (click)="updateReportToRRT(row)"
                     >
                       Report to RRT
                     </button>
+                    <button
+                    mat-stroked-button
+                    color="warn"
+                    disabled
+                    class="mt-2 ml-2 button-height"
+                    *ngIf="row.reportedToRRT !== 'No' && row.isReportToRRTPending"
+                    (click)="updateReportToRRT(row)"
+                  >
+                    <mat-icon>report_problem</mat-icon> Report to RRT pending
+                  </button>
                   </td>
                 </tr>
               </tbody>
