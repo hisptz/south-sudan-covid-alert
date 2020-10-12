@@ -21,7 +21,7 @@ export class ReportEffects {
   ) {}
 
   @Effect()
-  loadAnalyticsData(): Observable<Action> {
+  updateReportToRRT(): Observable<Action> {
     return this.actions$.pipe(
       ofType(updateReportToRRT),
       mergeMap((action) => {
