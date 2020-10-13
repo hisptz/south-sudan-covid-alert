@@ -27,7 +27,7 @@ export class ReportEffects {
       mergeMap((action) => {
         return this.reportService.reportToRRT(action.data, action.id).pipe(
           map((data) => {
-            this.snackBar.open('Reported to analytics successfully, changes will take place after analytics has been run', null ,{
+            this.snackBar.open('Reported to RRT successfully', null ,{
               duration: 3000,
             });
             return loadEvents();
