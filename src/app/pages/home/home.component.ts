@@ -9,7 +9,8 @@ import { map, flattenDeep } from 'lodash';
 import { getFormattedPayload } from 'src/app/shared/helpers/get-formatted-payload.helper';
 import { updateReportToRRT } from 'src/app/store/actions/report.actions';
 import { MatSnackBar } from '@angular/material';
-
+import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
+import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -23,8 +24,10 @@ export class HomeComponent implements OnInit {
   itemsPerPage = 10;
   searchText = '';
   eventToShow = null;
+  allRegisteredHeaders = [];
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
+    this.allRegisteredHeaders = JSON_FILES.allRegisteredHeaders;
     this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
     this.eventsLoading$ = store.select(fromSelectors.getEventsLoading);
   }
@@ -79,5 +82,8 @@ export class HomeComponent implements OnInit {
     if (data && data.closeView) {
       this.eventToShow = null;
     }
+  }
+  getValidPhone(phone) {
+    return phone && convertExponentialToDecimal(phone) ? convertExponentialToDecimal(phone) : '';
   }
 }
