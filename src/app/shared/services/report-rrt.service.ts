@@ -1,10 +1,10 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { from, Observable, throwError } from "rxjs";
-import { catchError, take } from "rxjs/operators";
-import { apiLink } from "../../../assets/configurations/apiLink";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { from, Observable, throwError } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
+import { apiLink } from '../../../assets/configurations/apiLink';
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ReportRrtService {
   constructor(private httpClient: HttpClient) {}

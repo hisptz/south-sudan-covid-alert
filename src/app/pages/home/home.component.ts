@@ -56,8 +56,9 @@ export class HomeComponent implements OnInit {
     return flattenDeep(
       map(eventsAnalytics || [], (eventAnalytic) => {
         return eventAnalytic &&
-          (eventAnalytic.reportedToRRT &&
-          eventAnalytic.reportedToRRT === 'Yes') 
+          eventAnalytic.reportedToRRT &&
+          (eventAnalytic.reportedToRRT === 'Yes' ||
+            eventAnalytic.isReportToRRTPending)
           ? eventAnalytic
           : [];
       })
@@ -75,7 +76,6 @@ export class HomeComponent implements OnInit {
     this.eventToShow = event;
   }
   closeEventDataSection(data) {
-
     if (data && data.closeView) {
       this.eventToShow = null;
     }
