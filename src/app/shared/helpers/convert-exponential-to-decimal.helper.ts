@@ -4,19 +4,27 @@
  * If it does it converts it to string representation of that number
  * which forces it to format 0.00000001
  */
-export function convertExponentialToDecimal(
-  exponentialNumber: number,
-): number | string {
-  // sanity check - is it exponential number
-  const str = exponentialNumber.toString();
-  if (str.indexOf('e') !== -1) {
-    const exponent = parseInt(str.split('-')[1], 10);
-    // Unfortunately I can not return 1e-8 as 0.00000001, because even if I call parseFloat() on it,
-    // it will still return the exponential representation
-    // So I have to use .toFixed()
-    const result = exponentialNumber.toFixed(exponent);
-    return result;
-  } else {
-    return exponentialNumber;
+export function convertExponentialToDecimal(exponentialNumber) {
+  const data = String(exponentialNumber).split(/[eE]/);
+  if (data.length === 1) {
+    return data[0];
   }
+
+  let z = '';
+  const sign = exponentialNumber < 0 ? '-' : '';
+  const str = data[0].replace('.', '');
+  let mag = Number(data[1]) + 1;
+
+  if (mag < 0) {
+    z = sign + '0.';
+    while (mag++) {
+      z += '0';
+    }
+    return z + str.replace(/^\-/, '');
+  }
+  mag -= str.length;
+  while (mag--) {
+    z += '0';
+  }
+  return str + z;
 }
