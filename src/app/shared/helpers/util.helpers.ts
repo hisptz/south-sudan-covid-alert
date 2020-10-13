@@ -1,3 +1,5 @@
+import { convertExponentialToDecimal } from './convert-exponential-to-decimal.helper';
+
 export function removeAnalyticsheaders(analytics, headersToRemove) {
   const newAnalytics = { ...analytics };
   headersToRemove.forEach((head) => {
@@ -22,7 +24,7 @@ export function removeAnalyticsheaders(analytics, headersToRemove) {
 
 export function transformAnalytics(analytics) {
   const newVersion = transformAnalytics1(analytics);
-  console.log({newVersion});
+  console.log({ newVersion });
   const headers = analytics.headers;
   const transformedData = (analytics.rows || []).map((row) => {
     let reportedToRRT =
@@ -70,10 +72,13 @@ export function transformAnalytics1(analytics) {
     let obj = {};
     if (headers && headers.length) {
       for (const header of headers) {
+        let value = '';
+        value = getHeaderValue(
+          row[itemIndex1(headers, header.name)],
+          header.name,
+        );
         obj =
-          header && header.name
-            ? { ...obj, [header.name]: row[itemIndex1(headers, header.name)] }
-            : { ...obj };
+          header && header.name ? { ...obj, [header.name]: value } : { ...obj };
       }
     }
     return obj;
@@ -92,4 +97,12 @@ export function itemIndex1(headers, headername) {
     (head) => head.name === headername,
   );
   return itemindex;
+}
+function getHeaderValue(rowValue, rowName) {
+  if (rowName === 'g7EpCKIysgQ') {
+    return rowValue === '1' ? 'Yes' : 'No';
+  } else if(rowName === 'dxyEuWRce8l') {
+    return convertExponentialToDecimal(rowValue);
+  }
+  return rowValue;
 }
