@@ -25,9 +25,16 @@ export class HomeComponent implements OnInit {
   searchText = '';
   eventToShow = null;
   allRegisteredHeaders = [];
+  allRegisteredFilters = [];
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
-    this.allRegisteredHeaders = JSON_FILES.allRegisteredHeaders;
+    this.allRegisteredHeaders =
+      JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.headers
+        ? JSON_FILES.allRegisteredHeaders.headers
+        : [];
+    this.allRegisteredFilters = JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.filters
+    ? JSON_FILES.allRegisteredHeaders.filters
+    : [];  
     this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
     this.eventsLoading$ = store.select(fromSelectors.getEventsLoading);
   }
@@ -64,7 +71,7 @@ export class HomeComponent implements OnInit {
             eventAnalytic.isReportToRRTPending)
           ? eventAnalytic
           : [];
-      })
+      }),
     );
   }
   updateReportToRRT(event) {
@@ -84,6 +91,8 @@ export class HomeComponent implements OnInit {
     }
   }
   getValidPhone(phone) {
-    return phone && convertExponentialToDecimal(phone) ? convertExponentialToDecimal(phone) : '';
+    return phone && convertExponentialToDecimal(phone)
+      ? convertExponentialToDecimal(phone)
+      : '';
   }
 }
