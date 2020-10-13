@@ -39,18 +39,19 @@
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
-                  <th>Call date</th>
+                  <th *ngFor="let header of allRegisteredHeaders">{{ header?.column }}</th>
+                  <!-- <th>Call date</th>
                   <th>Name of caller</th>
-                  <!-- <th>Age</th>
+                  <th>Age</th>
                   <th>Sex</th>
-                  <th>Phone number</th> -->
+                  <th>Phone number</th>
                   <th>Was call missed or picked</th>
                   <th>Reason for calling 6666</th>
                   <th>Specific question about Diseases</th>
                   <th>Did the caller meet case definition of COVID19 Cases</th>
                   <th>Action Taken</th>
                   <th>Case Referred to</th>
-                  <th>Reported to RRT</th>
+                  <th>Reported to RRT</th> -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -59,13 +60,7 @@
                   *ngFor="
                     let row of eventAnalytics
                       | filterBy
-                        : [
-                            'nameofcaller',
-                            'reasoncalling',
-                            'specificquestion',
-                            'actiontaken',
-                            'casereferred'
-                          ]
+                        : allRegisteredFilters
                         : searchText
                       | paginate
                         : { itemsPerPage: itemsPerPage, currentPage: page };
@@ -74,7 +69,8 @@
                   "
                 >
                   <td>{{ i + 10 * (page - 1) + 1 }}</td>
-                  <td>{{ row?.eventdate | date }}</td>
+                  <td *ngFor="let header of allRegisteredHeaders">{{ header.valueType === 'DATE' ? (row[header?.name] | date) : (row[header?.name])}}</td>
+                  <!-- <td >{{ row?.eventdate | date }}</td>
                   <td
                     class="cursor-pointer"
                     matRipple
@@ -82,19 +78,19 @@
                   >
                     {{ row?.nameofcaller }}
                   </td>
-                  <!-- <td>{{ row?.age }}</td>
+                  <td>{{ row?.age }}</td>
                   <td>{{ row?.sex }}</td>
-                  <td>{{ row?.phone }}</td> -->
+                  <td>{{ row?.phone }}</td>
                   <td>{{ row?.callmissed }}</td>
                   <td>{{ row?.reasoncalling }}</td>
                   <td>{{ row?.specificquestion }}</td>
                   <td>{{ row?.callermeetcase === "1" ? "Yes" : "No" }}</td>
                   <td>{{ row?.actiontaken }}</td>
                   <td>{{ row?.casereferred }}</td>
-                  <td>{{ row?.reportedToRRT }}</td>
+                  <td>{{ row?.reportedToRRT }}</td> -->
 
                   <td>
-                    <button
+                    <!-- <button
                       mat-stroked-button
                       color="primary"
                       class="mt-2 ml-2 button-height"
@@ -102,7 +98,7 @@
                       (click)="updateReportToRRT(row)"
                     >
                       Report to RRT
-                    </button>
+                    </button> -->
                   </td>
                 </tr>
               </tbody>
@@ -112,13 +108,7 @@
                     eventsAnalytics$
                     | async
                     | filterBy
-                      : [
-                          'nameofcaller',
-                          'reasoncalling',
-                          'specificquestion',
-                          'actiontaken',
-                          'casereferred'
-                        ]
+                      : allRegisteredFilters
                       : searchText
                   )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
                 "
@@ -137,13 +127,7 @@
                     eventsAnalytics$
                     | async
                     | filterBy
-                      : [
-                          'nameofcaller',
-                          'reasoncalling',
-                          'specificquestion',
-                          'actiontaken',
-                          'casereferred'
-                        ]
+                      : allRegisteredFilters
                       : searchText
                   )?.length > 0
                 "
