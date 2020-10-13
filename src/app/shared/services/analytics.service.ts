@@ -35,7 +35,7 @@ export class AnalyticsService {
 
   async getEventListingPromise(eventsAnalytics: Array<any>) {
     let eventsWithPendingStatus = [];
-    const formattedEvents = fromHelpers.transformAnalytics(eventsAnalytics); // Format analytics data of events
+    const formattedEvents = fromHelpers.transformAnalytics1(eventsAnalytics); // Format analytics data of events
     try {
       const pendingEventsObj = await this.reportService.getPendingReportedEventsPromise(); // Get saved pending reported to RRT events
       for (const event of formattedEvents) {
@@ -52,7 +52,7 @@ export class AnalyticsService {
         eventsWithPendingStatus.push(newEvent);
       }
 
-      return eventsWithPendingStatus;
+     // return eventsWithPendingStatus;
     } catch (e) {
       if (e && e.status && e.status === 404) {
         eventsWithPendingStatus = _.map(
@@ -62,8 +62,9 @@ export class AnalyticsService {
           },
         );
       }
-      return eventsWithPendingStatus;
+     // return eventsWithPendingStatus;
     }
+    return formattedEvents;
   }
   getEventListing(eventsAnalytics: Array<any>) {
     return from(this.getEventListingPromise(eventsAnalytics));
