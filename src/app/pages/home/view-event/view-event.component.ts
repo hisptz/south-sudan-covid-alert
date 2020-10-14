@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class ViewEventComponent implements OnInit {
   @Input() event;
+  @Input() headers;
   @Output() closeEvent = new EventEmitter<any>();
   constructor() {}
 

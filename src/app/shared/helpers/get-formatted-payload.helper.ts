@@ -1,7 +1,8 @@
 import { JSON_FILES } from './json-files.helper';
-import { map } from 'lodash';
+import { map, find } from 'lodash';
+import { commonUsedIds } from '../models/alert.model';
 
-export function getFormattedPayload(eventRow) {
+export function getFormattedPayload1(eventRow) {
   const event = eventRow && eventRow.psi ? eventRow.psi : '';
   const reportedToRRTValue = 'Yes';
   let payload = JSON_FILES.payload;
@@ -82,4 +83,29 @@ export function getFormattedPayload(eventRow) {
   console.log({ eventRow, event, payload, dataValues });
   payload = { ...payload, dataValues };
   return payload;
+}
+export function getFormattedPayload(eventData, payload) {
+  const dataValues = map(payload.dataValues || [], (dataValue) => {
+    const headers = JSON_FILES.allHeaders;
+    if (dataValue && dataValue.dataElement) {
+      const header = find(
+        headers || [],
+        (item) =>
+          item.name === dataValue.dataElement && item.valueType === 'BOOLEAN',
+      );
+      let value = eventData[dataValue.dataElement];
+      if (header) {
+        value = getValidBooleanType(eventData[dataValue.dataElement]);
+      } else if (dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT) {
+        value = 'Yes';
+      }
+
+      return { ...dataValue, value };
+    }
+    return dataValue;
+  });
+  return { ...payload, dataValues };
+}
+function getValidBooleanType(value) {
+  return value === 'Yes' ? 1 : 0;
 }

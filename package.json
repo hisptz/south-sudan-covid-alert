@@ -7,7 +7,8 @@
     "build": "ng build --prod --aot --build-optimizer && cd dist/covid-alert && zip -r -D covid-alert.zip .",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "format": "prettier --write \"*.json\" \"src/**/*.ts\""
   },
   "private": true,
   "dependencies": {
@@ -41,6 +42,7 @@
     "ngx-pagination": "^3.3.1",
     "ngx-pipes": "^2.7.5",
     "popper.js": "^1.16.1",
+    "prettier": "^2.1.2",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
