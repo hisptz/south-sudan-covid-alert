@@ -43,19 +43,7 @@
                     <th *ngFor="let header of allRegisteredHeaders">
                       {{ header?.column }}
                     </th>
-                    <!-- <th>Call date</th>
-                  <th>Name of caller</th>
-                  <th>Age</th>
-                  <th>Sex</th>
-                  <th>Phone number</th>
-                  <th>Was call missed or picked</th>
-                  <th>Reason for calling 6666</th>
-                  <th>Specific question about Diseases</th>
-                  <th>Did the caller meet case definition of COVID19 Cases</th>
-                  <th>Action Taken</th>
-                  <th>Case Referred to</th>
-                  <th>Reported to RRT</th> -->
-                    <th>Actions</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
@@ -86,24 +74,6 @@
                         }}
                       </p>
                     </td>
-                    <!-- <td >{{ row?.eventdate | date }}</td>
-                  <td
-                    class="cursor-pointer"
-                    matRipple
-                    (click)="showEventData(row)"
-                  >
-                    {{ row?.nameofcaller }}
-                  </td>
-                  <td>{{ row?.age }}</td>
-                  <td>{{ row?.sex }}</td>
-                  <td>{{ row?.phone }}</td>
-                  <td>{{ row?.callmissed }}</td>
-                  <td>{{ row?.reasoncalling }}</td>
-                  <td>{{ row?.specificquestion }}</td>
-                  <td>{{ row?.callermeetcase === "1" ? "Yes" : "No" }}</td>
-                  <td>{{ row?.actiontaken }}</td>
-                  <td>{{ row?.casereferred }}</td>
-                  <td>{{ row?.reportedToRRT }}</td> -->
 
                     <td>
                       <button
@@ -222,17 +192,6 @@
                   <th *ngFor="let header of reportedToRRTHeaders">
                     {{ header?.column }}
                   </th>
-                  <!-- <th>Call date</th>
-                  <th>Name of caller</th>
-                  <th>Age</th>
-                  <th>Sex</th>
-                  <th>Phone number</th>
-                  <th>Was call missed or picked</th>
-                  <th>Reason for calling 6666</th>
-                  <th>Specific question about Diseases</th>
-                  <th>Did the caller meet case definition of COVID19 Cases</th>
-                  <th>Action Taken</th>
-                  <th>Case Referred to</th> -->
                 </tr>
               </thead>
               <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
@@ -262,23 +221,6 @@
                       }}
                     </p>
                   </td>
-                  <!-- <td>{{ row.eventdate | date }}</td>
-                  <td
-                    class="cursor-pointer"
-                    matRipple
-                    (click)="showEventData(row)"
-                  >
-                    {{ row.nameofcaller }}
-                  </td>
-                  <td>{{ row.age }}</td>
-                  <td>{{ row.sex }}</td>
-                  <td>{{ row.phone }}</td>
-                  <td>{{ row.callmissed }}</td>
-                  <td>{{ row.reasoncalling }}</td>
-                  <td>{{ row.specificquestion }}</td>
-                  <td>{{ row.callermeetcase === "1" ? "Yes" : "No" }}</td>
-                  <td>{{ row.actiontaken }}</td>
-                  <td>{{ row.casereferred }}</td> -->
                 </tr>
               </tbody>
               <tbody

@@ -93,9 +93,9 @@ export class HomeComponent implements OnInit {
     this._snackBar.open('Reporting to RRT', null, {
       duration: 3000,
     });
-    const payload = getFormattedPayload(event);
+    // const payload = getFormattedPayload(event);
     const id = event && event.psi ? event.psi : '';
-    this.store.dispatch(updateReportToRRT({ data: payload, id }));
+    this.store.dispatch(updateReportToRRT({ data: event, id }));
   }
   showEventData(event) {
     this.eventToShow = event;
