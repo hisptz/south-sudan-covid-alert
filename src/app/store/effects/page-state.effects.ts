@@ -12,7 +12,7 @@ export class PageStateEffects {
   constructor(
     private actions$: Actions,
     private store: Store<AppState>,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
   ) {}
 
   loadEvents$ = createEffect(
@@ -22,19 +22,19 @@ export class PageStateEffects {
         switchMap((action) =>
           this.analyticsService.loadEvents().pipe(
             map((response: any) =>
-              this.store.dispatch(fromActions.addEvents({ payload: response }))
+              this.store.dispatch(fromActions.addEvents({ payload: response })),
             ),
             catchError((error: Error) =>
               of(
                 fromActions.loadNotification({
                   payload: { message: error.message, statusCode: 500 },
-                })
-              )
-            )
-          )
-        )
+                }),
+              ),
+            ),
+          ),
+        ),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 
   addEvents$ = createEffect(
@@ -43,21 +43,22 @@ export class PageStateEffects {
         ofType(fromActions.addEvents),
         switchMap((action) =>
           this.analyticsService.getEventListing(action.payload).pipe(
-            map((response: Array<any>) =>
-              this.store.dispatch(
-                fromActions.addEventsSuccess({ events: response })
-              )
-            ),
+            map((response: Array<any>) => {
+              console.log({ response });
+              return this.store.dispatch(
+                fromActions.addEventsSuccess({ events: response }),
+              );
+            }),
             catchError((error: Error) =>
               of(
                 fromActions.loadNotification({
                   payload: { message: error.message, statusCode: 500 },
-                })
-              )
-            )
-          )
-        )
+                }),
+              ),
+            ),
+          ),
+        ),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }
