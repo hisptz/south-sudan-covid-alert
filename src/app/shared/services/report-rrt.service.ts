@@ -1,10 +1,11 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { from, Observable, throwError } from "rxjs";
-import { catchError, take } from "rxjs/operators";
-import { apiLink } from "../../../assets/configurations/apiLink";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { from, Observable, throwError } from 'rxjs';
+import { catchError, take } from 'rxjs/operators';
+import { apiLink } from '../../../assets/configurations/apiLink';
+import { getFormattedPayload } from '../helpers/get-formatted-payload.helper';
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ReportRrtService {
   constructor(private httpClient: HttpClient) {}
@@ -17,6 +18,12 @@ export class ReportRrtService {
   }
   getPendingReportedEvents(): Observable<any> {
     const url = apiLink + `dataStore/covidAlertConfig/pendingReportedEvents`;
+    return this.httpClient
+      .get(url)
+      .pipe(catchError((error) => throwError(error)));
+  }
+  getEventPayLoad(id: string): Observable<any> {
+    const url = apiLink + `events/${id}.json`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
@@ -43,7 +50,21 @@ export class ReportRrtService {
           },
           (error) => {
             reject(error);
-          }
+          },
+        );
+    });
+  }
+  getEventPayloadPromise(id: string): any {
+    return new Promise((resolve, reject) => {
+      this.getEventPayLoad(id)
+        .pipe(take(1))
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (error) => {
+            reject(error);
+          },
         );
     });
   }
@@ -57,7 +78,7 @@ export class ReportRrtService {
           },
           (error) => {
             reject(error);
-          }
+          },
         );
     });
   }
@@ -71,7 +92,7 @@ export class ReportRrtService {
           },
           (error) => {
             reject(error);
-          }
+          },
         );
     });
   }
@@ -85,19 +106,22 @@ export class ReportRrtService {
           },
           (error) => {
             reject(error);
-          }
+          },
         );
     });
   }
   async reportToRRTPromise(data: any, id: string) {
+    const payload = await this.getFormattedEventPayload(id, data);
     let response = { reportToRRTResponse: null, pendingReportResponse: null };
     try {
-      const reportToRRTResponse = await this.reportToRRTRequestPromise(
-        data,
-        id
-      );
-      const pendingReportResponse = await this.savePendingReportToRRT(id);
-      response = { ...response, pendingReportResponse, reportToRRTResponse };
+      if (payload) {
+        const reportToRRTResponse = await this.reportToRRTRequestPromise(
+          payload,
+          id,
+        );
+        const pendingReportResponse = await this.savePendingReportToRRT(id);
+        response = { ...response, pendingReportResponse, reportToRRTResponse };
+      }
     } catch (e) {}
     return response;
   }
@@ -136,5 +160,15 @@ export class ReportRrtService {
     } catch (e) {
       return null;
     }
+  }
+  async getFormattedEventPayload(id, eventData) {
+    let formattedPayload = null;
+    try {
+      const payload = await this.getEventPayloadPromise(id);
+      formattedPayload = getFormattedPayload(eventData, payload);
+    } catch (e) {
+      formattedPayload = null;
+    }
+    return formattedPayload;
   }
 }

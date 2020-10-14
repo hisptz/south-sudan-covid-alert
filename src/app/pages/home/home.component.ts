@@ -9,7 +9,9 @@ import { map, flattenDeep } from 'lodash';
 import { getFormattedPayload } from 'src/app/shared/helpers/get-formatted-payload.helper';
 import { updateReportToRRT } from 'src/app/store/actions/report.actions';
 import { MatSnackBar } from '@angular/material';
-
+import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
+import { JSON_FILES } from '../../shared/helpers/json-files.helper';
+import { commonUsedIds } from '../../shared/models/alert.model';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -23,8 +25,31 @@ export class HomeComponent implements OnInit {
   itemsPerPage = 10;
   searchText = '';
   eventToShow = null;
+  allRegisteredHeaders = [];
+  allRegisteredFilters = [];
+  reportedToRRTHeaders = [];
+  reportedToRRTFilters = [];
+  reportedToRRTId = commonUsedIds.REPORTED_TO_RRT;
+  commonIds = commonUsedIds;
+  allHeaders = JSON_FILES.allHeaders;
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
+    this.allRegisteredHeaders =
+      JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.headers
+        ? JSON_FILES.allRegisteredHeaders.headers
+        : [];
+    this.allRegisteredFilters =
+      JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.filters
+        ? JSON_FILES.allRegisteredHeaders.filters
+        : [];
+    this.reportedToRRTHeaders =
+      JSON_FILES.allRegisteredHeaders && JSON_FILES.reportedToRRTHeaders.headers
+        ? JSON_FILES.reportedToRRTHeaders.headers
+        : [];
+    this.reportedToRRTFilters =
+      JSON_FILES.allRegisteredHeaders && JSON_FILES.reportedToRRTHeaders.filters
+        ? JSON_FILES.reportedToRRTHeaders.filters
+        : [];
     this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
     this.eventsLoading$ = store.select(fromSelectors.getEventsLoading);
   }
@@ -56,28 +81,33 @@ export class HomeComponent implements OnInit {
     return flattenDeep(
       map(eventsAnalytics || [], (eventAnalytic) => {
         return eventAnalytic &&
-          (eventAnalytic.reportedToRRT &&
-          eventAnalytic.reportedToRRT === 'Yes') 
+          eventAnalytic[this.reportedToRRTId] &&
+          (eventAnalytic[this.reportedToRRTId] === 'Yes' ||
+            eventAnalytic.isReportToRRTPending)
           ? eventAnalytic
           : [];
-      })
+      }),
     );
   }
   updateReportToRRT(event) {
     this._snackBar.open('Reporting to RRT', null, {
       duration: 3000,
     });
-    const payload = getFormattedPayload(event);
+    // const payload = getFormattedPayload(event);
     const id = event && event.psi ? event.psi : '';
-    this.store.dispatch(updateReportToRRT({ data: payload, id }));
+    this.store.dispatch(updateReportToRRT({ data: event, id }));
   }
   showEventData(event) {
     this.eventToShow = event;
   }
   closeEventDataSection(data) {
-
     if (data && data.closeView) {
       this.eventToShow = null;
     }
+  }
+  getValidPhone(phone) {
+    return phone && convertExponentialToDecimal(phone)
+      ? convertExponentialToDecimal(phone)
+      : '';
   }
 }

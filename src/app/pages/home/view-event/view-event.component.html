@@ -15,7 +15,17 @@
   </div>
   <table class="table table-bordered">
     <tbody>
-      <tr>
+      <tr *ngFor="let header of headers">
+        <th>{{ header?.column }}</th>
+        <td>
+          {{
+            header.valueType === 'DATE'
+              ? (event[header?.name] | date)
+              : event[header?.name]
+          }}
+        </td>
+      </tr>
+      <!-- <tr>
         <th>Name</th>
         <td>{{ event?.nameofcaller }}</td>
       </tr>
@@ -34,7 +44,7 @@
       <tr>
         <th>Phone number</th>
         <td>{{ event?.phone }}</td>
-      </tr>
+      </tr> -->
     </tbody>
   </table>
 </div>

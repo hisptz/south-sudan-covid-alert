@@ -1,0 +1,112 @@
+{
+  "headers": [
+    {
+      "name": "eventdate",
+      "column": "Call date",
+      "valueType": "DATE",
+      "type": "java.util.Date",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "a0C28yEISxc",
+      "column": "Name of caller",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "K6ciAYeQKWL",
+      "column": "Sex",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true,
+      "optionSet": "spf71vPDh54"
+    },
+    {
+      "name": "Pe3CHmZicqT",
+      "column": "Age",
+      "valueType": "NUMBER",
+      "type": "java.lang.Double",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "dxyEuWRce8l",
+      "column": "Phone number",
+      "valueType": "NUMBER",
+      "type": "java.lang.Double",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "EicmBDTb8Zm",
+      "column": "Reason for calling 6666",
+      "valueType": "LONG_TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "sbwDPRnLzYY",
+      "column": "Specific question about Diseases ",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true,
+      "optionSet": "KKXqBxwwvC9"
+    },
+    {
+      "name": "ZRo6gpevFmy",
+      "column": "Signs and symptoms",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true,
+      "optionSet": "ya0NeYQ84cy"
+    },
+    {
+      "name": "g7EpCKIysgQ",
+      "column": "Caller meet case definition of COVID19 Cases",
+      "valueType": "BOOLEAN",
+      "type": "java.lang.Boolean",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "rBoJRVqlWpD",
+      "column": "Action Taken",
+      "valueType": "LONG_TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "m8d3rAwFrCb",
+      "column": "Case Referred to",
+      "valueType": "ORGANISATION_UNIT",
+      "type": "org.hisp.dhis.organisationunit.OrganisationUnit",
+      "hidden": false,
+      "meta": true
+    },
+
+    {
+      "name": "ouname",
+      "column": "State",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true
+    }
+  ],
+
+  "filters": [
+    "a0C28yEISxc",
+    "EicmBDTb8Zm",
+    "sbwDPRnLzYY",
+    "rBoJRVqlWpD",
+    "m8d3rAwFrCb"
+  ]
+}
