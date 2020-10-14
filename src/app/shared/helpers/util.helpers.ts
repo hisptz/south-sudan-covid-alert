@@ -1,3 +1,4 @@
+import { commonUsedIds } from '../models/alert.model';
 import { convertExponentialToDecimal } from './convert-exponential-to-decimal.helper';
 
 export function removeAnalyticsheaders(analytics, headersToRemove) {
@@ -73,10 +74,7 @@ export function transformAnalytics1(analytics) {
     if (headers && headers.length) {
       for (const header of headers) {
         let value = '';
-        value = getHeaderValue(
-          row[itemIndex1(headers, header.name)],
-          header.name,
-        );
+        value = getHeaderValue(row[itemIndex1(headers, header.name)], header);
         obj =
           header && header.name ? { ...obj, [header.name]: value } : { ...obj };
       }
@@ -98,11 +96,16 @@ export function itemIndex1(headers, headername) {
   );
   return itemindex;
 }
-function getHeaderValue(rowValue, rowName) {
-  if (rowName === 'g7EpCKIysgQ') {
+function getHeaderValue(rowValue, header) {
+  if (header && header.valueType && header.valueType === 'BOOLEAN') {
     return rowValue === '1' ? 'Yes' : 'No';
-  } else if(rowName === 'dxyEuWRce8l') {
+  } else if (
+    header &&
+    header.name &&
+    header.name === commonUsedIds.PHONE_NUMBER
+  ) {
     return convertExponentialToDecimal(rowValue);
   }
+
   return rowValue;
 }

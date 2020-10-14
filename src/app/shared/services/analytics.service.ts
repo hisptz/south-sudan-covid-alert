@@ -7,6 +7,7 @@ import { apiLink } from '../../../assets/configurations/apiLink';
 import * as fromHelpers from '../../shared/helpers';
 import * as _ from 'lodash';
 import { ReportRrtService } from './report-rrt.service';
+import { commonUsedIds } from '../models/alert.model';
 
 @Injectable()
 export class AnalyticsService {
@@ -52,7 +53,7 @@ export class AnalyticsService {
         eventsWithPendingStatus.push(newEvent);
       }
 
-     // return eventsWithPendingStatus;
+      return eventsWithPendingStatus;
     } catch (e) {
       if (e && e.status && e.status === 404) {
         eventsWithPendingStatus = _.map(
@@ -62,9 +63,9 @@ export class AnalyticsService {
           },
         );
       }
-     // return eventsWithPendingStatus;
+      return eventsWithPendingStatus;
     }
-    return formattedEvents;
+    // return formattedEvents;
   }
   getEventListing(eventsAnalytics: Array<any>) {
     return from(this.getEventListingPromise(eventsAnalytics));
@@ -77,14 +78,14 @@ export class AnalyticsService {
     let status = false;
 
     if (pendingEvents) {
-      if (formattedEvent && formattedEvent.reportedToRRT) {
+      if (formattedEvent && formattedEvent[commonUsedIds.REPORTED_TO_RRT]) {
         const eventPendingFromStore = this.getEventPendingFromStore(
           pendingEvents,
           formattedEvent,
         );
-        if (formattedEvent.reportedToRRT === 'No') {
+        if (formattedEvent[commonUsedIds.REPORTED_TO_RRT] === 'No') {
           status = eventPendingFromStore ? true : false;
-        } else if (formattedEvent.reportedToRRT === 'Yes') {
+        } else if (formattedEvent[commonUsedIds.REPORTED_TO_RRT] === 'Yes') {
           await this.removeCompletedReportedToRRTEvent(
             pendingEvents,
             eventPendingFromStore,

@@ -35,12 +35,15 @@
           *ngIf="eventsAnalytics$ | async"
         >
           <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-            <table class="table table-bordered w-100">
-              <thead>
-                <tr class="text-muted">
-                  <th>SN</th>
-                  <th *ngFor="let header of allRegisteredHeaders">{{ header?.column }}</th>
-                  <!-- <th>Call date</th>
+            <div class="table-responsive"  [ngClass]="{ 'overflow-hidden': !eventToShow}">
+              <table class="table table-bordered w-100">
+                <thead>
+                  <tr class="text-muted">
+                    <th>SN</th>
+                    <th *ngFor="let header of allRegisteredHeaders">
+                      {{ header?.column }}
+                    </th>
+                    <!-- <th>Call date</th>
                   <th>Name of caller</th>
                   <th>Age</th>
                   <th>Sex</th>
@@ -52,25 +55,38 @@
                   <th>Action Taken</th>
                   <th>Case Referred to</th>
                   <th>Reported to RRT</th> -->
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
-                <tr
-                  *ngFor="
-                    let row of eventAnalytics
-                      | filterBy
-                        : allRegisteredFilters
-                        : searchText
-                      | paginate
-                        : { itemsPerPage: itemsPerPage, currentPage: page };
-                    let i = index;
-                    trackBy: trackByFn
-                  "
-                >
-                  <td>{{ i + 10 * (page - 1) + 1 }}</td>
-                  <td *ngFor="let header of allRegisteredHeaders">{{ header.valueType === 'DATE' ? (row[header?.name] | date) : (row[header?.name])}}</td>
-                  <!-- <td >{{ row?.eventdate | date }}</td>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
+                  <tr
+                    *ngFor="
+                      let row of eventAnalytics
+                        | filterBy: allRegisteredFilters:searchText
+                        | paginate
+                          : { itemsPerPage: itemsPerPage, currentPage: page };
+                      let i = index;
+                      trackBy: trackByFn
+                    "
+                  >
+                    <td>{{ i + 10 * (page - 1) + 1 }}</td>
+                    <td *ngFor="let header of allRegisteredHeaders">
+                      <button
+                        mat-button
+                        *ngIf="header?.name === commonIds.CALLER_NAME"
+                        (click)="showEventData(row)"
+                      >
+                        {{ row[header?.name] }}
+                      </button>
+                      <p *ngIf="header?.name !== commonIds.CALLER_NAME">
+                        {{
+                          header.valueType === 'DATE'
+                            ? (row[header?.name] | date)
+                            : row[header?.name]
+                        }}
+                      </p>
+                    </td>
+                    <!-- <td >{{ row?.eventdate | date }}</td>
                   <td
                     class="cursor-pointer"
                     matRipple
@@ -89,72 +105,73 @@
                   <td>{{ row?.casereferred }}</td>
                   <td>{{ row?.reportedToRRT }}</td> -->
 
-                  <td>
-                    <!-- <button
-                      mat-stroked-button
-                      color="primary"
-                      class="mt-2 ml-2 button-height"
-                      *ngIf="row.reportedToRRT !== 'Yes' && !row.isReportToRRTPending"
-                      (click)="updateReportToRRT(row)"
-                    >
-                      Report to RRT
-                    </button> -->
-                  </td>
-                </tr>
-              </tbody>
-              <tbody
-                *ngIf="
-                  (
-                    eventsAnalytics$
-                    | async
-                    | filterBy
-                      : allRegisteredFilters
-                      : searchText
-                  )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
-                "
-              >
-                <tr>
-                  <td colspan="10">
-                    <label class="text-muted text-center w-100 h3">
-                      Session not found</label
-                    >
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot
-                *ngIf="
-                  (
-                    eventsAnalytics$
-                    | async
-                    | filterBy
-                      : allRegisteredFilters
-                      : searchText
-                  )?.length > 0
-                "
-              >
-                <tr>
-                  <td [attr.colspan]="13">
-                    <app-pagination
-                      [itemsPerPage]="itemsPerPage"
-                      [pageInterval]="itemsPerPage"
-                      [pageIntervalFactor]="1"
-                      [currentPage]="page"
-                      [dataArray]="eventsAnalytics$ | async"
-                      [maxSize]="(eventsAnalytics$ | async).length"
-                      (changeCurrentPage)="onCurrentPageUpdate($event)"
-                      (updateItemsPerPage)="onUpdatePageSize($event)"
-                    >
-                    </app-pagination>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                    <td>
+                      <button
+                        mat-stroked-button
+                        color="primary"
+                        class="mt-2 ml-2 button-height"
+                        *ngIf="
+                          row[reportedToRRTId] !== 'Yes' &&
+                          !row.isReportToRRTPending
+                        "
+                        (click)="updateReportToRRT(row)"
+                      >
+                        Report to RRT
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody
+                  *ngIf="
+                    (
+                      eventsAnalytics$
+                      | async
+                      | filterBy: allRegisteredFilters:searchText
+                    )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
+                  "
+                >
+                  <tr>
+                    <td colspan="10">
+                      <label class="text-muted text-center w-100 h3">
+                        Session not found</label
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot
+                  *ngIf="
+                    (
+                      eventsAnalytics$
+                      | async
+                      | filterBy: allRegisteredFilters:searchText
+                    )?.length > 0
+                  "
+                >
+                  <tr>
+                    <td [attr.colspan]="14">
+                      <app-pagination
+                        [itemsPerPage]="itemsPerPage"
+                        [pageInterval]="itemsPerPage"
+                        [pageIntervalFactor]="1"
+                        [currentPage]="page"
+                        [dataArray]="eventsAnalytics$ | async"
+                        [maxSize]="(eventsAnalytics$ | async).length"
+                        (changeCurrentPage)="onCurrentPageUpdate($event)"
+                        (updateItemsPerPage)="onUpdatePageSize($event)"
+                      >
+                      </app-pagination>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </mat-card>
         </div>
         <!-- End of Table card section  -->
         <div class="info-section mr-2 ml-4" *ngIf="eventToShow">
           <app-view-event
             [event]="eventToShow"
+            [headers]="allHeaders"
             (closeEvent)="closeEventDataSection($event)"
           ></app-view-event>
         </div>
@@ -202,7 +219,10 @@
               <thead>
                 <tr class="text-muted">
                   <th>SN</th>
-                  <th>Call date</th>
+                  <th *ngFor="let header of reportedToRRTHeaders">
+                    {{ header?.column }}
+                  </th>
+                  <!-- <th>Call date</th>
                   <th>Name of caller</th>
                   <th>Age</th>
                   <th>Sex</th>
@@ -212,29 +232,37 @@
                   <th>Specific question about Diseases</th>
                   <th>Did the caller meet case definition of COVID19 Cases</th>
                   <th>Action Taken</th>
-                  <th>Case Referred to</th>
+                  <th>Case Referred to</th> -->
                 </tr>
               </thead>
               <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
                 <tr
                   *ngFor="
                     let row of getEventsWithCallerMeetCase(eventAnalytics)
-                      | filterBy
-                        : [
-                            'nameofcaller',
-                            'reasoncalling',
-                            'specificquestion',
-                            'actiontaken',
-                            'casereferred'
-                          ]
-                        : searchText
+                      | filterBy: reportedToRRTFilters:searchText
                       | paginate
                         : { itemsPerPage: itemsPerPage, currentPage: page };
                     let i = index
                   "
                 >
                   <td>{{ i + 10 * (page - 1) + 1 }}</td>
-                  <td>{{ row.eventdate | date }}</td>
+                  <td *ngFor="let header of reportedToRRTHeaders">
+                    <button
+                      mat-button
+                      *ngIf="header?.name === commonIds.CALLER_NAME"
+                      (click)="showEventData(row)"
+                    >
+                      {{ row[header?.name] }}
+                    </button>
+                    <p *ngIf="header?.name !== commonIds.CALLER_NAME">
+                      {{
+                        header.valueType === 'DATE'
+                          ? (row[header?.name] | date)
+                          : row[header?.name]
+                      }}
+                    </p>
+                  </td>
+                  <!-- <td>{{ row.eventdate | date }}</td>
                   <td
                     class="cursor-pointer"
                     matRipple
@@ -250,7 +278,7 @@
                   <td>{{ row.specificquestion }}</td>
                   <td>{{ row.callermeetcase === "1" ? "Yes" : "No" }}</td>
                   <td>{{ row.actiontaken }}</td>
-                  <td>{{ row.casereferred }}</td>
+                  <td>{{ row.casereferred }}</td> -->
                 </tr>
               </tbody>
               <tbody
@@ -258,15 +286,7 @@
                   (
                     eventsAnalytics$
                     | async
-                    | filterBy
-                      : [
-                          'nameofcaller',
-                          'reasoncalling',
-                          'specificquestion',
-                          'actiontaken',
-                          'casereferred'
-                        ]
-                      : searchText
+                    | filterBy: reportedToRRTFilters:searchText
                   )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
                 "
               >
@@ -283,15 +303,7 @@
                   (
                     eventsAnalytics$
                     | async
-                    | filterBy
-                      : [
-                          'nameofcaller',
-                          'reasoncalling',
-                          'specificquestion',
-                          'actiontaken',
-                          'casereferred'
-                        ]
-                      : searchText
+                    | filterBy: reportedToRRTFilters:searchText
                   )?.length > 0
                 "
               >
@@ -318,6 +330,7 @@
         <div class="info-section mr-2 ml-4" *ngIf="eventToShow">
           <app-view-event
             [event]="eventToShow"
+            [headers]="reportedToRRTHeaders"
             (closeEvent)="closeEventDataSection($event)"
           ></app-view-event>
         </div>

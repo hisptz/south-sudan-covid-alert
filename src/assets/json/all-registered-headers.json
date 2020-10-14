@@ -69,7 +69,7 @@
     },
     {
       "name": "g7EpCKIysgQ",
-      "column": "Did the caller meet case definition of COVID19 Cases",
+      "column": "Caller meet case definition of COVID19 Cases",
       "valueType": "BOOLEAN",
       "type": "java.lang.Boolean",
       "hidden": false,
