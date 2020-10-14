@@ -97,7 +97,7 @@ export function getFormattedPayload(eventData, payload) {
       if (header) {
         value = getValidBooleanType(eventData[dataValue.dataElement]);
       } else if (dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT) {
-        value = 'No';
+        value = 'Yes';
       }
 
       return { ...dataValue, value };
