@@ -32,14 +32,6 @@
         "type": "java.lang.Double",
         "hidden": false,
         "meta": true
-      },
-      {
-        "name": "ouname",
-        "column": "State",
-        "valueType": "TEXT",
-        "type": "java.lang.String",
-        "hidden": false,
-        "meta": true
       }
     ],
   

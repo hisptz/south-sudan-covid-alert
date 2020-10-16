@@ -90,15 +90,6 @@
       "type": "org.hisp.dhis.organisationunit.OrganisationUnit",
       "hidden": false,
       "meta": true
-    },
-
-    {
-      "name": "ouname",
-      "column": "State",
-      "valueType": "TEXT",
-      "type": "java.lang.String",
-      "hidden": false,
-      "meta": true
     }
   ],
 
