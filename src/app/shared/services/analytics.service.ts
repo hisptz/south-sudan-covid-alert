@@ -8,6 +8,7 @@ import * as fromHelpers from '../../shared/helpers';
 import * as _ from 'lodash';
 import { ReportRrtService } from './report-rrt.service';
 import { commonUsedIds } from '../models/alert.model';
+import { getOrgUnitAncestors } from '../helpers/get-orgunit-ancestors.helper';
 
 @Injectable()
 export class AnalyticsService {
@@ -34,6 +35,26 @@ export class AnalyticsService {
     return this.httpClient.get(url);
   }
 
+  loadOrgUnitDataWithAncestors(orgUnitId) {
+    const url =
+      this.apiUrl +
+      `organisationUnits/${orgUnitId}.json?fields=id,name,level,ancestors[id,name,%20level]`;
+    return this.httpClient.get(url);
+  }
+  loadOrgUnitDataWithAncestorsPromise(orgUnitId): any {
+    return new Promise((resolve, reject) => {
+      this.loadOrgUnitDataWithAncestors(orgUnitId)
+        .pipe(take(1))
+        .subscribe(
+          (res) => {
+            resolve(res);
+          },
+          (error) => {
+            reject(error);
+          },
+        );
+    });
+  }
   async getEventListingPromise(eventsAnalytics: Array<any>) {
     let eventsWithPendingStatus = [];
     const formattedEvents = fromHelpers.transformAnalytics1(eventsAnalytics); // Format analytics data of events
@@ -49,7 +70,13 @@ export class AnalyticsService {
           pendingEvents,
         );
 
-        const newEvent = { ...event, isReportToRRTPending };
+        const orgunitData =
+          event && event.ou
+            ? await this.loadOrgUnitDataWithAncestorsPromise(event.ou)
+            : '';
+        const orgUnitAncestors = getOrgUnitAncestors(orgunitData);
+
+        const newEvent = { ...event, isReportToRRTPending, orgUnitAncestors };
         eventsWithPendingStatus.push(newEvent);
       }
 

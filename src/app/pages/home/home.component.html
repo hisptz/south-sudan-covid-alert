@@ -43,6 +43,7 @@
                     <th *ngFor="let header of allRegisteredHeaders">
                       {{ header?.column }}
                     </th>
+                    <th>State</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -74,6 +75,7 @@
                         }}
                       </p>
                     </td>
+                    <td>{{ row?.orgUnitAncestors?.state}}</td>
 
                     <td>
                       <button
