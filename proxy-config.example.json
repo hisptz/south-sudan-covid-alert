@@ -1,0 +1,15 @@
+{
+    "/api": {
+      "target": "url",
+      "secure": "false",
+      "auth": "username:password",
+      "changeOrigin": "true"
+    },
+    "/": {
+      "target": "url",
+      "secure": "false",
+      "auth": "username:password",
+      "changeOrigin": "true"
+    }
+  }
+  
