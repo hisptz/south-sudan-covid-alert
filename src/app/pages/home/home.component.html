@@ -194,6 +194,7 @@
                   <th *ngFor="let header of reportedToRRTHeaders">
                     {{ header?.column }}
                   </th>
+                  <th>State</th>
                 </tr>
               </thead>
               <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
@@ -223,6 +224,7 @@
                       }}
                     </p>
                   </td>
+                  <td>{{ row?.orgUnitAncestors?.state}}</td>
                 </tr>
               </tbody>
               <tbody
