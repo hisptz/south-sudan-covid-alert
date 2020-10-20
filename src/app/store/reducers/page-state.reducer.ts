@@ -42,6 +42,7 @@ const pageStateReducer = createReducer(
   })),
   on(PageStateActions.loadEventsFailure, (state, action) => ({
     ...state,
+    eventsLoading: false,
     hasError: true,
   })),
   on(PageStateActions.upsertPageState, (state, action) =>
