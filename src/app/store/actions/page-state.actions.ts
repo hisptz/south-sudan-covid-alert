@@ -5,6 +5,10 @@ import { PageState, NotificationState } from '../models';
 export const loadEvents = createAction(
   '[PageState/API] Load events'
 );
+export const loadEventsFailure = createAction(
+  '[PageState/API] Load events Failure',
+  props<{ error: any }>()
+);
 
 export const loadNotification = createAction(
   '[PageState/API] Load Notification',

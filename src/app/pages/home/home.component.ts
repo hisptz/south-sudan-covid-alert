@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material';
 import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
 import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
+import { getErrorStatus } from '../../store/selectors';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,6 +22,7 @@ import { commonUsedIds } from '../../shared/models/alert.model';
 export class HomeComponent implements OnInit {
   eventsAnalytics$: Observable<any>;
   eventsLoading$: Observable<any>;
+  eventsLoadingErrorStatus$: Observable<any>;
   page = 1;
   itemsPerPage = 10;
   searchText = '';
@@ -56,6 +58,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(fromActions.loadEvents());
+    this.eventsLoadingErrorStatus$ = this.store.select(getErrorStatus);
   }
 
   trackByFn(index, item) {

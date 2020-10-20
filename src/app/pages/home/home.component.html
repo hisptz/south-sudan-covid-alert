@@ -20,14 +20,6 @@
         <!-- Search field with buttons -->
         <!-- {{eventsAnalytics$ | async | json }} -->
 
-        <!-- Progressive Loader -->
-        <mat-progress-bar
-          mode="indeterminate"
-          class="ml-2"
-          *ngIf="eventsLoading$ | async"
-        ></mat-progress-bar>
-        <!-- End of Progressive Loader -->
-
         <!-- Table card section  -->
         <div
           class="ml-2"
@@ -92,6 +84,18 @@
                       </button>
                     </td>
                   </tr>
+                </tbody>
+                <tbody *ngIf="eventsLoadingErrorStatus$ | async">
+                  <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                    <i>There is no data to show at the moment.</i>
+                  
+                  </td>
+                </tbody>
+                <tbody  *ngIf="(eventsLoading$ | async) && !(eventsLoadingErrorStatus$ | async)">
+                  <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                    <div>Loading data</div>
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                  </td>
                 </tbody>
                 <tbody
                   *ngIf="
@@ -172,13 +176,6 @@
         <!-- Search field with buttons -->
         <!-- {{eventsAnalytics$ | async | json }} -->
 
-        <!-- Progressive Loader -->
-        <mat-progress-bar
-          mode="indeterminate"
-          class="ml-2"
-          *ngIf="eventsLoading$ | async"
-        ></mat-progress-bar>
-        <!-- End of Progressive Loader -->
 
         <!-- Table card section  -->
         <div
@@ -226,6 +223,18 @@
                   </td>
                   <td>{{ row?.orgUnitAncestors?.state}}</td>
                 </tr>
+              </tbody>
+              <tbody *ngIf="eventsLoadingErrorStatus$ | async">
+                <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                  <i>There is no data to show at the moment.</i>
+                
+                </td>
+              </tbody>
+              <tbody  *ngIf="(eventsLoading$ | async) && !(eventsLoadingErrorStatus$ | async)">
+                <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                  <div>Loading data</div>
+                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </td>
               </tbody>
               <tbody
                 *ngIf="
