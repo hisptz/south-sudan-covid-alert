@@ -24,14 +24,15 @@ export class PageStateEffects {
             map((response: any) =>
               this.store.dispatch(fromActions.addEvents({ payload: response })),
             ),
-            catchError((error: Error) =>
-              of(
+            catchError((error: Error) =>{
+              this.store.dispatch(fromActions.loadEventsFailure({ error }))
+              return of(
                 fromActions.loadNotification({
                   payload: { message: error.message, statusCode: 500 },
                 }),
+              );
+            }),
               ),
-            ),
-          ),
         ),
       ),
     { dispatch: false },

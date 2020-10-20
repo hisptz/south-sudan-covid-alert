@@ -16,3 +16,7 @@ export const getEventsLoading = createSelector(
     getPageState,
     fromPageStateReducer.getEventsLoadingState
 );
+export const getErrorStatus = createSelector(
+    getPageState,
+   (state) => state.hasError
+);

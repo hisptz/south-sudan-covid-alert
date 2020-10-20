@@ -12,6 +12,7 @@ export interface State extends EntityState<PageState> {
   notificationStatus: boolean;
   events: any;
   eventsLoading: boolean;
+  hasError: boolean;
 }
 
 export const adapter: EntityAdapter<PageState> = createEntityAdapter<
@@ -24,6 +25,7 @@ export const initialState: State = adapter.getInitialState({
   notificationStatus: false,
   events: [],
   eventsLoading: true,
+  hasError: false
 });
 
 const pageStateReducer = createReducer(
@@ -35,7 +37,13 @@ const pageStateReducer = createReducer(
   on(PageStateActions.addEventsSuccess, (state, { events }) => ({
     ...state,
     eventsLoading: false,
+    hasError: false,
     events,
+  })),
+  on(PageStateActions.loadEventsFailure, (state, action) => ({
+    ...state,
+    eventsLoading: false,
+    hasError: true,
   })),
   on(PageStateActions.upsertPageState, (state, action) =>
     adapter.upsertOne(action.pageState, state)
