@@ -69,6 +69,7 @@ export function transformAnalytics(analytics) {
 export function transformAnalytics1(analytics) {
   const headers = analytics && analytics.headers ? analytics.headers : [];
   // const rows = analytics && analytics.rows ? analytics.rows : [];
+
   const transformedData = (analytics.rows || []).map((row) => {
     let obj = {};
     if (headers && headers.length) {
@@ -105,6 +106,14 @@ function getHeaderValue(rowValue, header) {
     header.name === commonUsedIds.PHONE_NUMBER
   ) {
     return convertExponentialToDecimal(rowValue);
+  } else if (header && header.name && header.name === commonUsedIds.SEX) {
+    if (rowValue === '01') {
+      return 'Male';
+    } else if (rowValue === '02') {
+      return 'Female';
+    } else {
+      return rowValue;
+    }
   }
 
   return rowValue;
