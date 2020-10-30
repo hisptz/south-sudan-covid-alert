@@ -2,74 +2,81 @@ import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { PageState, NotificationState } from '../models';
 
-export const loadEvents = createAction(
-  '[PageState/API] Load events'
-);
+export const loadEvents = createAction('[PageState/API] Load events');
 export const loadEventsFailure = createAction(
   '[PageState/API] Load events Failure',
-  props<{ error: any }>()
+  props<{ error: any }>(),
+);
+export const loadOrgUnitsAncestors = createAction(
+  '[PageState/API] Load OrgUnit Ancestors',
+  props<{ orgUnitIds: Array<any> }>(),
+);
+
+export const loadOrgUnitsAncestorsSuccess = createAction(
+  '[PageState/API] Load OrgUnit Ancestors Success',
+  props<{ data: Array<any> }>(),
 );
 
 export const loadNotification = createAction(
   '[PageState/API] Load Notification',
-  props<{ payload: any }>()
+  props<{ payload: any }>(),
 );
 
 export const showNotification = createAction(
   '[PageState/API] Show notification',
-  props<{ payload: boolean }>()
+  props<{ payload: boolean }>(),
 );
 
 export const addEvents = createAction(
   '[PageState/API] Add Events',
-  props<{ payload: any }>()
+  props<{ payload: any }>(),
 );
 export const addEventsSuccess = createAction(
   '[PageState/API] Add Events Success',
-  props<{ events: Array<any> }>()
+  props<{ events: Array<any> }>(),
 );
 export const addEventsFailure = createAction(
   '[PageState/API] Add Events Failure',
-  props<{ payload: any }>()
+  props<{ payload: any }>(),
 );
 
 export const upsertPageState = createAction(
   '[PageState/API] Upsert PageState',
-  props<{ pageState: PageState }>()
+  props<{ pageState: PageState }>(),
 );
 
 export const addPageStates = createAction(
   '[PageState/API] Add PageStates',
-  props<{ pageStates: PageState[] }>()
+  props<{ pageStates: PageState[] }>(),
 );
 
 export const upsertPageStates = createAction(
   '[PageState/API] Upsert PageStates',
-  props<{ pageStates: PageState[] }>()
+  props<{ pageStates: PageState[] }>(),
 );
 
 export const updatePageState = createAction(
   '[PageState/API] Update PageState',
-  props<{ pageState: Update<PageState> }>()
+  props<{ pageState: Update<PageState> }>(),
 );
 
 export const updatePageStates = createAction(
   '[PageState/API] Update PageStates',
-  props<{ pageStates: Update<PageState>[] }>()
+  props<{ pageStates: Update<PageState>[] }>(),
 );
 
 export const deletePageState = createAction(
   '[PageState/API] Delete PageState',
-  props<{ id: string }>()
+  props<{ id: string }>(),
 );
 
 export const updateNotification = createAction(
   '[PageState/API] Update Notification',
-  props<{ payload: NotificationState }>()
+  props<{ payload: NotificationState }>(),
 );
 
 export const updateNotificationStatus = createAction(
   '[PageState/API] Update Notification Status',
-  props<{ payload: boolean }>()
+  props<{ payload: boolean }>(),
 );
 export const clearPageStates = createAction('[PageState/API] Clear PageStates');

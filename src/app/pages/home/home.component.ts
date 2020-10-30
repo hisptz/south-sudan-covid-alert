@@ -5,10 +5,10 @@ import * as fromSelectors from '../../store/selectors';
 import * as fromActions from '../../store/actions';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
-import { map, flattenDeep } from 'lodash';
+import { map, flattenDeep, findIndex } from 'lodash';
 import { getFormattedPayload } from 'src/app/shared/helpers/get-formatted-payload.helper';
 import { updateReportToRRT } from 'src/app/store/actions/report.actions';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, PageEvent } from '@angular/material';
 import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
 import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
@@ -34,7 +34,15 @@ export class HomeComponent implements OnInit {
   reportedToRRTId = commonUsedIds.REPORTED_TO_RRT;
   commonIds = commonUsedIds;
   allHeaders = JSON_FILES.allHeaders;
-
+  pageIndex = 0;
+  pageSize = 10;
+  lowValue = 0;
+  highValue = 10;
+  
+  rPageIndex = 0;
+  rPageSize = 10;
+  rLowValue = 0;
+  rHighValue = 10;
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
     this.allRegisteredHeaders =
       JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.headers
@@ -113,4 +121,29 @@ export class HomeComponent implements OnInit {
       ? convertExponentialToDecimal(phone)
       : '';
   }
+  onPageChange(event) {
+    if (event.pageIndex === this.pageIndex + 1) {
+      this.lowValue = this.lowValue + this.pageSize;
+      this.highValue = this.highValue + this.pageSize;
+    } else if (event.pageIndex === this.pageIndex - 1) {
+      this.lowValue = this.lowValue - this.pageSize;
+      this.highValue = this.highValue - this.pageSize;
+    }
+    this.pageIndex = event.pageIndex;
+  }
+  rOnPageChange(event) {
+    if (event.pageIndex === this.rPageIndex + 1) {
+      this.rLowValue = this.rLowValue + this.rPageSize;
+      this.rHighValue = this.rHighValue + this.rPageSize;
+    } else if (event.pageIndex === this.rPageIndex - 1) {
+      this.rLowValue = this.rLowValue - this.rPageSize;
+      this.rHighValue = this.rHighValue - this.rPageSize;
+    }
+    this.rPageIndex = event.pageIndex;
+  }
+
+  getRowNumber(row, analytics: Array<any>) {
+    return findIndex(analytics || [], row) + 1;
+  }
+  
 }

@@ -33,10 +33,26 @@
       "hidden": false,
       "meta": true
     },
+
+    {
+      "name": "state",
+      "column": "State",
+      "valueType": "TEXT"
+    },
+    {
+      "name": "county",
+      "column": "County",
+      "valueType": "TEXT"
+    },
+    {
+      "name": "payam",
+      "column": "Payam",
+      "valueType": "TEXT"
+    },
   
     {
       "name": "ouname",
-      "column": "Location",
+      "column": "Boma",
       "valueType": "TEXT",
       "type": "java.lang.String",
       "hidden": false,
@@ -177,35 +193,8 @@
       "meta": true
     },
     {
-      "name": "FEJYpBRI2tw",
-      "column": "Was call missed or picked",
-      "valueType": "TEXT",
-      "type": "java.lang.String",
-      "hidden": false,
-      "meta": true,
-      "optionSet": "DAUKJlZVXsG"
-    },
-    {
-      "name": "PSabDGnGtw8",
-      "column": "Why did you missed the call",
-      "valueType": "TEXT",
-      "type": "java.lang.String",
-      "hidden": false,
-      "meta": true,
-      "optionSet": "c4Sm3GSpZk8"
-    },
-    {
-      "name": "JHvOHr5nmSi",
-      "column": "Why you didn't call back",
-      "valueType": "TEXT",
-      "type": "java.lang.String",
-      "hidden": false,
-      "meta": true,
-      "optionSet": "IDQESEtiVQH"
-    },
-    {
-      "name": "ZRo6gpevFmy",
-      "column": "which signs & symptoms did they reported?",
+      "name": "symptoms",
+      "column": "Signs and symptoms",
       "valueType": "TEXT",
       "type": "java.lang.String",
       "hidden": false,

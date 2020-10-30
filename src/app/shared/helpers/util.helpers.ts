@@ -1,5 +1,7 @@
-import { commonUsedIds } from '../models/alert.model';
+import { commonUsedIds, definedSysmptoms } from '../models/alert.model';
 import { convertExponentialToDecimal } from './convert-exponential-to-decimal.helper';
+import { flattenDeep } from 'lodash';
+import { calculateAge } from './calculate-age.helper';
 
 export function removeAnalyticsheaders(analytics, headersToRemove) {
   const newAnalytics = { ...analytics };
@@ -25,7 +27,6 @@ export function removeAnalyticsheaders(analytics, headersToRemove) {
 
 export function transformAnalytics(analytics) {
   const newVersion = transformAnalytics1(analytics);
-  console.log({ newVersion });
   const headers = analytics.headers;
   const transformedData = (analytics.rows || []).map((row) => {
     let reportedToRRT =
@@ -69,19 +70,30 @@ export function transformAnalytics(analytics) {
 export function transformAnalytics1(analytics) {
   const headers = analytics && analytics.headers ? analytics.headers : [];
   // const rows = analytics && analytics.rows ? analytics.rows : [];
+
   const transformedData = (analytics.rows || []).map((row) => {
     let obj = {};
+    let symptoms = [];
     if (headers && headers.length) {
       for (const header of headers) {
         let value = '';
         value = getHeaderValue(row[itemIndex1(headers, header.name)], header);
+        const definedSysmptom = getDefinedSysmptom(header, value);
+        symptoms = definedSysmptom
+          ? [...symptoms, definedSysmptom]
+          : [...symptoms];
         obj =
           header && header.name ? { ...obj, [header.name]: value } : { ...obj };
       }
     }
-    return obj;
+    obj = { ...obj, symptoms };
+    return obj &&
+      obj[commonUsedIds.REASON_FOR_CALLING] &&
+      obj[commonUsedIds.REASON_FOR_CALLING] === 'Sickness'
+      ? obj
+      : [];
   });
-  return transformedData;
+  return flattenDeep(transformedData);
 }
 
 export function itemIndex(headers, headername) {
@@ -99,13 +111,48 @@ export function itemIndex1(headers, headername) {
 function getHeaderValue(rowValue, header) {
   if (header && header.valueType && header.valueType === 'BOOLEAN') {
     return rowValue === '1' ? 'Yes' : 'No';
-  } else if (
-    header &&
-    header.name &&
-    header.name === commonUsedIds.PHONE_NUMBER
-  ) {
-    return convertExponentialToDecimal(rowValue);
+  }
+  if (header && header.name && header.name === commonUsedIds.PHONE_NUMBER) {
+    return convertExponentialToDecimal(rowValue) === '0.0'
+      ? 0
+      : convertExponentialToDecimal(rowValue);
+  }
+  if (header && header.name && header.name === commonUsedIds.SEX) {
+    if (rowValue === '01') {
+      return 'Male';
+    } else if (rowValue === '02') {
+      return 'Female';
+    } else {
+      return rowValue;
+    }
+  }
+  if (header && header.name && header.name === commonUsedIds.AGE) {
+    const birthDate = new Date(rowValue);
+    return calculateAge(birthDate) ? calculateAge(birthDate) : '';
   }
 
   return rowValue;
+}
+function getDefinedSysmptom(header, value) {
+  let symptomValue = '';
+  if (definedSysmptoms && definedSysmptoms.length) {
+    for (const symptom of definedSysmptoms) {
+      if (
+        header &&
+        symptom &&
+        symptom.id &&
+        header.name === symptom.id &&
+        value === 'Yes'
+      ) {
+        if (symptomValue) {
+          symptomValue = symptom.name
+            ? 'symptomValue' + ' ' + symptom.name
+            : symptomValue;
+        } else {
+          symptomValue = symptom.name ? `${symptom.name}` : symptomValue;
+        }
+      }
+    }
+  }
+  return symptomValue;
 }
