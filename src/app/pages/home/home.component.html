@@ -27,7 +27,10 @@
           *ngIf="eventsAnalytics$ | async"
         >
           <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-            <div class="table-responsive"  [ngClass]="{ 'overflow-hidden': !eventToShow}">
+            <div
+              class="table-responsive"
+              [ngClass]="{ 'overflow-hidden': !eventToShow }"
+            >
               <table class="table table-bordered w-100">
                 <thead>
                   <tr class="text-muted">
@@ -35,7 +38,6 @@
                     <th *ngFor="let header of allRegisteredHeaders">
                       {{ header?.column }}
                     </th>
-                    <th>State</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -44,7 +46,7 @@
                     *ngFor="
                       let row of eventAnalytics
                         | filterBy: allRegisteredFilters:searchText
-                        | slice: lowValue : highValue
+                        | slice: lowValue:highValue;
                       let i = index;
                       trackBy: trackByFn
                     "
@@ -66,7 +68,6 @@
                         }}
                       </p>
                     </td>
-                    <td>{{ row?.orgUnitAncestors?.state}}</td>
 
                     <td>
                       <button
@@ -74,7 +75,7 @@
                         color="primary"
                         class="mt-2 ml-2 button-height"
                         *ngIf="
-                          row[reportedToRRTId] !== 'Yes' &&
+                          row[reportedToRRTId] === 'No' &&
                           !row.isReportToRRTPending
                         "
                         (click)="updateReportToRRT(row)"
@@ -87,10 +88,14 @@
                 <tbody *ngIf="eventsLoadingErrorStatus$ | async">
                   <td colspan="100%" style="border-right: 1px solid #dee2e6">
                     <i>There is no data to show at the moment.</i>
-                  
                   </td>
                 </tbody>
-                <tbody  *ngIf="(eventsLoading$ | async) && !(eventsLoadingErrorStatus$ | async)">
+                <tbody
+                  *ngIf="
+                    (eventsLoading$ | async) &&
+                    !(eventsLoadingErrorStatus$ | async)
+                  "
+                >
                   <td colspan="100%" style="border-right: 1px solid #dee2e6">
                     <div>Loading data</div>
                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -123,7 +128,7 @@
                   "
                 >
                   <tr>
-                    <td [attr.colspan]="14">
+                    <td [attr.colspan]="16">
                       <!-- <app-pagination
                         [itemsPerPage]="itemsPerPage"
                         [pageInterval]="itemsPerPage"
@@ -135,10 +140,11 @@
                         (updateItemsPerPage)="onUpdatePageSize($event)"
                       >
                       </app-pagination> -->
-                      <mat-paginator [length]="(eventsAnalytics$ | async).length"
-                                     [pageSize]="pageSize"
-                                     (page)="onPageChange($event)"
-                                    >
+                      <mat-paginator
+                        [length]="(eventsAnalytics$ | async).length"
+                        [pageSize]="pageSize"
+                        (page)="onPageChange($event)"
+                      >
                       </mat-paginator>
                     </td>
                   </tr>
@@ -180,7 +186,6 @@
         <!-- Search field with buttons -->
         <!-- {{eventsAnalytics$ | async | json }} -->
 
-
         <!-- Table card section  -->
         <div
           class="row w-100 ml-2 overflow-hidden"
@@ -195,7 +200,6 @@
                   <th *ngFor="let header of reportedToRRTHeaders">
                     {{ header?.column }}
                   </th>
-                  <th>State</th>
                 </tr>
               </thead>
               <tbody *ngIf="eventsAnalytics$ | async as eventAnalytics">
@@ -203,11 +207,11 @@
                   *ngFor="
                     let row of getEventsWithCallerMeetCase(eventAnalytics)
                       | filterBy: reportedToRRTFilters:searchText
-                      | slice: rLowValue : rHighValue;
+                      | slice: rLowValue:rHighValue;
                     let i = index
                   "
                 >
-                  <td>{{ i + 10 * (page - 1) + 1 }}</td>
+                  <td>{{ getRowNumber(row, getEventsWithCallerMeetCase(eventAnalytics)) }}</td>
                   <td *ngFor="let header of reportedToRRTHeaders">
                     <button
                       mat-button
@@ -224,16 +228,19 @@
                       }}
                     </p>
                   </td>
-                  <td>{{ row?.orgUnitAncestors?.state}}</td>
                 </tr>
               </tbody>
               <tbody *ngIf="eventsLoadingErrorStatus$ | async">
                 <td colspan="100%" style="border-right: 1px solid #dee2e6">
                   <i>There is no data to show at the moment.</i>
-                
                 </td>
               </tbody>
-              <tbody  *ngIf="(eventsLoading$ | async) && !(eventsLoadingErrorStatus$ | async)">
+              <tbody
+                *ngIf="
+                  (eventsLoading$ | async) &&
+                  !(eventsLoadingErrorStatus$ | async)
+                "
+              >
                 <td colspan="100%" style="border-right: 1px solid #dee2e6">
                   <div>Loading data</div>
                   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -256,22 +263,17 @@
                   </td>
                 </tr>
               </tbody>
-              <tfoot
-                *ngIf="
-                  (
-                    eventsAnalytics$
-                    | async
-                    | filterBy: reportedToRRTFilters:searchText
-                  )?.length > 0
-                "
-              >
-                <tr *ngIf="(eventsAnalytics$ | async) as eventAnalytics">
+              <tfoot>
+                <tr *ngIf="eventsAnalytics$ | async as eventAnalytics">
                   <td [attr.colspan]="13">
-                    <mat-paginator [length]="getEventsWithCallerMeetCase(eventAnalytics).length"
-                    [pageSize]="pageSize"
-                    (page)="rOnPageChange($event)"
-                   >
-     </mat-paginator>
+                    <mat-paginator
+                      [length]="
+                        getEventsWithCallerMeetCase(eventAnalytics).length
+                      "
+                      [pageSize]="rPageSize"
+                      (page)="rOnPageChange($event)"
+                    >
+                    </mat-paginator>
                   </td>
                 </tr>
               </tfoot>

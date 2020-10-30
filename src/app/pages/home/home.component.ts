@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
   pageIndex = 0;
   pageSize = 10;
   lowValue = 0;
-  highValue = 30;
+  highValue = 10;
   
   rPageIndex = 0;
   rPageSize = 10;
@@ -136,7 +136,7 @@ export class HomeComponent implements OnInit {
       this.rLowValue = this.rLowValue + this.rPageSize;
       this.rHighValue = this.rHighValue + this.rPageSize;
     } else if (event.pageIndex === this.rPageIndex - 1) {
-      this.rLowValue = this.lowValue - this.rPageSize;
+      this.rLowValue = this.rLowValue - this.rPageSize;
       this.rHighValue = this.rHighValue - this.rPageSize;
     }
     this.rPageIndex = event.pageIndex;
@@ -145,4 +145,5 @@ export class HomeComponent implements OnInit {
   getRowNumber(row, analytics: Array<any>) {
     return findIndex(analytics || [], row) + 1;
   }
+  
 }

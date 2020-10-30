@@ -48,24 +48,24 @@
       "type": "java.lang.String",
       "hidden": false,
       "meta": true
-    },
+    }, 
     {
-      "name": "sbwDPRnLzYY",
-      "column": "Specific question about Diseases ",
-      "valueType": "TEXT",
-      "type": "java.lang.String",
-      "hidden": false,
-      "meta": true,
-      "optionSet": "KKXqBxwwvC9"
-    },
-    {
-      "name": "ZRo6gpevFmy",
+      "name": "symptoms",
       "column": "Signs and symptoms",
       "valueType": "TEXT",
       "type": "java.lang.String",
       "hidden": false,
       "meta": true,
       "optionSet": "ya0NeYQ84cy"
+    },
+    {
+      "name": "aVm8pmWxIWX",
+      "column": "Suspected disease",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true,
+      "optionSet": "wJTig3W6ETw"
     },
     {
       "name": "g7EpCKIysgQ",
@@ -76,18 +76,33 @@
       "meta": true
     },
     {
-      "name": "rBoJRVqlWpD",
-      "column": "Action Taken",
-      "valueType": "LONG_TEXT",
-      "type": "java.lang.String",
+      "name": "HkqxOfRr51f",
+      "column": "Alert case for other outbreak prone  diseases",
+      "valueType": "BOOLEAN",
+      "type": "java.lang.Boolean",
       "hidden": false,
       "meta": true
     },
     {
-      "name": "m8d3rAwFrCb",
-      "column": "Case Referred to",
-      "valueType": "ORGANISATION_UNIT",
-      "type": "org.hisp.dhis.organisationunit.OrganisationUnit",
+      "name": "state",
+      "column": "State",
+      "valueType": "TEXT"
+    },
+    {
+      "name": "county",
+      "column": "County",
+      "valueType": "TEXT"
+    },
+    {
+      "name": "payam",
+      "column": "Payam",
+      "valueType": "TEXT"
+    },
+    {
+      "name": "ouname",
+      "column": "Boma",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
       "hidden": false,
       "meta": true
     }
@@ -98,6 +113,11 @@
     "EicmBDTb8Zm",
     "sbwDPRnLzYY",
     "rBoJRVqlWpD",
-    "m8d3rAwFrCb"
+    "m8d3rAwFrCb",
+    "ouname",
+    "state",
+    "county",
+    "payam",
+    "symptoms"
   ]
 }

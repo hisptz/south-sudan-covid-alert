@@ -32,12 +32,40 @@
         "type": "java.lang.Double",
         "hidden": false,
         "meta": true
+      },
+      {
+        "name": "state",
+        "column": "State",
+        "valueType": "TEXT"
+      },
+      {
+        "name": "county",
+        "column": "County",
+        "valueType": "TEXT"
+      },
+      {
+        "name": "payam",
+        "column": "Payam",
+        "valueType": "TEXT"
+      },
+      {
+        "name": "ouname",
+        "column": "Boma",
+        "valueType": "TEXT",
+        "type": "java.lang.String",
+        "hidden": false,
+        "meta": true
       }
     ],
   
     "filters": [
       "a0C28yEISxc",
-      "ouname"
+      "K6ciAYeQKWL",
+      "dxyEuWRce8l",
+      "ouname",
+      "state",
+      "county",
+      "payam"
     ]
   }
   

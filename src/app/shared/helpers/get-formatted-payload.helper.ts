@@ -80,29 +80,28 @@ export function getFormattedPayload1(eventRow) {
     }
     return updatedDataValue;
   });
-  console.log({ eventRow, event, payload, dataValues });
   payload = { ...payload, dataValues };
   return payload;
 }
 export function getFormattedPayload(eventData, payload) {
   const dataValues = map(payload.dataValues || [], (dataValue) => {
-    const headers = JSON_FILES.allHeaders;
-    if (dataValue && dataValue.dataElement) {
-      const header = find(
-        headers || [],
-        (item) =>
-          item.name === dataValue.dataElement && item.valueType === 'BOOLEAN',
-      );
-      let value = eventData[dataValue.dataElement];
-      if (header) {
-        value = getValidBooleanType(eventData[dataValue.dataElement]);
-      } else if (dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT) {
-        value = 'Yes';
-      }
+    // const headers = JSON_FILES.allHeaders;
+    // if (dataValue && dataValue.dataElement) {
+    //   const header = find(
+    //     headers || [],
+    //     (item) =>
+    //       item.name === dataValue.dataElement && item.valueType === 'BOOLEAN',
+    //   );
+    //   let value = eventData[dataValue.dataElement];
+    //   if (header) {
+    //     value = getValidBooleanType(eventData[dataValue.dataElement]);
+    //   } else if (dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT) {
+    //     value = 'Yes';
+    //   }
 
-      return { ...dataValue, value };
-    }
-    return dataValue;
+    return dataValue && dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT
+      ? { ...dataValue, value: 'Yes' }
+      : { ...dataValue };
   });
   return { ...payload, dataValues };
 }
