@@ -54,7 +54,7 @@
                     <td>{{ getRowNumber(row, eventAnalytics) }}</td>
                     <td *ngFor="let header of allRegisteredHeaders">
                       <button
-                        mat-button
+                        mat-stroked-button
                         *ngIf="header?.name === commonIds.CALLER_NAME"
                         (click)="showEventData(row)"
                       >
