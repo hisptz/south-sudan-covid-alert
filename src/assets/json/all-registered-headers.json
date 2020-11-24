@@ -10,7 +10,15 @@
     },
     {
       "name": "a0C28yEISxc",
-      "column": "Name of caller",
+      "column": "First name of the caller",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true
+    },
+    {
+      "name": "cQkocmeqivx",
+      "column": "Last Name of the Caller",
       "valueType": "TEXT",
       "type": "java.lang.String",
       "hidden": false,
@@ -111,6 +119,7 @@
   "filters": [
     "a0C28yEISxc",
     "EicmBDTb8Zm",
+    "cQkocmeqivx",
     "sbwDPRnLzYY",
     "rBoJRVqlWpD",
     "m8d3rAwFrCb",

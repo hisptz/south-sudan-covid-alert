@@ -55,12 +55,14 @@
                     <td *ngFor="let header of allRegisteredHeaders">
                       <button
                         mat-stroked-button
-                        *ngIf="header?.name === commonIds.CALLER_NAME"
+                        *ngIf="header?.name === commonIds.CALLER_FIRST_NAME || header?.name === commonIds.CALLER_LAST_NAME"
+
                         (click)="showEventData(row)"
                       >
-                        {{ row[header?.name] }}
+                      <span *ngIf="row[header?.name]"> {{ row[header?.name] }}</span> 
+                      <span *ngIf="row[header?.name] === ''"> N/A</span> 
                       </button>
-                      <p *ngIf="header?.name !== commonIds.CALLER_NAME">
+                      <p *ngIf="header?.name !== commonIds.CALLER_FIRST_NAME && header?.name !== commonIds.CALLER_LAST_NAME">
                         {{
                           header.valueType === 'DATE'
                             ? (row[header?.name] | date)
@@ -214,13 +216,14 @@
                   <td>{{ getRowNumber(row, getEventsWithCallerMeetCase(eventAnalytics)) }}</td>
                   <td *ngFor="let header of reportedToRRTHeaders">
                     <button
-                      mat-button
-                      *ngIf="header?.name === commonIds.CALLER_NAME"
+                       mat-stroked-button
+                      *ngIf="header?.name === commonIds.CALLER_FIRST_NAME || header?.name === commonIds.CALLER_LAST_NAME"
                       (click)="showEventData(row)"
                     >
-                      {{ row[header?.name] }}
+                    <span *ngIf="row[header?.name]"> {{ row[header?.name] }}</span> 
+                    <span *ngIf="row[header?.name] === ''"> N/A</span> 
                     </button>
-                    <p *ngIf="header?.name !== commonIds.CALLER_NAME">
+                    <p *ngIf="header?.name !== commonIds.CALLER_FIRST_NAME && header?.name !== commonIds.CALLER_LAST_NAME">
                       {{
                         header.valueType === 'DATE'
                           ? (row[header?.name] | date)
