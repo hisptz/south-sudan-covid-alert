@@ -51,6 +51,12 @@ export class AnalyticsService {
       'stage=qpjm7pHJYu0&displayProperty=NAME&outputType=EVENT&desc=eventdate&paging=false';
     return this.httpClient.get(url);
   }
+  loadEvents1(): Observable<any> {
+    const url =
+      this.apiUrl +
+      'analytics/events/query/uaV8Y8Yd2te.json?dimension=pe:LAST_12_MONTHS&dimension=ou:he6RdNPCKhY&dimension=qpjm7pHJYu0.ULq5o82P6yq&dimension=qpjm7pHJYu0.snEoCW6OmBH&dimension=qpjm7pHJYu0.UVb0n05eXrb&dimension=qpjm7pHJYu0.dxyEuWRce8l&dimension=qpjm7pHJYu0.FEJYpBRI2tw:IN:Picked&dimension=qpjm7pHJYu0.a0C28yEISxc&dimension=qpjm7pHJYu0.cQkocmeqivx&dimension=qpjm7pHJYu0.oQSKqGcOGNe&dimension=qpjm7pHJYu0.TwGiy51IM8t&dimension=qpjm7pHJYu0.Pe3CHmZicqT&dimension=qpjm7pHJYu0.K6ciAYeQKWL&dimension=qpjm7pHJYu0.EicmBDTb8Zm:IN:Sickness&dimension=qpjm7pHJYu0.nybNlx0XcUq&dimension=qpjm7pHJYu0.aTMMzGXk19L&dimension=qpjm7pHJYu0.Yh5KOJj8l7p&dimension=qpjm7pHJYu0.EWZcuvPOrJF&dimension=qpjm7pHJYu0.fyzp8BpsPMl&dimension=qpjm7pHJYu0.IrFWIj5ks2p&dimension=qpjm7pHJYu0.iUEwXfg9CgD&dimension=qpjm7pHJYu0.HahhmzRvwu8&dimension=qpjm7pHJYu0.T0ehgpsDrui&dimension=qpjm7pHJYu0.YirYKgXDYwm&dimension=qpjm7pHJYu0.aVm8pmWxIWX&dimension=qpjm7pHJYu0.UATjIK2KUVd&dimension=qpjm7pHJYu0.gYjZ1iTGNlg&dimension=qpjm7pHJYu0.HkqxOfRr51f&dimension=qpjm7pHJYu0.g7EpCKIysgQ&dimension=qpjm7pHJYu0.s4jPdjTj69G&stage=qpjm7pHJYu0&displayProperty=NAME&outputType=EVENT&desc=eventdate&paging=false';
+    return this.httpClient.get(url);
+  }
 
   loadOrgUnitDataWithAncestors(orgUnitIdArr: Array<any>) {
     const formattedOrgUnitArr = _.uniq(orgUnitIdArr);

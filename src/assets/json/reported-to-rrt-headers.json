@@ -2,7 +2,15 @@
     "headers": [
       {
         "name": "a0C28yEISxc",
-        "column": "Name of caller",
+        "column": "First name of the caller",
+        "valueType": "TEXT",
+        "type": "java.lang.String",
+        "hidden": false,
+        "meta": true
+      },
+      {
+        "name": "cQkocmeqivx",
+        "column": "Last Name of the Caller",
         "valueType": "TEXT",
         "type": "java.lang.String",
         "hidden": false,
