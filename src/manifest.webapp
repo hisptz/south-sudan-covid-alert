@@ -1,7 +1,7 @@
 {
   "version": "0.0.9-alpha",
   "name": "Call Centre Screening",
-  "description": "Call Centre Screening",
+  "description": "Watch Desk",
   "launch_path": "index.html",
   "icons": {
     "16": "assets/icons/icon-16x16.png",
