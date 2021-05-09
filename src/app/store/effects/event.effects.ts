@@ -20,12 +20,11 @@ export class EventEffects {
         ofType(fromActions.loadEventsByProgramId),
         switchMap((action) =>
           this.eventsService.getEvents().pipe(
-            map((response: any) =>{
-              console.log({response})
-             return  this.store.dispatch(
-                fromActions.loadEventsByProgramIdSuccess(response),
-              )
-              }),
+            map((response: any) => {
+              return this.store.dispatch(
+                fromActions.loadEventsByProgramIdSuccess({events: response}),
+              );
+            }),
             catchError((error: Error) => {
               this.store.dispatch(
                 fromActions.loadEventsByProgramIdFailure({ error }),
