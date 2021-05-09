@@ -1,11 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { PROGRAM_ID, ORGUNIT_ID } from '../models/config.model';
+import {
+  PROGRAM_ID,
+  ORGUNIT_ID,
+  REASON_FOR_CALLING_ID,
+  REASON_FOR_CALLING_VALUE,
+} from '../models/config.model';
 import { apiLink } from '../../../assets/configurations/apiLink';
 import { catchError } from 'rxjs/operators';
 import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
+import {filter} from 'lodash';
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +28,9 @@ export class EventsService {
     fields,
     pageSize = 50,
   }): Observable<any> {
+    const filterExpression = `filter=${REASON_FOR_CALLING_ID}:EQ:${REASON_FOR_CALLING_VALUE}`;
     const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&${pageSize}`;
-    const url = `${apiLink}events.json?page=${pageFilter}&${queries}&${fields}`;
+    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}&${filterExpression}`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
@@ -64,5 +71,10 @@ export class EventsService {
       { fields: 'none' },
     );
     return await this.promiseService.getPromiseFromObservable(eventsObservable);
+  }
+
+  getEventsWithMoreThanOneSymptomDataElement(events) {
+    
+    // return filter
   }
 }
