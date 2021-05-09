@@ -5,13 +5,15 @@ import {
   ORGUNIT_ID,
   REASON_FOR_CALLING_ID,
   REASON_FOR_CALLING_VALUE,
+  SYMPTOM_IDS,
 } from '../models/config.model';
 import { apiLink } from '../../../assets/configurations/apiLink';
 import { catchError } from 'rxjs/operators';
 import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
-import {filter} from 'lodash';
+import { filter } from 'lodash';
+import { EventResponse } from 'src/app/store/models/events.model';
 
 @Injectable({
   providedIn: 'root',
@@ -47,11 +49,18 @@ export class EventsService {
           const eventsObservable: Observable<Function> = this.getEventsByProgramIdObservable(
             { pageFilter, fields },
           );
-          const eventsResult = await this.promiseService.getPromiseFromObservable(
+          const eventsResult: {
+            events: Array<EventResponse>;
+          } = await this.promiseService.getPromiseFromObservable(
             eventsObservable,
           );
           events = eventsResult?.events?.length
-            ? [...events, ...eventsResult?.events]
+            ? [
+                ...events,
+                ...this.getEventsWithMoreThanOneSymptomDataElement(
+                  eventsResult?.events,
+                ),
+              ]
             : [...events];
         }
       }
@@ -73,8 +82,24 @@ export class EventsService {
     return await this.promiseService.getPromiseFromObservable(eventsObservable);
   }
 
-  getEventsWithMoreThanOneSymptomDataElement(events) {
-    
-    // return filter
+  getEventsWithMoreThanOneSymptomDataElement(
+    events: Array<EventResponse>,
+  ): Array<EventResponse> {
+    console.log({ SYMPTOM_IDS });
+    return filter(events || [], (eventItem: EventResponse) => {
+      if (eventItem?.dataValues) {
+        const symptomsDataValues = filter(
+          eventItem?.dataValues || [],
+          (dataValue) => {
+            if (SYMPTOM_IDS?.includes(dataValue?.dataElement)) {
+              return dataValue;
+            }
+          },
+        );
+        if (symptomsDataValues?.length > 1) {
+          return eventItem;
+        }
+      }
+    });
   }
 }
