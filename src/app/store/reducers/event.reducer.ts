@@ -1,21 +1,46 @@
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
+import { loadEventsByProgramId, loadEventsByProgramIdFailure, loadEventsByProgramIdSuccess } from '../actions';
+import { NotificationState } from '../models';
 
+export const eventFeatureKey = 'events';
 
-export const eventFeatureKey = 'event';
-
-export interface State {
-
+export interface EventState extends EntityState<any> {
+  notification: NotificationState;
+  notificationStatus: boolean;
+  events: any;
+  eventsLoading: boolean;
+  hasError: boolean;
 }
+export const adapter: EntityAdapter<any> = createEntityAdapter<any>();
 
-export const initialState: State = {
+export const initialState: EventState =  adapter.getInitialState({
+   // additional entity state properties
+   notification: { message: '', statusCode: 0 },
+   notificationStatus: false,
+   events: [],
+   eventsLoading: true,
+   hasError: false
+});
 
-};
+export const eventReducer = createReducer(initialState,
+  on(loadEventsByProgramId, (state, action) => ({
+    ...state,
+    eventsLoading: true,
+  })),
+  on(loadEventsByProgramIdSuccess, (state, { events }) => ({
+    ...state,
+    eventsLoading: false,
+    hasError: false,
+    events,
+  })),
+  on(loadEventsByProgramIdFailure, (state, action) => ({
+    ...state,
+    eventsLoading: false,
+    hasError: true,
+  })),
+  );
 
-const eventReducer = createReducer(
-  initialState,
-
-);
-
-export function reducer(state: State | undefined, action: Action) {
+export function reducer(state: EventState | undefined, action: Action) {
   return eventReducer(state, action);
 }
