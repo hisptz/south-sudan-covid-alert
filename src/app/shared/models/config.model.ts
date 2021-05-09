@@ -8,4 +8,4 @@ export const REASON_FOR_CALLING_ID =
   METADATA?.dataElements?.reasonForCalling?.id || '';
 export const REASON_FOR_CALLING_VALUE =
   METADATA?.dataElements?.reasonForCalling?.preferredValue || '';
-export const SYMPTOM_IDS = METADATA?.dataElements?.sysmptomsIds;
+export const SYMPTOM_IDS = METADATA?.dataElements?.symptomIds;
