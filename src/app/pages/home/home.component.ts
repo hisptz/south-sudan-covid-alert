@@ -5,7 +5,7 @@ import * as fromSelectors from '../../store/selectors';
 import * as fromActions from '../../store/actions';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
-import { map, flattenDeep, findIndex } from 'lodash';
+import { map, flattenDeep, findIndex, filter } from 'lodash';
 import { getFormattedPayload } from 'src/app/shared/helpers/get-formatted-payload.helper';
 import { updateReportToRRT } from 'src/app/store/actions/report.actions';
 import { PageEvent } from '@angular/material/paginator';
@@ -14,6 +14,15 @@ import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-expo
 import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
 import { getErrorStatus } from '../../store/selectors';
+import {
+  ALL_REGISTERED_HEADERS,
+  ALL_REGISTERED_FILTERS,
+  REPORTED_TO_RRT_HEADERS,
+  REPORTED_TO_RRT_FILTERS,
+  ALL_TABLE_HEADERS,
+} from 'src/app/shared/models/config.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,6 +30,7 @@ import { getErrorStatus } from '../../store/selectors';
   providers: [FilterByPipe],
 })
 export class HomeComponent implements OnInit {
+  eventsByProgramId$: Observable<any>;
   eventsAnalytics$: Observable<any>;
   eventsLoading$: Observable<any>;
   eventsLoadingErrorStatus$: Observable<any>;
@@ -34,39 +44,33 @@ export class HomeComponent implements OnInit {
   reportedToRRTFilters = [];
   reportedToRRTId = commonUsedIds.REPORTED_TO_RRT;
   commonIds = commonUsedIds;
-  allHeaders = JSON_FILES.allHeaders;
+  allHeaders = ALL_TABLE_HEADERS;
   pageIndex = 0;
   pageSize = 10;
   lowValue = 0;
   highValue = 10;
-  
+
   rPageIndex = 0;
   rPageSize = 10;
   rLowValue = 0;
   rHighValue = 10;
-  constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
-    this.allRegisteredHeaders =
-      JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.headers
-        ? JSON_FILES.allRegisteredHeaders.headers
-        : [];
-    this.allRegisteredFilters =
-      JSON_FILES.allRegisteredHeaders && JSON_FILES.allRegisteredHeaders.filters
-        ? JSON_FILES.allRegisteredHeaders.filters
-        : [];
-    this.reportedToRRTHeaders =
-      JSON_FILES.allRegisteredHeaders && JSON_FILES.reportedToRRTHeaders.headers
-        ? JSON_FILES.reportedToRRTHeaders.headers
-        : [];
-    this.reportedToRRTFilters =
-      JSON_FILES.allRegisteredHeaders && JSON_FILES.reportedToRRTHeaders.filters
-        ? JSON_FILES.reportedToRRTHeaders.filters
-        : [];
+  constructor(
+    private store: Store<AppState>,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+  ) {
+    this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
+    this.allRegisteredFilters = ALL_REGISTERED_FILTERS;
+    this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
+    this.reportedToRRTFilters = REPORTED_TO_RRT_FILTERS;
     this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
     this.eventsLoading$ = store.select(fromSelectors.getEventsLoading);
+    this.eventsByProgramId$ = store.select(fromSelectors.eventsToDisplay);
   }
 
   ngOnInit() {
     this.store.dispatch(fromActions.loadEvents());
+    this.store.dispatch(fromActions.loadEventsByProgramId());
     this.eventsLoadingErrorStatus$ = this.store.select(getErrorStatus);
   }
 
@@ -101,13 +105,37 @@ export class HomeComponent implements OnInit {
       }),
     );
   }
-  updateReportToRRT(event) {
-    this._snackBar.open('Reporting to RRT', null, {
-      duration: 3000,
+  getReportedToRRTEvents(eventsAnalytics: Array<any>): Array<any> {
+    return flattenDeep(
+      map(eventsAnalytics || [], (eventAnalytic) => {
+        return eventAnalytic[this.reportedToRRTId] &&
+          eventAnalytic[this.reportedToRRTId]?.value === 'Yes'
+          ? eventAnalytic
+          : [];
+      }),
+    );
+  }
+  updateReportToRRT(row) {
+    const dialogRef = this.dialog.open(ConfirmReportToRrtDialogComponent, {
+      data: {
+        firstName: 'panda',
+        lastName: 'to',
+      },
+      height: '150px',
+      width: '500px',
     });
-    // const payload = getFormattedPayload(event);
-    const id = event && event.psi ? event.psi : '';
-    this.store.dispatch(updateReportToRRT({ data: event, id }));
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.reportToRRT) {
+        this._snackBar.open('Reporting to RRT', null, {
+          duration: 3000,
+        });
+        const data = {
+          event: row?.event,
+          dataValues: { dataElement: this.reportedToRRTId, value: true },
+        };
+        this.store.dispatch(updateReportToRRT({ data, id: row?.event }));
+      }
+    });
   }
   showEventData(event) {
     this.eventToShow = event;
@@ -146,5 +174,4 @@ export class HomeComponent implements OnInit {
   getRowNumber(row, analytics: Array<any>) {
     return findIndex(analytics || [], row) + 1;
   }
-  
 }
