@@ -24,7 +24,7 @@ import { ConfirmReportToRrtDialogComponent } from './dialogs/confirm-report-to-r
     ...sharedComponents,
     ConfirmReportToRrtDialogComponent
   ],
-  exports: [...sharedComponents, ...materialModules, NgPipesModule, NgxPaginationModule, ...modules],
+  exports: [...sharedComponents, ...materialModules, ConfirmReportToRrtDialogComponent, NgPipesModule, NgxPaginationModule, ...modules],
   providers: [...services]
 })
 export class SharedModule { }
