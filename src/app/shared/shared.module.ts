@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
 import { materialModules } from './material-modules';
 import { modules } from './modules';
+import { ConfirmReportToRrtDialogComponent } from './dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { modules } from './modules';
     ...modules
   ],
   declarations: [
-    ...sharedComponents
+    ...sharedComponents,
+    ConfirmReportToRrtDialogComponent
   ],
   exports: [...sharedComponents, ...materialModules, NgPipesModule, NgxPaginationModule, ...modules],
   providers: [...services]

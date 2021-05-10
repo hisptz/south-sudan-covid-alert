@@ -84,26 +84,17 @@ export function getFormattedPayload1(eventRow) {
   return payload;
 }
 export function getFormattedPayload(eventData, payload) {
-  const dataValues = map(payload.dataValues || [], (dataValue) => {
-    // const headers = JSON_FILES.allHeaders;
-    // if (dataValue && dataValue.dataElement) {
-    //   const header = find(
-    //     headers || [],
-    //     (item) =>
-    //       item.name === dataValue.dataElement && item.valueType === 'BOOLEAN',
-    //   );
-    //   let value = eventData[dataValue.dataElement];
-    //   if (header) {
-    //     value = getValidBooleanType(eventData[dataValue.dataElement]);
-    //   } else if (dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT) {
-    //     value = 'Yes';
-    //   }
-
-    return dataValue && dataValue.dataElement === commonUsedIds.REPORTED_TO_RRT
-      ? { ...dataValue, value: 'Yes' }
-      : { ...dataValue };
-  });
-  return { ...payload, dataValues };
+  let reportToRrtObj = find(
+    payload?.dataValues || [],
+    (dataValue) => dataValue?.dataElement === commonUsedIds.REPORTED_TO_RRT,
+  );
+  reportToRrtObj = reportToRrtObj
+    ? { ...reportToRrtObj, value: 'Yes' }
+    : { dataElement: commonUsedIds.REPORTED_TO_RRT, value: true };
+  return {
+    ...payload,
+    dataValues: [...(payload?.dataValues || []), reportToRrtObj],
+  };
 }
 function getValidBooleanType(value) {
   return value === 'Yes' ? 1 : 0;
