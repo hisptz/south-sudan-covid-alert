@@ -89,7 +89,7 @@ export function getFormattedPayload(eventData, payload) {
     (dataValue) => dataValue?.dataElement === commonUsedIds.REPORTED_TO_RRT,
   );
   reportToRrtObj = reportToRrtObj
-    ? { ...reportToRrtObj, value: 'Yes' }
+    ? { ...reportToRrtObj, value: true }
     : { dataElement: commonUsedIds.REPORTED_TO_RRT, value: true };
   return {
     ...payload,
