@@ -166,6 +166,7 @@ export class ReportRrtService {
     try {
       const payload = await this.getEventPayloadPromise(id);
       formattedPayload = getFormattedPayload(eventData, payload);
+      console.log({formattedPayload})
     } catch (e) {
       formattedPayload = null;
     }
