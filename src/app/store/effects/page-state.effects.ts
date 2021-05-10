@@ -6,6 +6,7 @@ import * as fromActions from '../actions';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AnalyticsService } from 'src/app/shared/services';
+import { EventsService } from 'src/app/shared/services/events.service';
 
 @Injectable()
 export class PageStateEffects {
@@ -13,6 +14,7 @@ export class PageStateEffects {
     private actions$: Actions,
     private store: Store<AppState>,
     private analyticsService: AnalyticsService,
+    private eventsService: EventsService
   ) {}
 
   loadEvents$ = createEffect(
@@ -20,7 +22,7 @@ export class PageStateEffects {
       this.actions$.pipe(
         ofType(fromActions.loadEvents),
         switchMap((action) =>
-          this.analyticsService.loadEvents1().pipe(
+          this.eventsService.getEvents().pipe(
             map((response: any) =>
               this.store.dispatch(fromActions.addEvents({ payload: response })),
             ),
