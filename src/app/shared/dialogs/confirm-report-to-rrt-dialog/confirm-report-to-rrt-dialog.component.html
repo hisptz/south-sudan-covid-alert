@@ -1,1 +1,20 @@
-<p>confirm-report-to-rrt-dialog works!</p>
+<div class="d-flex flex-column w-100">
+  <p class="mb-1">
+    Are use you want to report case {{ data?.firstName }}
+    {{ data?.lastName }} to RRT?
+  </p>
+  <br />
+  <div class="d-flex flex-row w-100 justify-content-end">
+    <button mat-flat-button class="float-right mr-2" (click)="closeDialog()">
+      Close
+    </button>
+    <button
+      mat-flat-button
+      class="float-right"
+      color="primary"
+      (click)="reportToRRT()"
+    >
+      Yes, report to RRT
+    </button>
+  </div>
+</div>
