@@ -90,10 +90,11 @@ export class HomeComponent implements OnInit {
     this.searchText = e ? e.target.value.trim() : this.searchText;
   }
 
-  addCaseNumber(row) {
+  addCaseNumber(row, caseNumber) {
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
         eventId: row?.event,
+        caseNumber
       },
       height: '250px',
       width: '500px',
@@ -101,6 +102,7 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
         this._snackBar.open('Saving case number', null, {
+  
           duration: 3000,
         });
         const data = {
@@ -165,7 +167,7 @@ export class HomeComponent implements OnInit {
     });
   }
   showEventData(event, header = null, value = null) {
-    if (header === commonUsedIds.CASE_NUMBER && !value) {
+    if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
     } else {
       this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 4);

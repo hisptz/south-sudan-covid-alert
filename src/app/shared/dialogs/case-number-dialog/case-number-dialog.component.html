@@ -4,7 +4,7 @@
     <div style="width: 100%">
       <mat-form-field style="width: 100%" appearance="outline">
         <mat-label>Case number</mat-label>
-        <input matInput type="text" required [formControlName]="commonIds?.CASE_NUMBER" />
+        <input matInput type="text"  required [formControlName]="commonIds?.CASE_NUMBER" />
         <mat-error>Case number is required</mat-error>
       </mat-form-field>
 
@@ -13,16 +13,17 @@
           style="float: right !important"
           mat-flat-button
           type="submit"
-         
+          [disabled]="!addCaseNumberForm.valid"
           color="primary"
         >
-          Save
+         {{data?.caseNumber ? 'Update' : 'Save'}} 
         </button>
         <button
         class="mr-2"
           style="float: right !important"
           mat-flat-button
           color="basic"
+          
           type="button"
           (click)="closeDialog()"
         >

@@ -3,17 +3,17 @@
     <div class="container-fluid px-0">
       <div class="row mx-0 w-100">
         <!-- Search field with buttons -->
-        <div class="row w-100 mx-0 mb-2">
+        <div class="row w-100 mx-0 mb-2 mt-2">
           <div class="col-sm">
             <div class="input-group">
-              <mat-form-field class="w-25" appearance="outline">
+              <div class="form-group w-50" appearance="outline">
                 <input
-                  matInput
+                  class="form-control"
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search using First Name, Last Name, Reason for calling, Case number, State, County, Boma and Signs and Sysmptoms"
                   (keyup)="searchingItems($event)"
                 />
-              </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
@@ -69,16 +69,33 @@
                             : row[header?.name]?.value
                         }}
                       </p>
-                      <div *ngIf="header?.name === commonIds.CASE_NUMBER">
-                        <p *ngIf="row[header?.name]?.value">
-                          {{ row[header?.name]?.value }}
-                        </p>
+                      <div
+                        class="position-relative"
+                        style="width: 120px;"
+                        *ngIf="header?.name === commonIds.CASE_NUMBER"
+                      >
+                      <div class="w-75" style="word-wrap: break-word">
+                        <i
+                        style="color: gray"
+                        *ngIf="!row[header?.name]?.value"
+                      >
+                        There is no case number for this case
+                      </i>
+                      <p
+                       
+                       
+                        *ngIf="row[header?.name]?.value"
+                      >
+                        {{ row[header?.name]?.value }}
+                      </p>
+                      </div>
+                      
                         <button
+                          class="position-absolute"
                           mat-icon-button
-                          *ngIf="!row[header?.name]?.value"
-                          style="color: gray"
-                          (click)="addCaseNumber(row)"
-            
+                          
+                          style="color: gray; top: 0; right: 0"
+                          (click)="addCaseNumber(row, row[header?.name]?.value)"
                         >
                           <mat-icon>edit</mat-icon>
                         </button>
@@ -289,9 +306,7 @@
                 <tr *ngIf="eventsByProgramId$ | async as eventAnalytics">
                   <td [attr.colspan]="13">
                     <mat-paginator
-                      [length]="
-                      getReportedToRRTEvents(eventAnalytics).length
-                      "
+                      [length]="getReportedToRRTEvents(eventAnalytics).length"
                       [pageSize]="rPageSize"
                       (page)="rOnPageChange($event)"
                     >
