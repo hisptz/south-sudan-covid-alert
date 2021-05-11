@@ -23,3 +23,11 @@ export const eventsToDisplay = createSelector(
     });
   },
 );
+export const getEventsByProgramIdLoading = createSelector(
+  getEventState,
+  (state) => state.eventsLoading,
+);
+export const getEventsByProgramIdErrorStatus = createSelector(
+  getEventState,
+  (state) => state.hasError,
+);
