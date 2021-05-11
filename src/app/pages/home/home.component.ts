@@ -72,7 +72,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-   
     this.store.dispatch(fromActions.loadEvents());
     this.store.dispatch(fromActions.loadEventsByProgramId());
     this.eventsLoadingErrorStatus$ = this.store.select(
@@ -94,7 +93,7 @@ export class HomeComponent implements OnInit {
   addCaseNumber(row) {
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
-         eventId: row?.event
+        eventId: row?.event,
       },
       height: '250px',
       width: '500px',
@@ -111,7 +110,6 @@ export class HomeComponent implements OnInit {
         this.store.dispatch(updateReportToRRT({ data, id: row?.event }));
       }
     });
-
   }
 
   onUpdatePageSize(e) {
@@ -166,11 +164,17 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-  showEventData(event) {
-    this.eventToShow = event;
+  showEventData(event, header = null, value = null) {
+    if (header === commonUsedIds.CASE_NUMBER && !value) {
+      this.eventToShow = null;
+    } else {
+      this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 4);
+      this.eventToShow = event;
+    }
   }
   closeEventDataSection(data) {
     if (data && data.closeView) {
+      this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
       this.eventToShow = null;
     }
   }
