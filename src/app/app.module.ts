@@ -15,7 +15,7 @@ import { pagesComponent } from './pages';
 import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { RouteSerializer } from './utils';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxDhis2MenuModule } from '@iapps/ngx-dhis2-menu';
 import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
 import { services } from './shared/services';
@@ -33,6 +33,7 @@ import { ViewEventComponent } from './pages/home/view-event/view-event.component
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     
     SharedModule,
     StoreModule.forRoot(reducers, {

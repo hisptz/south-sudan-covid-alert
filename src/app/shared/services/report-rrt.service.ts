@@ -4,14 +4,16 @@ import { from, Observable, throwError } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { apiLink } from '../../../assets/configurations/apiLink';
 import { getFormattedPayload } from '../helpers/get-formatted-payload.helper';
+import { commonUsedIds } from '../models/alert.model';
+import { find } from 'lodash';
 @Injectable({
   providedIn: 'root',
 })
 export class ReportRrtService {
   constructor(private httpClient: HttpClient) {}
 
-  reportToRRTRequest(data: any, id: string) {
-    const url = apiLink + `events/${id}`;
+  reportToRRTRequest(data: any, eventId: string, dataValueId: string) {
+    const url = apiLink + `events/${eventId}/${dataValueId}`;
     return this.httpClient
       .put(url, data)
       .pipe(catchError((error) => throwError(error)));
@@ -40,9 +42,13 @@ export class ReportRrtService {
       .post(url, { events })
       .pipe(catchError((error) => throwError(error)));
   }
-  reportToRRTRequestPromise(data: any, id: string): any {
+  reportToRRTRequestPromise(
+    data: any,
+    eventId: string,
+    dataValueId: string,
+  ): any {
     return new Promise((resolve, reject) => {
-      this.reportToRRTRequest(data, id)
+      this.reportToRRTRequest(data, eventId, dataValueId)
         .pipe(take(1))
         .subscribe(
           (res) => {
@@ -110,6 +116,41 @@ export class ReportRrtService {
         );
     });
   }
+  async saveCaseNumberPromise({ data, eventId }) {
+    let response = null;
+    try {
+      const eventPayload = await this.getEventPayloadPromise(eventId);
+      const formattedPayload = this.addCaseNumberInPayload({
+        payload: eventPayload,
+        data,
+      });
+
+      response = await this.reportToRRTRequestPromise(formattedPayload, eventId, commonUsedIds.CASE_NUMBER);
+    } catch (e) {
+    } finally {
+      return response;
+    }
+  }
+  saveCaseNumber({ data, eventId }) {
+    return from(this.saveCaseNumberPromise({ data, eventId }));
+  }
+
+  addCaseNumberInPayload({ payload, data }) {
+    let caseNumberObj = find(
+      payload?.dataValues || [],
+      (dataValue) => dataValue?.dataElement === commonUsedIds?.CASE_NUMBER,
+    );
+    caseNumberObj = caseNumberObj
+      ? { ...caseNumberObj, value: data[commonUsedIds?.CASE_NUMBER] }
+      : {
+          dataElement: commonUsedIds?.CASE_NUMBER,
+          value: data[commonUsedIds?.CASE_NUMBER],
+        };
+    return {
+      ...payload,
+      dataValues: [ caseNumberObj],
+    };
+  }
   async reportToRRTPromise(data: any, id: string) {
     const payload = await this.getFormattedEventPayload(id, data);
     let response = { reportToRRTResponse: null, pendingReportResponse: null };
@@ -118,9 +159,9 @@ export class ReportRrtService {
         const reportToRRTResponse = await this.reportToRRTRequestPromise(
           payload,
           id,
+          commonUsedIds.REPORTED_TO_RRT,
         );
-        const pendingReportResponse = await this.savePendingReportToRRT(id);
-        response = { ...response, pendingReportResponse, reportToRRTResponse };
+        response = { ...response, reportToRRTResponse };
       }
     } catch (e) {}
     return response;

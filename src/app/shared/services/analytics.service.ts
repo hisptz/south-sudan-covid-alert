@@ -91,10 +91,10 @@ export class AnalyticsService {
     const ancestors = orgUnit && orgUnit.ancestors ? orgUnit.ancestors : [];
     return ancestors && ancestors.length
       ? {
-          country: ancestors[0].name,
-          state: ancestors[1].name,
-          county: ancestors[2].name,
-          payam: ancestors[3].name,
+          country: ancestors[0]?.name,
+          state: ancestors[1]?.name,
+          county: ancestors[2]?.name,
+          payam: ancestors[3]?.name,
         }
       : { country: '', state: '', county: '', payam: '' };
   }
