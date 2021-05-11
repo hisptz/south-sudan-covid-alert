@@ -43,7 +43,7 @@
                   <tr
                     *ngFor="
                       let row of eventAnalytics
-                        | filterBy: allRegisteredFilters:searchText
+                        | search: allRegisteredFilters:searchText
                         | slice: lowValue:highValue;
                       let i = index;
                       trackBy: trackByFn
@@ -142,7 +142,7 @@
                     (
                       eventsAnalytics$
                       | async
-                      | filterBy: allRegisteredFilters:searchText
+                      | search: allRegisteredFilters:searchText
                     )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
                   "
                 >
@@ -159,7 +159,7 @@
                     (
                       eventsByProgramId$
                       | async
-                      | filterBy: allRegisteredFilters:searchText
+                      | search: allRegisteredFilters:searchText
                     )?.length > 0
                   "
                 >
@@ -231,7 +231,7 @@
                 <tr
                   *ngFor="
                     let row of getReportedToRRTEvents(eventAnalytics)
-                      | filterBy: reportedToRRTFilters:searchText
+                      | search: reportedToRRTFilters:searchText
                       | slice: rLowValue:rHighValue;
                     let i = index
                   "
@@ -273,7 +273,7 @@
                   (
                     eventsAnalytics$
                     | async
-                    | filterBy: reportedToRRTFilters:searchText
+                    | search: reportedToRRTFilters:searchText
                   )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
                 "
               >

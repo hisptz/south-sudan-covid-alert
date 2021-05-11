@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { sharedComponents } from './components';
 import { services } from './services';
@@ -28,9 +28,17 @@ import { CaseNumberDialogComponent } from './dialogs/case-number-dialog/case-num
     ...sharedComponents,
     ConfirmReportToRrtDialogComponent,
     SearchPipe,
-    CaseNumberDialogComponent
+    CaseNumberDialogComponent,
   ],
-  exports: [...sharedComponents, ...materialModules, ConfirmReportToRrtDialogComponent, NgPipesModule, NgxPaginationModule, ...modules],
-  providers: [...services]
+  exports: [
+    ...sharedComponents,
+    ...materialModules,
+    ConfirmReportToRrtDialogComponent,
+    NgPipesModule,
+    NgxPaginationModule,
+    ...modules,
+    SearchPipe,
+  ],
+  providers: [...services],
 })
-export class SharedModule { }
+export class SharedModule {}
