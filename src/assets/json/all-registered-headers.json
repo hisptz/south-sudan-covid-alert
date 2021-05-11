@@ -113,6 +113,14 @@
       "type": "java.lang.String",
       "hidden": false,
       "meta": true
+    },
+    {
+      "name": "CEjSf5UFrHP",
+      "column": "Case number",
+      "valueType": "TEXT",
+      "type": "java.lang.String",
+      "hidden": false,
+      "meta": true
     }
   ],
 
