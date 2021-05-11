@@ -54,7 +54,13 @@
                     </td>
                     <td
                       *ngFor="let header of allRegisteredHeaders"
-                      (click)="showEventData(row)"
+                      (click)="
+                        showEventData(
+                          row,
+                          header?.name,
+                          row[header?.name]?.value
+                        )
+                      "
                     >
                       <p *ngIf="header?.name !== commonIds.CASE_NUMBER">
                         {{
@@ -70,8 +76,9 @@
                         <button
                           mat-icon-button
                           *ngIf="!row[header?.name]?.value"
-                          style="color: gray;"
+                          style="color: gray"
                           (click)="addCaseNumber(row)"
+            
                         >
                           <mat-icon>edit</mat-icon>
                         </button>
@@ -279,11 +286,11 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr *ngIf="eventsAnalytics$ | async as eventAnalytics">
+                <tr *ngIf="eventsByProgramId$ | async as eventAnalytics">
                   <td [attr.colspan]="13">
                     <mat-paginator
                       [length]="
-                        getEventsWithCallerMeetCase(eventAnalytics).length
+                      getReportedToRRTEvents(eventAnalytics).length
                       "
                       [pageSize]="rPageSize"
                       (page)="rOnPageChange($event)"
