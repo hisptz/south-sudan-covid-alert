@@ -93,7 +93,7 @@ export function getFormattedPayload(eventData, payload) {
     : { dataElement: commonUsedIds.REPORTED_TO_RRT, value: true };
   return {
     ...payload,
-    dataValues: [...(payload?.dataValues || []), reportToRrtObj],
+    dataValues: [ reportToRrtObj],
   };
 }
 function getValidBooleanType(value) {

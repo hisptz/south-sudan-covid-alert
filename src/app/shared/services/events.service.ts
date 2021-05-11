@@ -30,13 +30,20 @@ export class EventsService {
     private analyticsService: AnalyticsService,
   ) {}
 
+
+  updateEventBySingleDataValue(data: any, eventId: string, dataValueId: string) {
+    const url = apiLink + `events/${eventId}/${dataValueId}`;
+    return this.httpClient
+      .put(url, data)
+      .pipe(catchError((error) => throwError(error)));
+  }
+
   getEventsByProgramIdObservable({
     programId = PROGRAM_ID,
     pageFilter = '',
     fields,
     pageSize = 50,
   }): Observable<any> {
-    console.log({ programId, pageFilter, fields, pageSize });
     const filterExpression = `filter=${REASON_FOR_CALLING_ID}:EQ:${REASON_FOR_CALLING_VALUE}`;
     const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&${pageSize}`;
     const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}&${filterExpression}`;
@@ -107,6 +114,7 @@ export class EventsService {
         const dataValues = [
           ...this.formatDataValues(eventItem?.dataValues),
           ...orgUnitData,
+          {dataElement: 'eventdate', value: eventItem?.eventDate}
         ];
         return { ...eventItem, dataValues };
       });
