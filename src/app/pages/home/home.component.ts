@@ -23,6 +23,7 @@ import {
 } from 'src/app/shared/models/config.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
+import { CaseNumberDialogComponent } from 'src/app/shared/dialogs/case-number-dialog/case-number-dialog.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -64,14 +65,19 @@ export class HomeComponent implements OnInit {
     this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
     this.reportedToRRTFilters = REPORTED_TO_RRT_FILTERS;
     this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
-    this.eventsLoading$ = store.select(fromSelectors.getEventsLoading);
+    this.eventsLoading$ = store.select(
+      fromSelectors.getEventsByProgramIdLoading,
+    );
     this.eventsByProgramId$ = store.select(fromSelectors.eventsToDisplay);
   }
 
   ngOnInit() {
+   
     this.store.dispatch(fromActions.loadEvents());
     this.store.dispatch(fromActions.loadEventsByProgramId());
-    this.eventsLoadingErrorStatus$ = this.store.select(getErrorStatus);
+    this.eventsLoadingErrorStatus$ = this.store.select(
+      fromSelectors.getEventsByProgramIdErrorStatus,
+    );
   }
 
   trackByFn(index, item) {
@@ -83,6 +89,29 @@ export class HomeComponent implements OnInit {
       e.stopPropagation();
     }
     this.searchText = e ? e.target.value.trim() : this.searchText;
+  }
+
+  addCaseNumber(row) {
+    const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
+      data: {
+         eventId: row?.event
+      },
+      height: '250px',
+      width: '500px',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.reportToRRT) {
+        this._snackBar.open('Saving case number', null, {
+          duration: 3000,
+        });
+        const data = {
+          event: row?.event,
+          dataValues: { dataElement: this.reportedToRRTId, value: true },
+        };
+        this.store.dispatch(updateReportToRRT({ data, id: row?.event }));
+      }
+    });
+
   }
 
   onUpdatePageSize(e) {
@@ -118,8 +147,8 @@ export class HomeComponent implements OnInit {
   updateReportToRRT(row) {
     const dialogRef = this.dialog.open(ConfirmReportToRrtDialogComponent, {
       data: {
-        firstName: 'panda',
-        lastName: 'to',
+        firstName: row[commonUsedIds?.CALLER_FIRST_NAME]?.value,
+        lastName: row[commonUsedIds?.CALLER_LAST_NAME]?.value,
       },
       height: '150px',
       width: '500px',

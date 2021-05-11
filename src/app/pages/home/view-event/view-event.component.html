@@ -20,8 +20,8 @@
         <td>
           {{
             header.valueType === 'DATE'
-              ? (event[header?.name] | date)
-              : event[header?.name]
+              ? (event[header?.name]?.value | date)
+              : event[header?.name]?.value
           }}
         </td>
       </tr>
