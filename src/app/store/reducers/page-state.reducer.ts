@@ -25,44 +25,11 @@ export const initialState: State = adapter.getInitialState({
   notificationStatus: false,
   events: [],
   eventsLoading: true,
-  hasError: false
+  hasError: false,
 });
 
 const pageStateReducer = createReducer(
   initialState,
-  on(PageStateActions.addEvents, (state, action) => ({
-    ...state,
-    eventsLoading: true,
-  })),
-  on(PageStateActions.addEventsSuccess, (state, { events }) => ({
-    ...state,
-    eventsLoading: false,
-    hasError: false,
-    events,
-  })),
-  on(PageStateActions.loadEventsFailure, (state, action) => ({
-    ...state,
-    eventsLoading: false,
-    hasError: true,
-  })),
-  on(PageStateActions.upsertPageState, (state, action) =>
-    adapter.upsertOne(action.pageState, state)
-  ),
-  on(PageStateActions.addPageStates, (state, action) =>
-    adapter.addMany(action.pageStates, state)
-  ),
-  on(PageStateActions.upsertPageStates, (state, action) =>
-    adapter.upsertMany(action.pageStates, state)
-  ),
-  on(PageStateActions.updatePageState, (state, action) =>
-    adapter.updateOne(action.pageState, state)
-  ),
-  on(PageStateActions.updatePageStates, (state, action) =>
-    adapter.updateMany(action.pageStates, state)
-  ),
-  on(PageStateActions.deletePageState, (state, action) =>
-    adapter.removeOne(action.id, state)
-  ),
   on(PageStateActions.loadNotification, (state, action) => ({
     ...state,
     notification: action.payload,
@@ -72,7 +39,6 @@ const pageStateReducer = createReducer(
     ...state,
     notificationStatus: action.payload,
   })),
-  on(PageStateActions.clearPageStates, (state) => adapter.removeAll(state))
 );
 
 export function reducer(state: State | undefined, action: Action) {

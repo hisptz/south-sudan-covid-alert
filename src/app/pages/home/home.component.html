@@ -22,7 +22,7 @@
         <div
           class="ml-2"
           [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
-          *ngIf="eventsAnalytics$ | async"
+          *ngIf="eventsByProgramId$ | async"
         >
           <mat-card class="w-100 mb-4 p-0 overflow-hidden">
             <div
@@ -128,7 +128,11 @@
                   </tr>
                 </tbody>
                 <tbody *ngIf="eventsLoadingErrorStatus$ | async">
-                  <td colspan="100%" style="border-right: 1px solid #dee2e6"  class="color-gray">
+                  <td
+                    colspan="100%"
+                    style="border-right: 1px solid #dee2e6"
+                    class="color-gray"
+                  >
                     <i>There is no data to show at the moment.</i>
                   </td>
                 </tbody>
@@ -153,22 +157,22 @@
                 </tbody>
                 <tbody *ngIf="eventsLoading$ | async">
                   <td colspan="100%" style="border-right: 1px solid #dee2e6">
-                    <div  class="color-gray">Loading data</div>
+                    <div class="color-gray">Loading data</div>
                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                   </td>
                 </tbody>
                 <tbody
                   *ngIf="
                     (
-                      eventsAnalytics$
+                      eventsByProgramId$
                       | async
                       | search: allRegisteredFilters:searchText
-                    )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
+                    )?.length < 1 && (eventsByProgramId$ | async)?.length > 0
                   "
                 >
                   <tr>
                     <td colspan="10">
-                      <label class="text-center w-100  color-gray">
+                      <label class="text-center w-100 color-gray">
                         Session not found</label
                       >
                     </td>
@@ -221,7 +225,7 @@
                 <input
                   class="form-control"
                   type="text"
-                  placeholder="Search using First Name, Last Name, Reason for calling, Case number, State, County, Boma and Signs and Sysmptoms"
+                  placeholder="Search using First Name, Last Name, Case number, State, County, Boma "
                   (keyup)="searchingItems($event)"
                 />
               </div>
@@ -235,7 +239,7 @@
         <div
           class="row w-100 ml-2 overflow-hidden"
           [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
-          *ngIf="eventsAnalytics$ | async"
+          *ngIf="eventsByProgramId$ | async"
         >
           <mat-card class="w-100 mb-4 p-0 overflow-hidden">
             <table class="table table-bordered overflow-hidden">
@@ -305,10 +309,10 @@
               <tbody
                 *ngIf="
                   (
-                    eventsAnalytics$
+                    eventsByProgramId$
                     | async
                     | search: reportedToRRTFilters:searchText
-                  )?.length < 1 && (eventsAnalytics$ | async)?.length > 0
+                  )?.length < 1 && (eventsByProgramId$ | async)?.length > 0
                 "
               >
                 <tr>

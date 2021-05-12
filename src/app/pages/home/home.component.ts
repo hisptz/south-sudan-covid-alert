@@ -13,7 +13,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
 import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
-import { getErrorStatus } from '../../store/selectors';
 import {
   ALL_REGISTERED_HEADERS,
   ALL_REGISTERED_FILTERS,
@@ -32,7 +31,6 @@ import { CaseNumberDialogComponent } from 'src/app/shared/dialogs/case-number-di
 })
 export class HomeComponent implements OnInit {
   eventsByProgramId$: Observable<any>;
-  eventsAnalytics$: Observable<any>;
   eventsLoading$: Observable<any>;
   eventsLoadingErrorStatus$: Observable<any>;
   page = 1;
@@ -64,7 +62,6 @@ export class HomeComponent implements OnInit {
     this.allRegisteredFilters = ALL_REGISTERED_FILTERS;
     this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
     this.reportedToRRTFilters = REPORTED_TO_RRT_FILTERS;
-    this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
     this.eventsLoading$ = store.select(
       fromSelectors.getEventsByProgramIdLoading,
     );
