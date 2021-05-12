@@ -14,3 +14,9 @@ export const ALL_REGISTERED_HEADERS = JSON_FILES?.allRegisteredHeaders?.headers;
 export const ALL_REGISTERED_FILTERS = JSON_FILES?.allRegisteredHeaders?.filters;
 export const REPORTED_TO_RRT_HEADERS = JSON_FILES.reportedToRRTHeaders?.headers;
 export const REPORTED_TO_RRT_FILTERS = JSON_FILES.reportedToRRTHeaders?.filters;
+export const AUTHORITIES = {
+  VIEW_REGISTERED_CALLS: 'VIEW_REGISTERED_CALLS',
+  VIEW_REPORTED_TO_RRT: 'VIEW_REPORTED_TO_RRT',
+  UPDATE_CASE_NUMBER: 'UPDATE_CASE_NUMBER',
+  REPORT_TO_RRT: 'REPORT_TO_RRT',
+};

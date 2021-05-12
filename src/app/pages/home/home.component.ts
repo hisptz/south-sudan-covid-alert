@@ -13,13 +13,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
 import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
-import { getErrorStatus } from '../../store/selectors';
 import {
   ALL_REGISTERED_HEADERS,
   ALL_REGISTERED_FILTERS,
   REPORTED_TO_RRT_HEADERS,
   REPORTED_TO_RRT_FILTERS,
   ALL_TABLE_HEADERS,
+  AUTHORITIES
 } from 'src/app/shared/models/config.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
@@ -32,9 +32,10 @@ import { CaseNumberDialogComponent } from 'src/app/shared/dialogs/case-number-di
 })
 export class HomeComponent implements OnInit {
   eventsByProgramId$: Observable<any>;
-  eventsAnalytics$: Observable<any>;
   eventsLoading$: Observable<any>;
   eventsLoadingErrorStatus$: Observable<any>;
+  currentUser$: Observable<any>;
+  authorities = AUTHORITIES;
   page = 1;
   itemsPerPage = 10;
   searchText = '';
@@ -64,15 +65,14 @@ export class HomeComponent implements OnInit {
     this.allRegisteredFilters = ALL_REGISTERED_FILTERS;
     this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
     this.reportedToRRTFilters = REPORTED_TO_RRT_FILTERS;
-    this.eventsAnalytics$ = store.select(fromSelectors.getEvents);
     this.eventsLoading$ = store.select(
       fromSelectors.getEventsByProgramIdLoading,
     );
     this.eventsByProgramId$ = store.select(fromSelectors.eventsToDisplay);
+    this.currentUser$ = store.select(fromSelectors.getCurrentUser);
   }
 
   ngOnInit() {
-    this.store.dispatch(fromActions.loadEvents());
     this.store.dispatch(fromActions.loadEventsByProgramId());
     this.eventsLoadingErrorStatus$ = this.store.select(
       fromSelectors.getEventsByProgramIdErrorStatus,
@@ -83,17 +83,23 @@ export class HomeComponent implements OnInit {
     return item.id;
   }
 
-  searchingItems(e) {
+  isAuthorised(currentUser, authority) {
+    return currentUser?.authorities?.includes(authority);
+  }
+
+  searchingItems(e, currentUser = null) {
+    console.log({ currentUser });
     if (e) {
       e.stopPropagation();
     }
     this.searchText = e ? e.target.value.trim() : this.searchText;
   }
 
-  addCaseNumber(row) {
+  addCaseNumber(row, caseNumber) {
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
         eventId: row?.event,
+        caseNumber,
       },
       height: '250px',
       width: '500px',
@@ -165,7 +171,7 @@ export class HomeComponent implements OnInit {
     });
   }
   showEventData(event, header = null, value = null) {
-    if (header === commonUsedIds.CASE_NUMBER && !value) {
+    if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
     } else {
       this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 4);

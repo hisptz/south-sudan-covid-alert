@@ -26,8 +26,9 @@ export class CaseNumberDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.data)
     this.addCaseNumberForm = this.fb.group({
-      [this.commonIds?.CASE_NUMBER]: ['', [Validators.required]],
+      [this.commonIds?.CASE_NUMBER]: [this.data?.caseNumber, [Validators.required]],
     });
   }
   closeDialog(): void {
