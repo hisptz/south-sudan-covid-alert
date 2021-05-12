@@ -3,12 +3,12 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url(./assets/fonts/Montserrat-Light.otf) format("truetype");
-  font-weight:300;
+  src: url(./assets/fonts/Montserrat-Light.otf) format('truetype');
+  font-weight: 300;
 }
 
 body {
- font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -17,8 +17,9 @@ input[type='number']::-webkit-outer-spin-button {
   margin: 0;
 }
 
-
-
+.color-gray {
+  color: gray !important;
+}
 
 .icon-font-size {
   font-size: 20px;
@@ -140,8 +141,12 @@ input[type='number']::-webkit-outer-spin-button {
   background-repeat: no-repeat;
 }
 
-div:focus { outline: none !important; }
-button:focus { outline: none !important; }
+div:focus {
+  outline: none !important;
+}
+button:focus {
+  outline: none !important;
+}
 
 .button-height {
   height: 36px;
@@ -155,7 +160,6 @@ button:focus { outline: none !important; }
   width: 100%;
   overflow-x: auto;
 }
-
 
 /**
  * Change animation duration
@@ -260,8 +264,6 @@ button:focus { outline: none !important; }
   animation-name: zoomIn;
 }
 
-
-
 @-webkit-keyframes fadeInUp {
   from {
     opacity: 0;
@@ -330,4 +332,3 @@ button:focus { outline: none !important; }
 .cursor-pointer {
   cursor: pointer;
 }
-
