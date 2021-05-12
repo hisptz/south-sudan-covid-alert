@@ -72,7 +72,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(fromActions.loadEvents());
     this.store.dispatch(fromActions.loadEventsByProgramId());
     this.eventsLoadingErrorStatus$ = this.store.select(
       fromSelectors.getEventsByProgramIdErrorStatus,
