@@ -29,7 +29,6 @@ export class SearchPipe implements PipeTransform {
           return valueItem;
         }
       });
-      console.log({valuesArray, filteredValueArr})
     
       if (filteredValueArr?.length) {
         return item;
@@ -39,12 +38,6 @@ export class SearchPipe implements PipeTransform {
 
     return filteredItems;
 
-    // return items.filter((item) => {
-    //   const notMatchingField = Object.keys(filter).find(
-    //     (key) => item[key] !== filter[key],
-    //   );
 
-    //   return !notMatchingField; // true if matches all fields
-    // });
   }
 }
