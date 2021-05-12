@@ -19,6 +19,7 @@ import {
   REPORTED_TO_RRT_HEADERS,
   REPORTED_TO_RRT_FILTERS,
   ALL_TABLE_HEADERS,
+  AUTHORITIES
 } from 'src/app/shared/models/config.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
@@ -33,6 +34,8 @@ export class HomeComponent implements OnInit {
   eventsByProgramId$: Observable<any>;
   eventsLoading$: Observable<any>;
   eventsLoadingErrorStatus$: Observable<any>;
+  currentUser$: Observable<any>;
+  authorities = AUTHORITIES;
   page = 1;
   itemsPerPage = 10;
   searchText = '';
@@ -66,6 +69,7 @@ export class HomeComponent implements OnInit {
       fromSelectors.getEventsByProgramIdLoading,
     );
     this.eventsByProgramId$ = store.select(fromSelectors.eventsToDisplay);
+    this.currentUser$ = store.select(fromSelectors.getCurrentUser);
   }
 
   ngOnInit() {
@@ -79,7 +83,12 @@ export class HomeComponent implements OnInit {
     return item.id;
   }
 
-  searchingItems(e) {
+  isAuthorised(currentUser, authority) {
+    return currentUser?.authorities?.includes(authority);
+  }
+
+  searchingItems(e, currentUser = null) {
+    console.log({ currentUser });
     if (e) {
       e.stopPropagation();
     }
@@ -90,7 +99,7 @@ export class HomeComponent implements OnInit {
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
         eventId: row?.event,
-        caseNumber
+        caseNumber,
       },
       height: '250px',
       width: '500px',
@@ -98,7 +107,6 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
         this._snackBar.open('Saving case number', null, {
-  
           duration: 3000,
         });
         const data = {
