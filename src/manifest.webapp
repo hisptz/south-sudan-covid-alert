@@ -1,5 +1,5 @@
 {
-  "version": "-*",
+  "version": "0.0.14-alpha",
   "name": "Watch Desk App",
   "description": "Watch Desk",
   "launch_path": "index.html",
@@ -17,5 +17,11 @@
     "dhis": {
       "href": "../../../"
     }
-  }
+  },
+  "authorities": [
+    "VIEW_REGISTERED_CALLS",
+    "VIEW_REPORTED_TO_RRT",
+    "UPDATE_CASE_NUMBER",
+    "REPORT_TO_RRT"
+  ]
 }
