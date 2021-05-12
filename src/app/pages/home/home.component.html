@@ -39,7 +39,12 @@
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody *ngIf="eventsByProgramId$ | async as eventAnalytics">
+                <tbody
+                  *ngIf="
+                    !(eventsLoading$ | async) && eventsByProgramId$
+                      | async as eventAnalytics
+                  "
+                >
                   <tr
                     *ngFor="
                       let row of eventAnalytics
@@ -71,30 +76,24 @@
                       </p>
                       <div
                         class="position-relative"
-                        style="width: 120px;"
+                        style="width: 120px"
                         *ngIf="header?.name === commonIds.CASE_NUMBER"
                       >
-                      <div class="w-75" style="word-wrap: break-word">
-                        <i
-                        style="color: gray"
-                        *ngIf="!row[header?.name]?.value"
-                      >
-                        There is no case number for this case
-                      </i>
-                      <p
-                       
-                       
-                        *ngIf="row[header?.name]?.value"
-                      >
-                        {{ row[header?.name]?.value }}
-                      </p>
-                      </div>
-                      
+                        <div class="w-75" style="word-wrap: break-word">
+                          <i
+                            class="color-gray"
+                            *ngIf="!row[header?.name]?.value"
+                          >
+                            There is no case number for this case
+                          </i>
+                          <p *ngIf="row[header?.name]?.value">
+                            {{ row[header?.name]?.value }}
+                          </p>
+                        </div>
+
                         <button
-                          class="position-absolute"
+                          class="position-absolute color-gray top-0 right-0"
                           mat-icon-button
-                          
-                          style="color: gray; top: 0; right: 0"
                           (click)="addCaseNumber(row, row[header?.name]?.value)"
                         >
                           <mat-icon>edit</mat-icon>
@@ -121,7 +120,7 @@
                           row[reportedToRRTId]?.value === 'true'
                         "
                       >
-                        <i style="color: gray">
+                        <i class="color-gray">
                           This case has already been reported to RRT
                         </i>
                       </p>
@@ -129,28 +128,32 @@
                   </tr>
                 </tbody>
                 <tbody *ngIf="eventsLoadingErrorStatus$ | async">
-                  <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                  <td colspan="100%" style="border-right: 1px solid #dee2e6"  class="color-gray">
                     <i>There is no data to show at the moment.</i>
                   </td>
                 </tbody>
                 <tbody
                   *ngIf="
                     !(eventsLoading$ | async) &&
-                    !(eventsByProgramId$ | async).length
+                    (!(eventsByProgramId$ | async).length ||
+                      !(
+                        eventsByProgramId$
+                        | async
+                        | search: allRegisteredFilters:searchText
+                      )?.length)
                   "
                 >
-                  <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                  <td
+                    colspan="100%"
+                    style="border-right: 1px solid #dee2e6"
+                    class="color-gray"
+                  >
                     <i>There is no case to show</i>
                   </td>
                 </tbody>
-                <tbody
-                  *ngIf="
-                    (eventsLoading$ | async) &&
-                    !(eventsLoadingErrorStatus$ | async)
-                  "
-                >
+                <tbody *ngIf="eventsLoading$ | async">
                   <td colspan="100%" style="border-right: 1px solid #dee2e6">
-                    <div>Loading data</div>
+                    <div  class="color-gray">Loading data</div>
                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                   </td>
                 </tbody>
@@ -165,7 +168,7 @@
                 >
                   <tr>
                     <td colspan="10">
-                      <label class="text-muted text-center w-100 h3">
+                      <label class="text-center w-100  color-gray">
                         Session not found</label
                       >
                     </td>
@@ -211,17 +214,17 @@
     <div class="container-fluid px-0">
       <div class="row mx-0 w-100">
         <!-- Search field with buttons -->
-        <div class="row w-100 mx-0 mb-2">
+        <div class="row w-100 mx-0 mb-2 mt-2">
           <div class="col-sm">
             <div class="input-group">
-              <mat-form-field class="w-25" appearance="outline">
+              <div class="form-group w-50" appearance="outline">
                 <input
-                  matInput
+                  class="form-control"
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search using First Name, Last Name, Reason for calling, Case number, State, County, Boma and Signs and Sysmptoms"
                   (keyup)="searchingItems($event)"
                 />
-              </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
@@ -244,6 +247,25 @@
                   </th>
                 </tr>
               </thead>
+              <tbody
+                *ngIf="
+                  !(eventsLoading$ | async) &&
+                  (!(eventsByProgramId$ | async).length ||
+                    !(
+                      eventsByProgramId$
+                      | async
+                      | search: reportedToRRTFilters:searchText
+                    )?.length)
+                "
+              >
+                <td
+                  colspan="100%"
+                  style="border-right: 1px solid #dee2e6"
+                  class="color-gray"
+                >
+                  <i>There is no case to show</i>
+                </td>
+              </tbody>
               <tbody *ngIf="eventsByProgramId$ | async as eventAnalytics">
                 <tr
                   *ngFor="
@@ -274,12 +296,7 @@
                   <i>There is no data to show at the moment.</i>
                 </td>
               </tbody>
-              <tbody
-                *ngIf="
-                  (eventsLoading$ | async) &&
-                  !(eventsLoadingErrorStatus$ | async)
-                "
-              >
+              <tbody *ngIf="eventsLoading$ | async">
                 <td colspan="100%" style="border-right: 1px solid #dee2e6">
                   <div>Loading data</div>
                   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
