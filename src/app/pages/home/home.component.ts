@@ -6,12 +6,8 @@ import * as fromActions from '../../store/actions';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
 import { map, flattenDeep, findIndex, filter } from 'lodash';
-import { getFormattedPayload } from 'src/app/shared/helpers/get-formatted-payload.helper';
 import { updateReportToRRT } from 'src/app/store/actions/report.actions';
-import { PageEvent } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
-import { JSON_FILES } from '../../shared/helpers/json-files.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
 import {
   ALL_REGISTERED_HEADERS,
@@ -19,7 +15,7 @@ import {
   REPORTED_TO_RRT_HEADERS,
   REPORTED_TO_RRT_FILTERS,
   ALL_TABLE_HEADERS,
-  AUTHORITIES
+  AUTHORITIES,
 } from 'src/app/shared/models/config.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
@@ -58,7 +54,6 @@ export class HomeComponent implements OnInit {
   rHighValue = 10;
   constructor(
     private store: Store<AppState>,
-    private _snackBar: MatSnackBar,
     public dialog: MatDialog,
   ) {
     this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
@@ -88,7 +83,6 @@ export class HomeComponent implements OnInit {
   }
 
   searchingItems(e, currentUser = null) {
-    console.log({ currentUser });
     if (e) {
       e.stopPropagation();
     }
@@ -106,9 +100,9 @@ export class HomeComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
-        this._snackBar.open('Saving case number', null, {
-          duration: 3000,
-        });
+        this.store.dispatch(
+          fromActions.showNotification({ message: 'Saving case number' }),
+        );
         const data = {
           event: row?.event,
           dataValues: { dataElement: this.reportedToRRTId, value: true },
@@ -126,18 +120,6 @@ export class HomeComponent implements OnInit {
     this.page = e;
   }
 
-  getEventsWithCallerMeetCase(eventsAnalytics: Array<any>): Array<any> {
-    return flattenDeep(
-      map(eventsAnalytics || [], (eventAnalytic) => {
-        return eventAnalytic &&
-          eventAnalytic[this.reportedToRRTId] &&
-          (eventAnalytic[this.reportedToRRTId] === 'Yes' ||
-            eventAnalytic.isReportToRRTPending)
-          ? eventAnalytic
-          : [];
-      }),
-    );
-  }
   getReportedToRRTEvents(eventsAnalytics: Array<any>): Array<any> {
     return flattenDeep(
       map(eventsAnalytics || [], (eventAnalytic) => {
@@ -159,9 +141,9 @@ export class HomeComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
-        this._snackBar.open('Reporting to RRT', null, {
-          duration: 3000,
-        });
+        this.store.dispatch(
+          fromActions.showNotification({ message: 'Reporting to RRT' }),
+        );
         const data = {
           event: row?.event,
           dataValues: { dataElement: this.reportedToRRTId, value: true },
