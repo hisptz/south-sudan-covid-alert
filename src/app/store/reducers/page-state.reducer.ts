@@ -35,10 +35,7 @@ const pageStateReducer = createReducer(
     notification: action.payload,
     notificationStatus: true,
   })),
-  on(PageStateActions.showNotification, (state, action) => ({
-    ...state,
-    notificationStatus: action.payload,
-  })),
+
 );
 
 export function reducer(state: State | undefined, action: Action) {
