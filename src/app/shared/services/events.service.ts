@@ -15,7 +15,7 @@ import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
 import { filter, map, find } from 'lodash';
 import { EventResponse } from 'src/app/store/models/events.model';
-import { AnalyticsService } from './analytics.service';
+import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
 import { commonUsedIds, definedSysmptoms } from '../models/alert.model';
 import { calculateAge } from '../helpers/calculate-age.helper';
@@ -27,11 +27,14 @@ export class EventsService {
   constructor(
     private httpClient: HttpClient,
     private promiseService: PromiseService,
-    private analyticsService: AnalyticsService,
+    private orgUnitsService: OrgUnitsService,
   ) {}
 
-
-  updateEventBySingleDataValue(data: any, eventId: string, dataValueId: string) {
+  updateEventBySingleDataValue(
+    data: any,
+    eventId: string,
+    dataValueId: string,
+  ) {
     const url = apiLink + `events/${eventId}/${dataValueId}`;
     return this.httpClient
       .put(url, data)
@@ -102,11 +105,11 @@ export class EventsService {
         events,
       );
       const ouArr = map(requiredEvents || [], (event) => event.orgUnit);
-      const orgUnitWithAncestors = await this.analyticsService.loadOrgUnitDataWithAncestorsPromise(
+      const orgUnitWithAncestors = await this.orgUnitsService.loadOrgUnitDataWithAncestorsPromise(
         ouArr,
       );
       return map(requiredEvents || [], (eventItem) => {
-        const orgUnitData = this.getAncestors(
+        const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
           orgUnitWithAncestors,
@@ -114,7 +117,7 @@ export class EventsService {
         const dataValues = [
           ...this.formatDataValues(eventItem?.dataValues),
           ...orgUnitData,
-          {dataElement: 'eventdate', value: eventItem?.eventDate}
+          { dataElement: 'eventdate', value: eventItem?.eventDate },
         ];
         return { ...eventItem, dataValues };
       });
@@ -145,7 +148,7 @@ export class EventsService {
       { dataElement: 'symptoms', value: sysmptoms || '' },
     ];
   }
-  getValueByHeader(rowValue, header) {
+  private getValueByHeader(rowValue, header) {
     if (header?.valueType === 'BOOLEAN') {
       return rowValue === '1' || rowValue === 'true' ? 'Yes' : 'No';
     }
@@ -189,35 +192,5 @@ export class EventsService {
         }
       }
     });
-  }
-
-  getAncestors(ou: string, ouName: string, ancestorsOrgUnitData: any) {
-    const orgUnit = find(
-      ancestorsOrgUnitData.organisationUnits || [],
-      (obj) => obj.id === ou,
-    );
-    const ancestors = orgUnit && orgUnit.ancestors ? orgUnit.ancestors : [];
-    return [
-      {
-        dataElement: 'country',
-        value: ancestors[0]?.name || '',
-      },
-      {
-        dataElement: 'state',
-        value: ancestors[1]?.name || '',
-      },
-      {
-        dataElement: 'county',
-        value: ancestors[2]?.name || '',
-      },
-      {
-        dataElement: 'payam',
-        value: ancestors[3]?.name || '',
-      },
-      {
-        dataElement: 'ouname',
-        value: ouName || '',
-      },
-    ];
   }
 }
