@@ -6,7 +6,7 @@ import { find, uniq } from 'lodash';
 import { take } from 'rxjs/operators';
 
 @Injectable()
-export class AnalyticsService {
+export class OrgUnitsService {
   apiUrl = apiLink;
 
   constructor(
@@ -35,19 +35,33 @@ export class AnalyticsService {
         );
     });
   }
-  getAncestors(ou: string, ancestorsOrgUnitData: any) {
+  getAncestors(ou: string, ouName: string, ancestorsOrgUnitData: any) {
     const orgUnit = find(
       ancestorsOrgUnitData.organisationUnits || [],
       (obj) => obj.id === ou,
     );
     const ancestors = orgUnit && orgUnit.ancestors ? orgUnit.ancestors : [];
-    return ancestors && ancestors.length
-      ? {
-          country: ancestors[0]?.name,
-          state: ancestors[1]?.name,
-          county: ancestors[2]?.name,
-          payam: ancestors[3]?.name,
-        }
-      : { country: '', state: '', county: '', payam: '' };
+    return [
+      {
+        dataElement: 'country',
+        value: ancestors[0]?.name || '',
+      },
+      {
+        dataElement: 'state',
+        value: ancestors[1]?.name || '',
+      },
+      {
+        dataElement: 'county',
+        value: ancestors[2]?.name || '',
+      },
+      {
+        dataElement: 'payam',
+        value: ancestors[3]?.name || '',
+      },
+      {
+        dataElement: 'ouname',
+        value: ouName || '',
+      },
+    ];
   }
 }
