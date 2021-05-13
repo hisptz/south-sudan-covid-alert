@@ -1,0 +1,36 @@
+<div class="w-100">
+  <h4 class="mb-4">Enter case number</h4>
+  <form #addForm="ngForm" [formGroup]="addCaseNumberForm" (submit)="onSave(addForm)" >
+    <div style="width: 100%">
+      <mat-form-field style="width: 100%" appearance="outline">
+        <mat-label>Case number</mat-label>
+        <input matInput type="text"  required [formControlName]="commonIds?.CASE_NUMBER" />
+        <mat-error>Case number is required</mat-error>
+      </mat-form-field>
+
+      <div class="action-buttons">
+        <button
+          style="float: right !important"
+          mat-flat-button
+          type="submit"
+          [disabled]="!addCaseNumberForm.valid"
+          color="primary"
+        >
+         {{data?.caseNumber ? 'Update' : 'Save'}} 
+        </button>
+        <button
+        class="mr-2"
+          style="float: right !important"
+          mat-flat-button
+          color="basic"
+          
+          type="button"
+          (click)="closeDialog()"
+        >
+          Close
+        </button>
+  
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,7 +1,7 @@
 {
-  "version": "0.0.9-alpha",
-  "name": "Call Centre Screening",
-  "description": "Call Centre Screening",
+  "version": "0.0.14-alpha",
+  "name": "Watch Desk App",
+  "description": "Watch Desk",
   "launch_path": "index.html",
   "icons": {
     "16": "assets/icons/icon-16x16.png",
@@ -17,5 +17,11 @@
     "dhis": {
       "href": "../../../"
     }
-  }
+  },
+  "authorities": [
+    "VIEW_REGISTERED_CALLS",
+    "VIEW_REPORTED_TO_RRT",
+    "UPDATE_CASE_NUMBER",
+    "REPORT_TO_RRT"
+  ]
 }
