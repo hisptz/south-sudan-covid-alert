@@ -9,18 +9,6 @@ export enum commonUsedIds {
   AGE = 'Pe3CHmZicqT',
   CASE_NUMBER = 'CEjSf5UFrHP',
 }
-// export const definedSysmptoms = [
-//   'EWZcuvPOrJF',
-//   'Yh5KOJj8l7p',
-//   'T0ehgpsDrui',
-//   'fyzp8BpsPMl',
-//   'aTMMzGXk19L',
-//   'iUEwXfg9CgD',
-//   'HahhmzRvwu8',
-//   'YirYKgXDYwm',
-//   'nybNlx0XcUq',
-//   'IrFWIj5ks2p',
-// ];
 export const definedSysmptoms = [
   {
     id: 'EWZcuvPOrJF',
