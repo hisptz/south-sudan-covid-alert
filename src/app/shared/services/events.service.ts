@@ -19,6 +19,7 @@ import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
 import { commonUsedIds, definedSysmptoms } from '../models/alert.model';
 import { calculateAge } from '../helpers/calculate-age.helper';
+import { getFormattedPayloadForUpdate } from '../helpers/get-formatted-payload.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -34,10 +35,17 @@ export class EventsService {
     data: any,
     eventId: string,
     dataValueId: string,
-  ) {
+  ): Observable<any> {
     const url = apiLink + `events/${eventId}/${dataValueId}`;
     return this.httpClient
       .put(url, data)
+      .pipe(catchError((error) => throwError(error)));
+  }
+  getEventByIdObservable(eventId: string): Observable<any> {
+    const fields = `fields=program,orgUnit,eventDate,status,completedDate,storedBy,coordinate,dataValues[dataElement,value]`;
+    const url = apiLink + `events/${eventId}.json?${fields}`;
+    return this.httpClient
+      .get(url)
       .pipe(catchError((error) => throwError(error)));
   }
 
@@ -126,7 +134,7 @@ export class EventsService {
         return { ...eventItem, dataValues };
       });
     } catch (e) {
-      throw e;
+      throw new Error(e?.message || `Failed to format events`);
     } finally {
       return formattedEvents;
     }
@@ -198,5 +206,37 @@ export class EventsService {
         }
       }
     });
+  }
+
+  async getEventPromise(eventId: string) {
+    const eventObservable = this.getEventByIdObservable(eventId);
+    return await this.promiseService.getPromiseFromObservable(eventObservable);
+  }
+  async updateCaseNumberPromise({ data, eventId }) {
+    let response = null;
+    try {
+      const eventPayload = await this.getEventPromise(eventId);
+      const formattedPayload = getFormattedPayloadForUpdate(
+        eventPayload,
+        commonUsedIds.CASE_NUMBER,
+        data[commonUsedIds.CASE_NUMBER],
+      );
+
+      const updateEventObservable = await this.updateEventBySingleDataValue(
+        formattedPayload,
+        eventId,
+        commonUsedIds.CASE_NUMBER,
+      );
+      response = await this.promiseService.getPromiseFromObservable(updateEventObservable);
+    } catch (e) {
+      response = e;
+      throw new Error(e?.message || `Failed to format events`);
+    } finally {
+      return response;
+    }
+  }
+
+  updateCaseNumber({ data, eventId }) {
+    return from(this.updateCaseNumberPromise({ data, eventId }));
   }
 }
