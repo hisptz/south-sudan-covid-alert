@@ -20,3 +20,8 @@ export const AUTHORITIES = {
   UPDATE_CASE_NUMBER: 'UPDATE_CASE_NUMBER',
   REPORT_TO_RRT: 'REPORT_TO_RRT',
 };
+export enum NotificationType {
+  ERROR = 'ERROR',
+  SUCCESS = 'SUCCESS',
+  INFO = 'INFO',
+}
