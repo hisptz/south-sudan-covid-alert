@@ -1,6 +1,6 @@
 {
   "name": "watch-desk-app",
-  "version": "0.0.0",
+  "version": "0.0.15-alpha",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --aot",
