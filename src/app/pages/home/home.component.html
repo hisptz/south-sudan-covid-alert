@@ -140,6 +140,7 @@
                           mat-stroked-button
                           color="primary"
                           class="mt-2 ml-2 button-height"
+                          [disabled]="!row[commonIds.CASE_NUMBER]?.value"
                           *ngIf="
                             row[reportedToRRTId]?.value === 'No' ||
                             !row[reportedToRRTId]?.value
@@ -222,7 +223,7 @@
                     "
                   >
                     <tr>
-                      <td [attr.colspan]="17">
+                      <td [attr.colspan]="18">
                         <mat-paginator
                           [length]="(eventsByProgramId$ | async).length"
                           [pageSize]="pageSize"

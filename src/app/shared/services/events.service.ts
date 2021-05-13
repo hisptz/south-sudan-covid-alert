@@ -15,10 +15,11 @@ import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
 import { filter, map, find } from 'lodash';
 import { EventResponse } from 'src/app/store/models/events.model';
-import { AnalyticsService } from './analytics.service';
+import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
 import { commonUsedIds, definedSysmptoms } from '../models/alert.model';
 import { calculateAge } from '../helpers/calculate-age.helper';
+import { getFormattedPayloadForUpdate } from '../helpers/get-formatted-payload.helper';
 
 @Injectable({
   providedIn: 'root',
@@ -27,14 +28,24 @@ export class EventsService {
   constructor(
     private httpClient: HttpClient,
     private promiseService: PromiseService,
-    private analyticsService: AnalyticsService,
+    private orgUnitsService: OrgUnitsService,
   ) {}
 
-
-  updateEventBySingleDataValue(data: any, eventId: string, dataValueId: string) {
+  updateEventBySingleDataValue(
+    data: any,
+    eventId: string,
+    dataValueId: string,
+  ): Observable<any> {
     const url = apiLink + `events/${eventId}/${dataValueId}`;
     return this.httpClient
       .put(url, data)
+      .pipe(catchError((error) => throwError(error)));
+  }
+  getEventByIdObservable(eventId: string): Observable<any> {
+    const fields = `fields=program,orgUnit,eventDate,status,completedDate,storedBy,coordinate,dataValues[dataElement,value]`;
+    const url = apiLink + `events/${eventId}.json?${fields}`;
+    return this.httpClient
+      .get(url)
       .pipe(catchError((error) => throwError(error)));
   }
 
@@ -97,16 +108,20 @@ export class EventsService {
   }
 
   private async formatEvents(events: Array<EventResponse>) {
+    let formattedEvents = [];
     try {
       const requiredEvents = this.getEventsWithMoreThanOneSymptomDataElement(
         events,
       );
       const ouArr = map(requiredEvents || [], (event) => event.orgUnit);
-      const orgUnitWithAncestors = await this.analyticsService.loadOrgUnitDataWithAncestorsPromise(
+      const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
         ouArr,
       );
-      return map(requiredEvents || [], (eventItem) => {
-        const orgUnitData = this.getAncestors(
+      const orgUnitWithAncestors = await this.promiseService.getPromiseFromObservable(
+        orgUnitWithAncenstorsObservable,
+      );
+      formattedEvents = map(requiredEvents || [], (eventItem) => {
+        const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
           orgUnitWithAncestors,
@@ -114,12 +129,14 @@ export class EventsService {
         const dataValues = [
           ...this.formatDataValues(eventItem?.dataValues),
           ...orgUnitData,
-          {dataElement: 'eventdate', value: eventItem?.eventDate}
+          { dataElement: 'eventdate', value: eventItem?.eventDate },
         ];
         return { ...eventItem, dataValues };
       });
     } catch (e) {
-      return [];
+      throw new Error(e?.message || `Failed to format events`);
+    } finally {
+      return formattedEvents;
     }
   }
   formatDataValues(dataValues: Array<any>): Array<any> {
@@ -145,7 +162,7 @@ export class EventsService {
       { dataElement: 'symptoms', value: sysmptoms || '' },
     ];
   }
-  getValueByHeader(rowValue, header) {
+  private getValueByHeader(rowValue, header) {
     if (header?.valueType === 'BOOLEAN') {
       return rowValue === '1' || rowValue === 'true' ? 'Yes' : 'No';
     }
@@ -165,13 +182,13 @@ export class EventsService {
     }
     if (header?.name === commonUsedIds.AGE) {
       const birthDate = new Date(rowValue);
-      return calculateAge(birthDate) ? calculateAge(birthDate) : '';
+      return calculateAge(birthDate);
     }
 
     return rowValue;
   }
 
-  getEventsWithMoreThanOneSymptomDataElement(
+  private getEventsWithMoreThanOneSymptomDataElement(
     events: Array<EventResponse>,
   ): Array<EventResponse> {
     return filter(events || [], (eventItem: EventResponse) => {
@@ -191,33 +208,35 @@ export class EventsService {
     });
   }
 
-  getAncestors(ou: string, ouName: string, ancestorsOrgUnitData: any) {
-    const orgUnit = find(
-      ancestorsOrgUnitData.organisationUnits || [],
-      (obj) => obj.id === ou,
-    );
-    const ancestors = orgUnit && orgUnit.ancestors ? orgUnit.ancestors : [];
-    return [
-      {
-        dataElement: 'country',
-        value: ancestors[0]?.name || '',
-      },
-      {
-        dataElement: 'state',
-        value: ancestors[1]?.name || '',
-      },
-      {
-        dataElement: 'county',
-        value: ancestors[2]?.name || '',
-      },
-      {
-        dataElement: 'payam',
-        value: ancestors[3]?.name || '',
-      },
-      {
-        dataElement: 'ouname',
-        value: ouName || '',
-      },
-    ];
+  async getEventPromise(eventId: string) {
+    const eventObservable = this.getEventByIdObservable(eventId);
+    return await this.promiseService.getPromiseFromObservable(eventObservable);
+  }
+  async updateCaseNumberPromise({ data, eventId }) {
+    let response = null;
+    try {
+      const eventPayload = await this.getEventPromise(eventId);
+      const formattedPayload = getFormattedPayloadForUpdate(
+        eventPayload,
+        commonUsedIds.CASE_NUMBER,
+        data[commonUsedIds.CASE_NUMBER],
+      );
+
+      const updateEventObservable = await this.updateEventBySingleDataValue(
+        formattedPayload,
+        eventId,
+        commonUsedIds.CASE_NUMBER,
+      );
+      response = await this.promiseService.getPromiseFromObservable(updateEventObservable);
+    } catch (e) {
+      response = e;
+      throw new Error(e?.message || `Failed to format events`);
+    } finally {
+      return response;
+    }
+  }
+
+  updateCaseNumber({ data, eventId }) {
+    return from(this.updateCaseNumberPromise({ data, eventId }));
   }
 }

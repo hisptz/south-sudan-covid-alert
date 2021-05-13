@@ -1,10 +1,16 @@
 import { CurrentUserService } from './current-user.service';
-import { AnalyticsService } from './analytics.service';
+import { OrgUnitsService } from './org-units.service';
+import { EventsService } from './events.service';
+import { PromiseService } from './promise.service';
 
 export const services: any[] = [
-    CurrentUserService, AnalyticsService
+  CurrentUserService,
+  OrgUnitsService,
+  EventsService,
+  PromiseService,
 ];
 
 export * from './current-user.service';
-export * from './analytics.service';
-
+export * from './org-units.service';
+export * from './events.service';
+export * from './promise.service';
