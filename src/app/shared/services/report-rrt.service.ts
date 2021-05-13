@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { from, Observable, throwError } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { apiLink } from '../../../assets/configurations/apiLink';
-import { getFormattedPayload } from '../helpers/get-formatted-payload.helper';
+import { getFormattedPayloadForUpdate } from '../helpers/get-formatted-payload.helper';
 import { commonUsedIds } from '../models/alert.model';
 import { find } from 'lodash';
 @Injectable({
@@ -116,49 +116,14 @@ export class ReportRrtService {
         );
     });
   }
-  async saveCaseNumberPromise({ data, eventId }) {
-    let response = null;
-    try {
-      const eventPayload = await this.getEventPayloadPromise(eventId);
-      const formattedPayload = this.addCaseNumberInPayload({
-        payload: eventPayload,
-        data,
-      });
-
-      response = await this.reportToRRTRequestPromise(formattedPayload, eventId, commonUsedIds.CASE_NUMBER);
-    } catch (e) {
-    } finally {
-      return response;
-    }
-  }
-  saveCaseNumber({ data, eventId }) {
-    return from(this.saveCaseNumberPromise({ data, eventId }));
-  }
-
-  addCaseNumberInPayload({ payload, data }) {
-    let caseNumberObj = find(
-      payload?.dataValues || [],
-      (dataValue) => dataValue?.dataElement === commonUsedIds?.CASE_NUMBER,
-    );
-    caseNumberObj = caseNumberObj
-      ? { ...caseNumberObj, value: data[commonUsedIds?.CASE_NUMBER] }
-      : {
-          dataElement: commonUsedIds?.CASE_NUMBER,
-          value: data[commonUsedIds?.CASE_NUMBER],
-        };
-    return {
-      ...payload,
-      dataValues: [ caseNumberObj],
-    };
-  }
-  async reportToRRTPromise(data: any, id: string) {
-    const payload = await this.getFormattedEventPayload(id, data);
+  async reportToRRTPromise(data: any, eventId: string) {
+    const payload = await this.getFormattedEventPayload(eventId, commonUsedIds.REPORTED_TO_RRT, true);
     let response = { reportToRRTResponse: null, pendingReportResponse: null };
     try {
       if (payload) {
         const reportToRRTResponse = await this.reportToRRTRequestPromise(
           payload,
-          id,
+          eventId,
           commonUsedIds.REPORTED_TO_RRT,
         );
         response = { ...response, reportToRRTResponse };
@@ -169,44 +134,16 @@ export class ReportRrtService {
   reportToRRT(data: any, id: string) {
     return from(this.reportToRRTPromise(data, id));
   }
-  async savePendingReportToRRT(id) {
-    let response = null;
-    try {
-      const availablePendingReportResponse = await this.getAvailablePendingReportResponse();
-      if (
-        availablePendingReportResponse &&
-        availablePendingReportResponse.events
-      ) {
-        let newEvents = availablePendingReportResponse.events;
-
-        newEvents = [...newEvents, id];
-
-        response = await this.updatePendingReportedEventsPromise(newEvents);
-      } else {
-        response = await this.createPendingReportedEventsPromise([id]);
-      }
-    } catch (e) {
-      if (e && e.status && e.status === 404) {
-        response = await this.createPendingReportedEventsPromise([id]);
-      } else {
-        response = e;
-      }
-    }
-    return response;
-  }
-  async getAvailablePendingReportResponse() {
-    try {
-      const pendingEventsObj = await this.getPendingReportedEventsPromise();
-      return pendingEventsObj;
-    } catch (e) {
-      return null;
-    }
-  }
-  async getFormattedEventPayload(id, eventData) {
+ 
+  async getFormattedEventPayload(eventId, dataValueId, value) {
     let formattedPayload = null;
     try {
-      const payload = await this.getEventPayloadPromise(id);
-      formattedPayload = getFormattedPayload(eventData, payload);
+      const payload = await this.getEventPayloadPromise(eventId);
+      formattedPayload = getFormattedPayloadForUpdate(
+        payload,
+        dataValueId,
+        value,
+      );
     } catch (e) {
       formattedPayload = null;
     }
