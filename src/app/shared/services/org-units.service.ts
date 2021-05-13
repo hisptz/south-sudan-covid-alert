@@ -3,37 +3,24 @@ import { Injectable } from '@angular/core';
 import { apiLink } from '../../../assets/configurations/apiLink';
 import { find, uniq } from 'lodash';
 
-import { take } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class OrgUnitsService {
   apiUrl = apiLink;
 
-  constructor(
-    private httpClient: HttpClient,
-  ) {}
+  constructor(private httpClient: HttpClient) {}
 
-  loadOrgUnitDataWithAncestors(orgUnitIdArr: Array<any>) {
+  loadOrgUnitDataWithAncestors(orgUnitIdArr: Array<any>): Observable<any> {
     const formattedOrgUnitArr = uniq(orgUnitIdArr);
     const orgUnitArrStr = formattedOrgUnitArr.toString();
     const url =
       this.apiUrl +
       `organisationUnits.json?fields=id,name,ancestors[id,name]&filter=id:in:[${orgUnitArrStr}]&paging=false`;
-    return this.httpClient.get(url);
-  }
-  loadOrgUnitDataWithAncestorsPromise(orgUnitIdArr: Array<any>): any {
-    return new Promise((resolve, reject) => {
-      this.loadOrgUnitDataWithAncestors(orgUnitIdArr)
-        .pipe(take(1))
-        .subscribe(
-          (res) => {
-            resolve(res);
-          },
-          (error) => {
-            reject(error);
-          },
-        );
-    });
+    return this.httpClient
+      .get(url)
+      .pipe(catchError((error) => throwError(error)));
   }
   getAncestors(ou: string, ouName: string, ancestorsOrgUnitData: any) {
     const orgUnit = find(
