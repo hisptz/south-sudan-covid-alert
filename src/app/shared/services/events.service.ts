@@ -100,15 +100,19 @@ export class EventsService {
   }
 
   private async formatEvents(events: Array<EventResponse>) {
+    let formattedEvents = [];
     try {
       const requiredEvents = this.getEventsWithMoreThanOneSymptomDataElement(
         events,
       );
       const ouArr = map(requiredEvents || [], (event) => event.orgUnit);
-      const orgUnitWithAncestors = await this.orgUnitsService.loadOrgUnitDataWithAncestorsPromise(
+      const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
         ouArr,
       );
-      return map(requiredEvents || [], (eventItem) => {
+      const orgUnitWithAncestors = await this.promiseService.getPromiseFromObservable(
+        orgUnitWithAncenstorsObservable,
+      );
+      formattedEvents = map(requiredEvents || [], (eventItem) => {
         const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
@@ -122,7 +126,9 @@ export class EventsService {
         return { ...eventItem, dataValues };
       });
     } catch (e) {
-      return [];
+      throw e;
+    } finally {
+      return formattedEvents;
     }
   }
   formatDataValues(dataValues: Array<any>): Array<any> {
@@ -168,13 +174,13 @@ export class EventsService {
     }
     if (header?.name === commonUsedIds.AGE) {
       const birthDate = new Date(rowValue);
-      return calculateAge(birthDate) ? calculateAge(birthDate) : '';
+      return calculateAge(birthDate);
     }
 
     return rowValue;
   }
 
-  getEventsWithMoreThanOneSymptomDataElement(
+  private getEventsWithMoreThanOneSymptomDataElement(
     events: Array<EventResponse>,
   ): Array<EventResponse> {
     return filter(events || [], (eventItem: EventResponse) => {
