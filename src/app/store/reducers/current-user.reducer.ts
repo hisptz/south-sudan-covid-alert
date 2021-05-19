@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as CurrentUserActions from '../actions/current-user.actions';
-import { CurrentUser } from '../models';
+import { CurrentUser } from '../../shared/models';
 
 export const currentUsersFeatureKey = 'currentUsers';
 

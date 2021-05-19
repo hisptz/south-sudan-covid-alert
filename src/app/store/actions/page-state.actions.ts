@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
-import { PageState, NotificationState } from '../models';
+import { PageState, NotificationState } from '../../shared/models';
 import { NotificationType } from 'src/app/shared/models/config.model';
 
 export const loadNotification = createAction(

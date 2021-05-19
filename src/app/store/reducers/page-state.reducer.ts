@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as PageStateActions from '../actions/page-state.actions';
-import { PageState, NotificationState } from '../models';
+import { PageState, NotificationState } from '../../shared/models';
 import * as fromHelpers from '../../shared/helpers';
 
 export const pageStatesFeatureKey = 'pageStates';
