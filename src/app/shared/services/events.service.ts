@@ -14,7 +14,7 @@ import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
 import { filter, map, find } from 'lodash';
-import { EventResponse } from 'src/app/store/models/events.model';
+import { EventResponse } from '../models/events.model';
 import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
 import { commonUsedIds, definedSysmptoms } from '../models/alert.model';

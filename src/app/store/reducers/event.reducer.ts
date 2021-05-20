@@ -1,7 +1,7 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, createReducer, on } from '@ngrx/store';
 import { loadEventsByProgramId, loadEventsByProgramIdFailure, loadEventsByProgramIdSuccess } from '../actions';
-import { NotificationState } from '../models';
+import { NotificationState } from '../../shared/models';
 
 export const eventFeatureKey = 'events';
 

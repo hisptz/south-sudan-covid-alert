@@ -3,43 +3,28 @@
       {
         "name": "a0C28yEISxc",
         "column": "First name of the caller",
-        "valueType": "TEXT",
-        "type": "java.lang.String",
-        "hidden": false,
-        "meta": true
+        "valueType": "TEXT"
       },
       {
         "name": "cQkocmeqivx",
         "column": "Last Name of the Caller",
-        "valueType": "TEXT",
-        "type": "java.lang.String",
-        "hidden": false,
-        "meta": true
+        "valueType": "TEXT"
       },
       {
         "name": "K6ciAYeQKWL",
         "column": "Sex",
         "valueType": "TEXT",
-        "type": "java.lang.String",
-        "hidden": false,
-        "meta": true,
         "optionSet": "spf71vPDh54"
       },
       {
         "name": "Pe3CHmZicqT",
         "column": "Age",
-        "valueType": "NUMBER",
-        "type": "java.lang.Double",
-        "hidden": false,
-        "meta": true
+        "valueType": "NUMBER"
       },
       {
         "name": "dxyEuWRce8l",
         "column": "Phone number",
-        "valueType": "NUMBER",
-        "type": "java.lang.Double",
-        "hidden": false,
-        "meta": true
+        "valueType": "NUMBER"
       },
       {
         "name": "state",
@@ -59,18 +44,12 @@
       {
         "name": "ouname",
         "column": "Boma",
-        "valueType": "TEXT",
-        "type": "java.lang.String",
-        "hidden": false,
-        "meta": true
+        "valueType": "TEXT"
       },
       {
         "name": "CEjSf5UFrHP",
         "column": "Case number",
-        "valueType": "TEXT",
-        "type": "java.lang.String",
-        "hidden": false,
-        "meta": true
+        "valueType": "TEXT"
       }
     ],
   
