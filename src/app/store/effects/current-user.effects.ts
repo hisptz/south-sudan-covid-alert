@@ -7,7 +7,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { CurrentUserService } from '../../shared/services';
 import * as fromActions from '../actions';
 import { AppState } from '../reducers';
-import { CurrentUser } from '../models';
+import { CurrentUser } from '../../shared/models';
 
 @Injectable()
 export class CurrentUserEffects {

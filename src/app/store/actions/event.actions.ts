@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { EventResponse } from '../models/events.model';
+import { EventResponse } from '../../shared/models/events.model';
 
 export const loadEventsByProgramId = createAction(
   '[Events] Load Events By Program ID',
