@@ -2,85 +2,55 @@
   {
     "name": "a0C28yEISxc",
     "column": "First name of the caller",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "cQkocmeqivx",
     "column": "Last Name of the Caller",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "K6ciAYeQKWL",
     "column": "Sex",
     "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true,
     "optionSet": "spf71vPDh54"
   },
   {
     "name": "Pe3CHmZicqT",
     "column": "Age",
-    "valueType": "NUMBER",
-    "type": "java.lang.Double",
-    "hidden": false,
-    "meta": true
+    "valueType": "NUMBER"
   },
   {
     "name": "dxyEuWRce8l",
     "column": "Phone number",
-    "valueType": "NUMBER",
-    "type": "java.lang.Double",
-    "hidden": false,
-    "meta": true
+    "valueType": "NUMBER"
   },
   {
     "name": "EicmBDTb8Zm",
     "column": "Reason for calling 6666",
-    "valueType": "LONG_TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "LONG_TEXT"
   }, 
   {
     "name": "symptoms",
     "column": "Signs and symptoms",
     "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true,
     "optionSet": "ya0NeYQ84cy"
   },
   {
     "name": "aVm8pmWxIWX",
     "column": "Suspected disease",
     "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true,
     "optionSet": "wJTig3W6ETw"
   },
   {
     "name": "g7EpCKIysgQ",
     "column": "Caller meet case definition of COVID19 Cases",
-    "valueType": "BOOLEAN",
-    "type": "java.lang.Boolean",
-    "hidden": false,
-    "meta": true
+    "valueType": "BOOLEAN"
   },
   {
     "name": "HkqxOfRr51f",
     "column": "Alert case for other outbreak prone  diseases",
-    "valueType": "BOOLEAN",
-    "type": "java.lang.Boolean",
-    "hidden": false,
-    "meta": true
+    "valueType": "BOOLEAN"
   },
   {
     "name": "state",
@@ -100,74 +70,47 @@
   {
     "name": "ouname",
     "column": "Boma",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "snEoCW6OmBH",
     "column": "Call Center Time of Call",
-    "valueType": "TIME",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TIME"
   },
   {
     "name": "UVb0n05eXrb",
     "column": "Call center: Meridium time",
     "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true,
     "optionSet": "pEhRt4LEOKM"
   },
   {
     "name": "oQSKqGcOGNe",
     "column": "First Name of person the call made for",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "TwGiy51IM8t",
     "column": "Last Name of person the call made for",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "UATjIK2KUVd",
     "column": "First Name of Phone Call Handler",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "gYjZ1iTGNlg",
     "column": "Last Name of Phone Call Handler",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   },
   {
     "name": "s4jPdjTj69G",
     "column": "COVID-19 alert case reported to RRT",
-    "valueType": "BOOLEAN",
-    "type": "java.lang.Boolean",
-    "hidden": false,
-    "meta": true
+    "valueType": "BOOLEAN"
   },
   {
     "name": "CEjSf5UFrHP",
     "column": "Case number",
-    "valueType": "TEXT",
-    "type": "java.lang.String",
-    "hidden": false,
-    "meta": true
+    "valueType": "TEXT"
   }
 ]
