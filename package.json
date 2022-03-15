@@ -3,7 +3,7 @@
   "version": "0.0.17-alpha",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot",
+    "start": "ng serve",
     "build": "ng build --prod --aot --build-optimizer && cd dist/covid-alert && zip -r -D covid-alert.zip .",
     "test": "ng test",
     "lint": "ng lint",
