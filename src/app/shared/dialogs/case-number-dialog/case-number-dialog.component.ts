@@ -31,6 +31,10 @@ export class CaseNumberDialogComponent implements OnInit {
         this.data?.caseNumber,
         [Validators.required],
       ],
+      [this.commonIds?.CASE_APPROVER]:[
+        this.data?.caseApprover,
+        [Validators.required],
+      ]
     });
   }
   closeDialog(): void {
@@ -41,10 +45,11 @@ export class CaseNumberDialogComponent implements OnInit {
     this._snackBar.open('Saving case number', null, {
       duration: 3000,
     });
-    this.store.dispatch(
-      fromActions.addCaseNumber({ data: value, id: this.data?.eventId }),
-    );
+    console.log(value);
+    // this.store.dispatch(
+    //   fromActions.addCaseNumber({ data: value, id: this.data?.eventId }),
+    // );
 
-    this.dialogRef.close();
+    // this.dialogRef.close();
   }
 }

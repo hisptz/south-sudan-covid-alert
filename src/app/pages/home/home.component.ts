@@ -90,25 +90,18 @@ export class HomeComponent implements OnInit {
   }
 
   addCaseNumber(row, caseNumber) {
+   const caseApprover = row[this.commonIds.CASE_APPROVER]?.value ?? '';
+   caseNumber = caseNumber?? '';
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
         eventId: row?.event,
         caseNumber,
+        caseApprover,
       },
-      height: '250px',
+      height: '350px',
       width: '500px',
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.reportToRRT) {
-        this.store.dispatch(
-          fromActions.showNotification({ message: 'Saving case number' }),
-        );
-        const data = {
-          event: row?.event,
-          dataValues: { dataElement: this.reportedToRRTId, value: true },
-        };
-        this.store.dispatch(updateReportToRRT({ data, id: row?.event }));
-      }
+    dialogRef.afterClosed().subscribe(() => {
     });
   }
 
