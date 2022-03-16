@@ -141,6 +141,7 @@ export class HomeComponent implements OnInit {
       height: '150px',
       width: '500px',
     });
+    //@TODO App support for name of the person confirm for alert
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
         this.store.dispatch(
@@ -156,12 +157,14 @@ export class HomeComponent implements OnInit {
   }
 
   onDownloadAllAlert(){
+    console.log(this.allRegisteredHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe(data=>{
       console.log(data);
     })
   }
 
   onDownloadConfirmedAlert(){
+    console.log(this.reportedToRRTHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe(data=>{
       console.log(this.getReportedToRRTEvents(data));
     })

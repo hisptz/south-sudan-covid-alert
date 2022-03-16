@@ -1,68 +1,78 @@
 {
-    "headers": [
-      {
-        "name": "a0C28yEISxc",
-        "column": "First name of the caller",
-        "valueType": "TEXT"
-      },
-      {
-        "name": "cQkocmeqivx",
-        "column": "Last Name of the Caller",
-        "valueType": "TEXT"
-      },
-      {
-        "name": "K6ciAYeQKWL",
-        "column": "Sex",
-        "valueType": "TEXT",
-        "optionSet": "spf71vPDh54"
-      },
-      {
-        "name": "Pe3CHmZicqT",
-        "column": "Age",
-        "valueType": "NUMBER"
-      },
-      {
-        "name": "dxyEuWRce8l",
-        "column": "Phone number",
-        "valueType": "NUMBER"
-      },
-      {
-        "name": "state",
-        "column": "State",
-        "valueType": "TEXT"
-      },
-      {
-        "name": "county",
-        "column": "County",
-        "valueType": "TEXT"
-      },
-      {
-        "name": "payam",
-        "column": "Payam",
-        "valueType": "TEXT"
-      },
-      {
-        "name": "ouname",
-        "column": "Boma",
-        "valueType": "TEXT"
-      },
-      {
-        "name": "CEjSf5UFrHP",
-        "column": "Case number",
-        "valueType": "TEXT"
-      }
+    "headers": [{
+            "name": "a0C28yEISxc",
+            "column": "First name of the caller",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "cQkocmeqivx",
+            "column": "Last Name of the Caller",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "oQSKqGcOGNe",
+            "column": "First name of the patient",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "TwGiy51IM8t",
+            "column": "Last Name of the patient",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "K6ciAYeQKWL",
+            "column": "Sex",
+            "valueType": "TEXT",
+            "optionSet": "spf71vPDh54"
+        },
+        {
+            "name": "Pe3CHmZicqT",
+            "column": "Age",
+            "valueType": "NUMBER"
+        },
+        {
+            "name": "dxyEuWRce8l",
+            "column": "Phone number",
+            "valueType": "NUMBER"
+        },
+        {
+            "name": "state",
+            "column": "State",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "county",
+            "column": "County",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "payam",
+            "column": "Payam",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "ouname",
+            "column": "Boma",
+            "valueType": "TEXT"
+        },
+        {
+            "name": "CEjSf5UFrHP",
+            "column": "Case number",
+            "valueType": "TEXT"
+        }
     ],
-  
+
     "filters": [
-      "a0C28yEISxc",
-      "cQkocmeqivx",
-      "K6ciAYeQKWL",
-      "dxyEuWRce8l",
-      "CEjSf5UFrHP",
-      "ouname",
-      "state",
-      "county",
-      "payam"
+        "a0C28yEISxc",
+        "cQkocmeqivx",
+        "oQSKqGcOGNe",
+        "TwGiy51IM8t",
+        "K6ciAYeQKWL",
+        "dxyEuWRce8l",
+        "CEjSf5UFrHP",
+        "ouname",
+        "state",
+        "county",
+        "payam"
     ]
-  }
-  
+}
