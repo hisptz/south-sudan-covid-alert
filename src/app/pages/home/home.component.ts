@@ -151,7 +151,7 @@ export class HomeComponent implements OnInit {
   onDownloadAllAlert() {
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
       this.onDownloadDataInExcel(
-        this.allRegisteredHeaders,
+        this.defaultAllRegisteredHeaders,
         data,
         'All registed Alerts',
       );
@@ -159,7 +159,6 @@ export class HomeComponent implements OnInit {
   }
 
   onDownloadConfirmedAlert() {
-    console.log(this.reportedToRRTHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
       this.onDownloadDataInExcel(
         this.reportedToRRTHeaders,
@@ -169,25 +168,29 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onDownloadDataInExcel(headers: any, data: any[], fileName: string) {
-    const jsonData = _.flattenDeep(
-      _.map(data, (dataObj: any) => {
-        const newData = {};
-        for (const header of headers) {
-          const id = header?.name ?? '';
-          const columnName = header?.column ?? '';
-          if (id !== '' && columnName !== '') {
-            const value = dataObj[id]?.value ?? '';
-            newData[columnName] = `${value}`;
+  async onDownloadDataInExcel(headers: any, data: any[], fileName: string) {
+    var ws = XLSX.utils.json_to_sheet(
+      _.flattenDeep(
+        _.map(data, (dataObj: any) => {
+          const newData = {};
+          for (const header of headers) {
+            const id = header?.name ?? '';
+            const columnName = header?.column ?? '';
+            if (id !== '' && columnName !== '') {
+              const value = dataObj[id]?.value ?? '';
+              newData[columnName] = `${value}`;
+            }
           }
-        }
-        return newData;
-      }),
+          return newData;
+        }),
+      ),
     );
-    console.log({ jsonData, fileName });
+    let workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, ws, 'Sheet');
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
   }
 
-  showEventData(event, header = null, value = null) {
+  showEventData(event, header = null) {
     if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
     } else {
@@ -196,20 +199,20 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  closeEventDataSection(data) {
+  closeEventDataSection(data: any) {
     if (data && data.closeView) {
       this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
       this.eventToShow = null;
     }
   }
 
-  getValidPhone(phone) {
+  getValidPhone(phone: any) {
     return phone && convertExponentialToDecimal(phone)
       ? convertExponentialToDecimal(phone)
       : '';
   }
 
-  onPageChange(event) {
+  onPageChange(event: any) {
     if (event.pageIndex === this.pageIndex + 1) {
       this.lowValue = this.lowValue + this.pageSize;
       this.highValue = this.highValue + this.pageSize;
@@ -220,7 +223,7 @@ export class HomeComponent implements OnInit {
     this.pageIndex = event.pageIndex;
   }
 
-  rOnPageChange(event) {
+  rOnPageChange(event: any) {
     if (event.pageIndex === this.rPageIndex + 1) {
       this.rLowValue = this.rLowValue + this.rPageSize;
       this.rHighValue = this.rHighValue + this.rPageSize;
@@ -231,7 +234,7 @@ export class HomeComponent implements OnInit {
     this.rPageIndex = event.pageIndex;
   }
 
-  getRowNumber(row, analytics: Array<any>) {
+  getRowNumber(row: any, analytics: Array<any>) {
     return findIndex(analytics || [], row) + 1;
   }
 }
