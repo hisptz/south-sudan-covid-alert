@@ -67,6 +67,8 @@
             "column": "Alert case for other outbreak prone  diseases",
             "valueType": "BOOLEAN"
         },
+        { "name": "cAR4cU2Csdq", "column": "Sought Information", "valueType": "" },
+        { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "" },
         {
             "name": "state",
             "column": "State",

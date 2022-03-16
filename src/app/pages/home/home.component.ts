@@ -174,7 +174,7 @@ export class HomeComponent implements OnInit {
     if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
     } else {
-      this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 4);
+      this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 6);
       this.eventToShow = event;
     }
   }

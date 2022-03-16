@@ -61,6 +61,8 @@
         "column": "Alert case for other outbreak prone  diseases",
         "valueType": "BOOLEAN"
     },
+    { "name": "cAR4cU2Csdq", "column": "Sought Information", "valueType": "" },
+    { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "" },
     {
         "name": "state",
         "column": "State",
@@ -91,16 +93,6 @@
         "column": "Call center: Meridium time",
         "valueType": "TEXT",
         "optionSet": "pEhRt4LEOKM"
-    },
-    {
-        "name": "oQSKqGcOGNe",
-        "column": "First Name of person the call made for",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "TwGiy51IM8t",
-        "column": "Last Name of person the call made for",
-        "valueType": "TEXT"
     },
     {
         "name": "UATjIK2KUVd",
