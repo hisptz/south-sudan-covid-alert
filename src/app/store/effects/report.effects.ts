@@ -7,7 +7,6 @@ import { ReportRrtService } from 'src/app/shared/services/report-rrt.service';
 import { loadEventsByProgramId } from '../actions';
 import {
   updateReportToRRT,
-  updateReportToRRTSuccess,
   updateReportToRRTFailure,
   addCaseNumber,
   addCaseNumberFailure,

@@ -67,8 +67,7 @@
                                             <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" *ngFor="let header of allRegisteredHeaders" (click)="
                           showEventData(
                             row,
-                            header?.name,
-                            row[header?.name]?.value
+                            header?.name
                           )
                         ">
                                                 <p *ngIf="header?.name !== commonIds.CASE_NUMBER">

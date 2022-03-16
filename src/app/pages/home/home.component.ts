@@ -3,6 +3,8 @@ import { AppState } from '../../store/reducers';
 import { Store } from '@ngrx/store';
 import * as fromSelectors from '../../store/selectors';
 import * as fromActions from '../../store/actions';
+import * as _ from 'lodash';
+import * as XLSX from 'xlsx';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
 import { map, flattenDeep, findIndex, filter } from 'lodash';
@@ -90,26 +92,18 @@ export class HomeComponent implements OnInit {
   }
 
   addCaseNumber(row, caseNumber) {
+    const caseApprover = row[this.commonIds.CASE_APPROVER]?.value ?? '';
+    caseNumber = caseNumber ?? '';
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
         eventId: row?.event,
         caseNumber,
+        caseApprover,
       },
-      height: '250px',
+      height: '350px',
       width: '500px',
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.reportToRRT) {
-        this.store.dispatch(
-          fromActions.showNotification({ message: 'Saving case number' }),
-        );
-        const data = {
-          event: row?.event,
-          dataValues: { dataElement: this.reportedToRRTId, value: true },
-        };
-        this.store.dispatch(updateReportToRRT({ data, id: row?.event }));
-      }
-    });
+    dialogRef.afterClosed().subscribe(() => {});
   }
 
   onUpdatePageSize(e) {
@@ -140,7 +134,6 @@ export class HomeComponent implements OnInit {
       height: '150px',
       width: '500px',
     });
-    //@TODO App support for name of the person confirm for alert
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
         this.store.dispatch(
@@ -156,20 +149,48 @@ export class HomeComponent implements OnInit {
   }
 
   onDownloadAllAlert() {
-    console.log(this.allRegisteredHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
-      console.log(data);
+      this.onDownloadDataInExcel(
+        this.defaultAllRegisteredHeaders,
+        data,
+        'All registed Alerts',
+      );
     });
   }
 
   onDownloadConfirmedAlert() {
-    console.log(this.reportedToRRTHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
-      console.log(this.getReportedToRRTEvents(data));
+      this.onDownloadDataInExcel(
+        this.reportedToRRTHeaders,
+        this.getReportedToRRTEvents(data),
+        'Reported to RRT',
+      );
     });
   }
 
-  showEventData(event, header = null, value = null) {
+  async onDownloadDataInExcel(headers: any, data: any[], fileName: string) {
+    var ws = XLSX.utils.json_to_sheet(
+      _.flattenDeep(
+        _.map(data, (dataObj: any) => {
+          const newData = {};
+          for (const header of headers) {
+            const id = header?.name ?? '';
+            const columnName = header?.column ?? '';
+            if (id !== '' && columnName !== '') {
+              const value = dataObj[id]?.value ?? '';
+              newData[columnName] = `${value}`;
+            }
+          }
+          return newData;
+        }),
+      ),
+    );
+    let workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, ws, 'Sheet');
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  }
+
+  showEventData(event, header = null) {
     if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
     } else {
@@ -178,20 +199,20 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  closeEventDataSection(data) {
+  closeEventDataSection(data: any) {
     if (data && data.closeView) {
       this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
       this.eventToShow = null;
     }
   }
 
-  getValidPhone(phone) {
+  getValidPhone(phone: any) {
     return phone && convertExponentialToDecimal(phone)
       ? convertExponentialToDecimal(phone)
       : '';
   }
 
-  onPageChange(event) {
+  onPageChange(event: any) {
     if (event.pageIndex === this.pageIndex + 1) {
       this.lowValue = this.lowValue + this.pageSize;
       this.highValue = this.highValue + this.pageSize;
@@ -202,7 +223,7 @@ export class HomeComponent implements OnInit {
     this.pageIndex = event.pageIndex;
   }
 
-  rOnPageChange(event) {
+  rOnPageChange(event: any) {
     if (event.pageIndex === this.rPageIndex + 1) {
       this.rLowValue = this.rLowValue + this.rPageSize;
       this.rHighValue = this.rHighValue + this.rPageSize;
@@ -213,7 +234,7 @@ export class HomeComponent implements OnInit {
     this.rPageIndex = event.pageIndex;
   }
 
-  getRowNumber(row, analytics: Array<any>) {
+  getRowNumber(row: any, analytics: Array<any>) {
     return findIndex(analytics || [], row) + 1;
   }
 }
