@@ -8,6 +8,7 @@ export enum commonUsedIds {
   REASON_FOR_CALLING = 'EicmBDTb8Zm',
   AGE = 'Pe3CHmZicqT',
   CASE_NUMBER = 'CEjSf5UFrHP',
+  CASE_APPROVER = 'xrzgJTi81es',
 }
 export const definedSysmptoms = [
   {

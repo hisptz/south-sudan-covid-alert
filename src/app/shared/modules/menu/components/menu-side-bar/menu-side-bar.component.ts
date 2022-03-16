@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import * as fromServices from '../../services';
 import * as fromConstants from '../../constants';
@@ -6,7 +6,7 @@ import * as fromConstants from '../../constants';
 @Component({
   selector: 'app-menu-side-bar',
   templateUrl: './menu-side-bar.component.html',
-  styleUrls: ['./menu-side-bar.component.css']
+  styleUrls: ['./menu-side-bar.component.css'],
 })
 export class MenuSideBarComponent implements OnInit {
   @Input() rootUrl: string;
@@ -37,7 +37,7 @@ export class MenuSideBarComponent implements OnInit {
       if (profile) {
         this.currentUser = {
           name: profile.displayName,
-          email: profile.email
+          email: profile.email,
         };
       }
 
@@ -58,8 +58,8 @@ export class MenuSideBarComponent implements OnInit {
   private _prepareMenuModules() {
     return this.filteredApp === ''
       ? this.originalApps.filter((menu: any) => {
-        return !menu.onlyShowOnSearch;
-      })
+          return !menu.onlyShowOnSearch;
+        })
       : this.originalApps;
   }
 
@@ -71,5 +71,4 @@ export class MenuSideBarComponent implements OnInit {
   updateMenuModules() {
     this.apps = this._prepareMenuModules();
   }
-
 }

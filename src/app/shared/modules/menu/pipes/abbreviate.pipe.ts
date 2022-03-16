@@ -1,10 +1,9 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'abbreviate'
+  name: 'abbreviate',
 })
 export class AbbreviatePipe implements PipeTransform {
-
   transform(name: string, args?: any): any {
     const abbreviatedName: any[] = [];
     let count = 0;
@@ -23,5 +22,4 @@ export class AbbreviatePipe implements PipeTransform {
 
     return abbreviatedName.join('');
   }
-
 }

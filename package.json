@@ -3,12 +3,12 @@
   "version": "0.0.17-alpha",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot",
+    "start": "ng serve",
     "build": "ng build --prod --aot --build-optimizer && cd dist/covid-alert && zip -r -D covid-alert.zip .",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "format": "prettier --write \"*.json\" \"src/**/*.ts\""
+    "format": "prettier --write \"*.json\" \"src/assets/json/*.json\" \"src/**/*.ts\""
   },
   "private": true,
   "dependencies": {

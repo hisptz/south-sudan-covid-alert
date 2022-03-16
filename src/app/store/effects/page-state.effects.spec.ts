@@ -10,10 +10,7 @@ describe('PageStateEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        PageStateEffects,
-        provideMockActions(() => actions$)
-      ]
+      providers: [PageStateEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.get<PageStateEffects>(PageStateEffects);

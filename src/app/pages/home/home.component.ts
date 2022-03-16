@@ -20,6 +20,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
 import { CaseNumberDialogComponent } from 'src/app/shared/dialogs/case-number-dialog/case-number-dialog.component';
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -37,6 +38,7 @@ export class HomeComponent implements OnInit {
   searchText = '';
   eventToShow = null;
   allRegisteredHeaders = [];
+  defaultAllRegisteredHeaders = [];
   allRegisteredFilters = [];
   reportedToRRTHeaders = [];
   reportedToRRTFilters = [];
@@ -52,11 +54,9 @@ export class HomeComponent implements OnInit {
   rPageSize = 10;
   rLowValue = 0;
   rHighValue = 10;
-  constructor(
-    private store: Store<AppState>,
-    public dialog: MatDialog,
-  ) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog) {
     this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
+    this.defaultAllRegisteredHeaders = ALL_REGISTERED_HEADERS;
     this.allRegisteredFilters = ALL_REGISTERED_FILTERS;
     this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
     this.reportedToRRTFilters = REPORTED_TO_RRT_FILTERS;
@@ -130,6 +130,7 @@ export class HomeComponent implements OnInit {
       }),
     );
   }
+
   updateReportToRRT(row) {
     const dialogRef = this.dialog.open(ConfirmReportToRrtDialogComponent, {
       data: {
@@ -139,6 +140,7 @@ export class HomeComponent implements OnInit {
       height: '150px',
       width: '500px',
     });
+    //@TODO App support for name of the person confirm for alert
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
         this.store.dispatch(
@@ -152,25 +154,43 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
+  onDownloadAllAlert() {
+    console.log(this.allRegisteredHeaders);
+    this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
+      console.log(data);
+    });
+  }
+
+  onDownloadConfirmedAlert() {
+    console.log(this.reportedToRRTHeaders);
+    this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
+      console.log(this.getReportedToRRTEvents(data));
+    });
+  }
+
   showEventData(event, header = null, value = null) {
     if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
     } else {
-      this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 4);
+      this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 6);
       this.eventToShow = event;
     }
   }
+
   closeEventDataSection(data) {
     if (data && data.closeView) {
       this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
       this.eventToShow = null;
     }
   }
+
   getValidPhone(phone) {
     return phone && convertExponentialToDecimal(phone)
       ? convertExponentialToDecimal(phone)
       : '';
   }
+
   onPageChange(event) {
     if (event.pageIndex === this.pageIndex + 1) {
       this.lowValue = this.lowValue + this.pageSize;
@@ -181,6 +201,7 @@ export class HomeComponent implements OnInit {
     }
     this.pageIndex = event.pageIndex;
   }
+
   rOnPageChange(event) {
     if (event.pageIndex === this.rPageIndex + 1) {
       this.rLowValue = this.rLowValue + this.rPageSize;

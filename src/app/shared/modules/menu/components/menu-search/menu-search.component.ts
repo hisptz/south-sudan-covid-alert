@@ -4,7 +4,7 @@ import {
   state,
   style,
   transition,
-  trigger
+  trigger,
 } from '@angular/animations';
 import * as fromServices from '../../services';
 
@@ -17,23 +17,23 @@ import * as fromServices from '../../services';
       state(
         'in',
         style({
-          opacity: 1
-        })
+          opacity: 1,
+        }),
       ),
       transition('void => *', [
         style({
-          transform: 'translateY(-100%)'
+          transform: 'translateY(-100%)',
         }),
-        animate(300)
+        animate(300),
       ]),
       transition('* => void', [
         animate(300),
         style({
-          transform: 'translateY(-100%)'
-        })
-      ])
-    ])
-  ]
+          transform: 'translateY(-100%)',
+        }),
+      ]),
+    ]),
+  ],
 })
 export class MenuSearchComponent implements OnInit {
   @Input() rootUrl: string;

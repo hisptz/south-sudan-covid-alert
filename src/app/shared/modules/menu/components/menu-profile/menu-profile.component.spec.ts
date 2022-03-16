@@ -6,12 +6,13 @@ describe('MenuProfileComponent', () => {
   let component: MenuProfileComponent;
   let fixture: ComponentFixture<MenuProfileComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MenuProfileComponent ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MenuProfileComponent],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MenuProfileComponent);

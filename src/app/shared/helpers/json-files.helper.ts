@@ -5,5 +5,5 @@ export const JSON_FILES = {
   allRegisteredHeaders: require('../../../assets/json/all-registered-headers.json'),
   reportedToRRTHeaders: require('../../../assets/json/reported-to-rrt-headers.json'),
   allHeaders: require('../../../assets/json/all-headers.json'),
-  metadata: require('../../../assets/json/metadata.json')
+  metadata: require('../../../assets/json/metadata.json'),
 };

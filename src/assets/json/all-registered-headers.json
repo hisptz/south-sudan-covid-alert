@@ -16,6 +16,16 @@
       "valueType": "TEXT"
     },
     {
+      "name": "oQSKqGcOGNe",
+      "column": "First name of the patient",
+      "valueType": "TEXT"
+    },
+    {
+      "name": "TwGiy51IM8t",
+      "column": "Last Name of the patient",
+      "valueType": "TEXT"
+    },
+    {
       "name": "K6ciAYeQKWL",
       "column": "Sex",
       "valueType": "TEXT",
@@ -35,7 +45,7 @@
       "name": "EicmBDTb8Zm",
       "column": "Reason for calling 6666",
       "valueType": "LONG_TEXT"
-    }, 
+    },
     {
       "name": "symptoms",
       "column": "Signs and symptoms",
@@ -58,6 +68,8 @@
       "column": "Alert case for other outbreak prone  diseases",
       "valueType": "BOOLEAN"
     },
+    { "name": "cAR4cU2Csdq", "column": "Sought Information", "valueType": "" },
+    { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "" },
     {
       "name": "state",
       "column": "State",
@@ -82,12 +94,19 @@
       "name": "CEjSf5UFrHP",
       "column": "Case number",
       "valueType": "TEXT"
+    },
+    {
+      "name": "xrzgJTi81es",
+      "column": "Case Approver",
+      "valueType": "TEXT"
     }
   ],
 
   "filters": [
     "a0C28yEISxc",
     "EicmBDTb8Zm",
+    "oQSKqGcOGNe",
+    "TwGiy51IM8t",
     "cQkocmeqivx",
     "sbwDPRnLzYY",
     "ouname",

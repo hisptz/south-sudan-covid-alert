@@ -12,7 +12,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { effects } from './store/effects';
 import { SharedModule } from './shared/shared.module';
 import { pagesComponent } from './pages';
-import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  RouterStateSerializer,
+  StoreRouterConnectingModule,
+} from '@ngrx/router-store';
 import { RouteSerializer } from './utils';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,11 +25,7 @@ import { services } from './shared/services';
 import { ViewEventComponent } from './pages/home/view-event/view-event.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ...pagesComponent,
-    ViewEventComponent
-  ],
+  declarations: [AppComponent, ...pagesComponent, ViewEventComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -34,14 +33,14 @@ import { ViewEventComponent } from './pages/home/view-event/view-event.component
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    
+
     SharedModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
-      }
+      },
     }),
     StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
@@ -58,6 +57,6 @@ import { ViewEventComponent } from './pages/home/view-event/view-event.component
     NgxDhis2MenuModule,
   ],
   providers: [{ provide: RouterStateSerializer, useClass: RouteSerializer }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

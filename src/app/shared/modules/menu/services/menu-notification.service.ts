@@ -5,11 +5,11 @@ import { of, Observable } from 'rxjs/index';
 
 @Injectable()
 export class MenuNotificationService {
-  constructor(private httpClient: HttpClient) {
-
-  }
+  constructor(private httpClient: HttpClient) {}
 
   loadNotification(rootUrl: string): Observable<any> {
-    return this.httpClient.get(`${rootUrl}api/me/dashboard.json`).pipe(catchError(() => of(null)));
+    return this.httpClient
+      .get(`${rootUrl}api/me/dashboard.json`)
+      .pipe(catchError(() => of(null)));
   }
 }

@@ -5,6 +5,9 @@ import { ReportEffects } from './report.effects';
 import { RouterEffects } from './router.effects';
 
 export const effects: any[] = [
-    CurrentUserEffects, 
-    RouterEffects, ReportEffects, EventEffects, PageStateEffects
+  CurrentUserEffects,
+  RouterEffects,
+  ReportEffects,
+  EventEffects,
+  PageStateEffects,
 ];
