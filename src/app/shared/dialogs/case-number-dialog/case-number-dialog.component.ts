@@ -25,31 +25,28 @@ export class CaseNumberDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data);
     this.addCaseNumberForm = this.fb.group({
       [this.commonIds?.CASE_NUMBER]: [
         this.data?.caseNumber,
         [Validators.required],
       ],
-      [this.commonIds?.CASE_APPROVER]:[
+      [this.commonIds?.CASE_APPROVER]: [
         this.data?.caseApprover,
         [Validators.required],
-      ]
+      ],
     });
   }
   closeDialog(): void {
     this.dialogRef.close();
   }
-  onSave(form) {
+  onSave(form: any) {
     const { value } = form?.form || { value: null };
     this._snackBar.open('Saving case number', null, {
       duration: 3000,
     });
-    console.log(value);
-    // this.store.dispatch(
-    //   fromActions.addCaseNumber({ data: value, id: this.data?.eventId }),
-    // );
-
-    // this.dialogRef.close();
+    this.store.dispatch(
+      fromActions.addCaseNumber({ data: value, id: this.data?.eventId }),
+    );
+    this.dialogRef.close();
   }
 }

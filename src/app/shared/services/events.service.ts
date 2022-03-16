@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
-import { filter, map, find } from 'lodash';
+import { flattenDeep, map, find } from 'lodash';
 import { EventResponse } from '../models/events.model';
 import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
@@ -39,8 +39,9 @@ export class EventsService {
       .put(url, data)
       .pipe(catchError((error) => throwError(error)));
   }
+
   getEventByIdObservable(eventId: string): Observable<any> {
-    const fields = `fields=program,orgUnit,eventDate,status,completedDate,storedBy,coordinate,dataValues[dataElement,value]`;
+    const fields = `fields=program,event,eventDate,orgUnit,orgUnitName,dataValues[dataElement,value]`;
     const url = apiLink + `events/${eventId}.json?${fields}`;
     return this.httpClient
       .get(url)
@@ -77,12 +78,7 @@ export class EventsService {
             eventsObservable,
           );
           events = eventsResult?.events?.length
-            ? [
-                ...events,
-                ...this.getEventsWithMoreThanOneSymptomDataElement(
-                  eventsResult?.events,
-                ),
-              ]
+            ? [...events, ...(eventsResult?.events ?? [])]
             : [...events];
         }
       }
@@ -180,26 +176,6 @@ export class EventsService {
     return rowValue;
   }
 
-  private getEventsWithMoreThanOneSymptomDataElement(
-    events: Array<EventResponse>,
-  ): Array<EventResponse> {
-    return events;
-    //TODO enable filtering by symptom values count
-    // return filter(events || [], (eventItem: EventResponse) => {
-    //   if (eventItem?.dataValues) {
-    //     const symptomsDataValues = filter(
-    //       eventItem?.dataValues || [],
-    //       (dataValue) => {
-    //         if (SYMPTOM_IDS?.includes(dataValue?.dataElement)) {
-    //           return dataValue;
-    //         }
-    //       },
-    //     );
-    //    return  symptomsDataValues?.length > 1;
-    //   }
-    // });
-  }
-
   async getEventPromise(eventId: string) {
     const eventObservable = this.getEventByIdObservable(eventId);
     return await this.promiseService.getPromiseFromObservable(eventObservable);
@@ -208,16 +184,28 @@ export class EventsService {
     let response = null;
     try {
       const eventPayload = await this.getEventPromise(eventId);
-      const formattedPayload = getFormattedPayloadForUpdate(
+      const formattedCaseNumberPayload = getFormattedPayloadForUpdate(
         eventPayload,
         commonUsedIds.CASE_NUMBER,
         data[commonUsedIds.CASE_NUMBER],
       );
-
-      const updateEventObservable = await this.updateEventBySingleDataValue(
-        formattedPayload,
+      let updateEventObservable = await this.updateEventBySingleDataValue(
+        formattedCaseNumberPayload,
         eventId,
         commonUsedIds.CASE_NUMBER,
+      );
+      response = await this.promiseService.getPromiseFromObservable(
+        updateEventObservable,
+      );
+      const formattedCaseApprovalPayload = getFormattedPayloadForUpdate(
+        eventPayload,
+        commonUsedIds.CASE_APPROVER,
+        data[commonUsedIds.CASE_APPROVER],
+      );
+      updateEventObservable = await this.updateEventBySingleDataValue(
+        formattedCaseApprovalPayload,
+        eventId,
+        commonUsedIds.CASE_APPROVER,
       );
       response = await this.promiseService.getPromiseFromObservable(
         updateEventObservable,

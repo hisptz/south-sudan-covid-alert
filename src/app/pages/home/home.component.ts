@@ -90,8 +90,8 @@ export class HomeComponent implements OnInit {
   }
 
   addCaseNumber(row, caseNumber) {
-   const caseApprover = row[this.commonIds.CASE_APPROVER]?.value ?? '';
-   caseNumber = caseNumber?? '';
+    const caseApprover = row[this.commonIds.CASE_APPROVER]?.value ?? '';
+    caseNumber = caseNumber ?? '';
     const dialogRef = this.dialog.open(CaseNumberDialogComponent, {
       data: {
         eventId: row?.event,
@@ -101,8 +101,7 @@ export class HomeComponent implements OnInit {
       height: '350px',
       width: '500px',
     });
-    dialogRef.afterClosed().subscribe(() => {
-    });
+    dialogRef.afterClosed().subscribe(() => {});
   }
 
   onUpdatePageSize(e) {
