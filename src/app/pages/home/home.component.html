@@ -34,8 +34,8 @@
                     <!-- Search field with buttons -->
                     <!-- Table card section  -->
                     <div class="ml-2" [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }" *ngIf="eventsByProgramId$ | async">
-                        <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-                            <div class="table-responsive" [ngClass]="{ 'overflow-hidden': !eventToShow }">
+                        <mat-card class="w-100 mb-4 p-0 overflow-auto">
+                            <div class="table-responsive" [ngClass]="{ 'overflow-auto': !eventToShow }">
                                 <table class="table table-bordered table-hover w-100">
                                     <thead>
                                         <tr class="text-muted">
@@ -60,6 +60,7 @@
                           | slice: lowValue:highValue;
                         let i = index;
                         trackBy: trackByFn
+                        
                       ">
                                             <td (click)="showEventData(row)">
                                                 {{ getRowNumber(row, eventAnalytics) }}
@@ -193,7 +194,7 @@
     </mat-tab>
 
     <mat-tab
-      class="overflow-hidden"
+      class="overflow-auto"
       label="Reported to RRT"
       *ngIf="isAuthorised(currentUser, authorities.VIEW_REPORTED_TO_RRT)"
     >
@@ -232,12 +233,12 @@
 
           <!-- Table card section  -->
           <div
-            class="row w-100 ml-2 overflow-hidden"
+            class="row w-100 ml-2 overflow-auto"
             [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
             *ngIf="eventsByProgramId$ | async"
           >
-            <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-              <table class="table table-bordered overflow-hidden">
+            <mat-card class="w-100 mb-4 p-0 overflow-auto">
+              <table class="table table-bordered overflow-auto">
                 <thead>
                   <tr class="text-muted">
                     <th>SN</th>
