@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
   searchText = '';
   eventToShow = null;
   allRegisteredHeaders = [];
+  defaultAllRegisteredHeaders = [];
   allRegisteredFilters = [];
   reportedToRRTHeaders = [];
   reportedToRRTFilters = [];
@@ -55,6 +56,7 @@ export class HomeComponent implements OnInit {
   rHighValue = 10;
   constructor(private store: Store<AppState>, public dialog: MatDialog) {
     this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
+    this.defaultAllRegisteredHeaders = ALL_REGISTERED_HEADERS;
     this.allRegisteredFilters = ALL_REGISTERED_FILTERS;
     this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
     this.reportedToRRTFilters = REPORTED_TO_RRT_FILTERS;

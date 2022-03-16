@@ -60,12 +60,11 @@
                           | slice: lowValue:highValue;
                         let i = index;
                         trackBy: trackByFn
-                        
                       ">
-                                            <td (click)="showEventData(row)">
+                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" (click)="showEventData(row)">
                                                 {{ getRowNumber(row, eventAnalytics) }}
                                             </td>
-                                            <td *ngFor="let header of allRegisteredHeaders" (click)="
+                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" *ngFor="let header of allRegisteredHeaders" (click)="
                           showEventData(
                             row,
                             header?.name,
@@ -98,7 +97,7 @@
                                                 </div>
                                             </td>
 
-                                            <td *ngIf="
+                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" *ngIf="
                           isAuthorised(currentUser, authorities.REPORT_TO_RRT)
                         ">
                                                 <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height" [disabled]="!row[commonIds.CASE_NUMBER]?.value" *ngIf="
@@ -275,7 +274,7 @@
                       let i = index
                     "
                   >
-                    <td>
+                    <td class=" {{ row == eventToShow ?'highlight-row' : ''}}"  (click)="showEventData(row)">
                       {{
                         getRowNumber(
                           row,
@@ -283,7 +282,7 @@
                         )
                       }}
                     </td>
-                    <td *ngFor="let header of reportedToRRTHeaders">
+                    <td class=" {{ row == eventToShow ?'highlight-row' : ''}}"  *ngFor="let header of reportedToRRTHeaders"(click)="showEventData(row)" >
                       <p>
                         {{
                           header.valueType === 'DATE'
@@ -341,7 +340,7 @@
           <div class="info-section mr-2 ml-4" *ngIf="eventToShow">
             <app-view-event
               [event]="eventToShow"
-              [headers]="reportedToRRTHeaders"
+              [headers]="defaultAllRegisteredHeaders"
               (closeEvent)="closeEventDataSection($event)"
             ></app-view-event>
           </div>
