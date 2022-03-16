@@ -94,6 +94,11 @@
       "name": "CEjSf5UFrHP",
       "column": "Case number",
       "valueType": "TEXT"
+    },
+    {
+      "name": "xrzgJTi81es",
+      "column": "Case Approver",
+      "valueType": "TEXT"
     }
   ],
 

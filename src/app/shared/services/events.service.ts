@@ -158,9 +158,6 @@ export class EventsService {
   }
   private getValueByHeader(rowValue, header) {
     if (header?.valueType === 'BOOLEAN') {
-      if (header?.name == 'g7EpCKIysgQ') {
-        console.log(header, rowValue);
-      }
       return rowValue === '1' || rowValue === 'true' ? 'Yes' : 'No';
     }
     if (header?.name === commonUsedIds.PHONE_NUMBER) {
