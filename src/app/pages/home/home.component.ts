@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromSelectors from '../../store/selectors';
 import * as fromActions from '../../store/actions';
 import * as _ from 'lodash';
+import * as XLSX from 'xlsx';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
 import { map, flattenDeep, findIndex, filter } from 'lodash';
