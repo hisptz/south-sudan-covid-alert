@@ -20,6 +20,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
 import { CaseNumberDialogComponent } from 'src/app/shared/dialogs/case-number-dialog/case-number-dialog.component';
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -130,6 +131,7 @@ export class HomeComponent implements OnInit {
       }),
     );
   }
+
   updateReportToRRT(row) {
     const dialogRef = this.dialog.open(ConfirmReportToRrtDialogComponent, {
       data: {
@@ -152,6 +154,19 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
+  onDownloadAllAlert(){
+    this.eventsByProgramId$.pipe(take(1)).subscribe(data=>{
+      console.log(data);
+    })
+  }
+
+  onDownloadConfirmedAlert(){
+    this.eventsByProgramId$.pipe(take(1)).subscribe(data=>{
+      console.log(this.getReportedToRRTEvents(data));
+    })
+  }
+
   showEventData(event, header = null, value = null) {
     if (header === commonUsedIds.CASE_NUMBER) {
       this.eventToShow = null;
@@ -160,17 +175,20 @@ export class HomeComponent implements OnInit {
       this.eventToShow = event;
     }
   }
+
   closeEventDataSection(data) {
     if (data && data.closeView) {
       this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
       this.eventToShow = null;
     }
   }
+
   getValidPhone(phone) {
     return phone && convertExponentialToDecimal(phone)
       ? convertExponentialToDecimal(phone)
       : '';
   }
+
   onPageChange(event) {
     if (event.pageIndex === this.pageIndex + 1) {
       this.lowValue = this.lowValue + this.pageSize;
@@ -181,6 +199,7 @@ export class HomeComponent implements OnInit {
     }
     this.pageIndex = event.pageIndex;
   }
+
   rOnPageChange(event) {
     if (event.pageIndex === this.rPageIndex + 1) {
       this.rLowValue = this.rLowValue + this.rPageSize;
