@@ -57,7 +57,11 @@ export class ReportRrtService {
     return from(this.reportToRRTPromise(data, id));
   }
 
-  async getFormattedEventPayload(eventId, dataValueId, value) {
+  async getFormattedEventPayload(
+    eventId: string,
+    dataValueId: string,
+    value: any,
+  ) {
     let formattedPayload = null;
     try {
       const payload = await this.eventsService.getEventPromise(eventId);

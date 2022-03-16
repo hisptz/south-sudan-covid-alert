@@ -3,6 +3,7 @@ import { AppState } from '../../store/reducers';
 import { Store } from '@ngrx/store';
 import * as fromSelectors from '../../store/selectors';
 import * as fromActions from '../../store/actions';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
 import { map, flattenDeep, findIndex, filter } from 'lodash';
@@ -132,7 +133,6 @@ export class HomeComponent implements OnInit {
       height: '150px',
       width: '500px',
     });
-    //@TODO App support for name of the person confirm for alert
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.reportToRRT) {
         this.store.dispatch(
@@ -148,17 +148,42 @@ export class HomeComponent implements OnInit {
   }
 
   onDownloadAllAlert() {
-    console.log(this.allRegisteredHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
-      console.log(data);
+      this.onDownloadDataInExcel(
+        this.allRegisteredHeaders,
+        data,
+        'All registed Alerts',
+      );
     });
   }
 
   onDownloadConfirmedAlert() {
     console.log(this.reportedToRRTHeaders);
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
-      console.log(this.getReportedToRRTEvents(data));
+      this.onDownloadDataInExcel(
+        this.reportedToRRTHeaders,
+        this.getReportedToRRTEvents(data),
+        'Reported to RRT',
+      );
     });
+  }
+
+  onDownloadDataInExcel(headers: any, data: any[], fileName: string) {
+    const jsonData = _.flattenDeep(
+      _.map(data, (dataObj: any) => {
+        const newData = {};
+        for (const header of headers) {
+          const id = header?.name ?? '';
+          const columnName = header?.column ?? '';
+          if (id !== '' && columnName !== '') {
+            const value = dataObj[id]?.value ?? '';
+            newData[columnName] = `${value}`;
+          }
+        }
+        return newData;
+      }),
+    );
+    console.log({ jsonData, fileName });
   }
 
   showEventData(event, header = null, value = null) {
