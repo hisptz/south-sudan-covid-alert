@@ -1,6 +1,5 @@
 export function getDataPaginationFilters(paginationData, pageSize = 50) {
     const paginationFilter = [];
-  
     const pager =
         paginationData && paginationData.pager ? paginationData.pager : {};
     const total = pager && pager.total >= pageSize ? pager.total : pageSize;

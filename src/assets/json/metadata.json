@@ -1,23 +1,19 @@
 {
-  "programId": "uaV8Y8Yd2te",
-  "orgUnitId": "he6RdNPCKhY",
-  "dataElements": {
-    "reasonForCalling": {
-      "id": "EicmBDTb8Zm",
-      "preferredValue": "Sickness"
-    },
-    "symptomIds": [
-      "EWZcuvPOrJF",
-      "Yh5KOJj8l7p",
-      "T0ehgpsDrui",
-      "fyzp8BpsPMl",
-      "aTMMzGXk19L",
-      "iUEwXfg9CgD",
-      "HahhmzRvwu8",
-      "YirYKgXDYwm",
-      "nybNlx0XcUq",
-      "IrFWIj5ks2p",
-      "BMyMdiqoWjn"
-    ]
-  }
+    "programId": "uaV8Y8Yd2te",
+    "orgUnitId": "he6RdNPCKhY",
+    "dataElements": {
+        "symptomIds": [
+            "EWZcuvPOrJF",
+            "Yh5KOJj8l7p",
+            "T0ehgpsDrui",
+            "fyzp8BpsPMl",
+            "aTMMzGXk19L",
+            "iUEwXfg9CgD",
+            "HahhmzRvwu8",
+            "YirYKgXDYwm",
+            "nybNlx0XcUq",
+            "IrFWIj5ks2p",
+            "BMyMdiqoWjn"
+        ]
+    }
 }

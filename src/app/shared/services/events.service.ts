@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import {
   PROGRAM_ID,
   ORGUNIT_ID,
-  REASON_FOR_CALLING_ID,
-  REASON_FOR_CALLING_VALUE,
   SYMPTOM_IDS,
   ALL_TABLE_HEADERS,
 } from '../models/config.model';
@@ -55,9 +53,8 @@ export class EventsService {
     fields,
     pageSize = 50,
   }): Observable<any> {
-    const filterExpression = `filter=${REASON_FOR_CALLING_ID}:EQ:${REASON_FOR_CALLING_VALUE}`;
-    const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&${pageSize}`;
-    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}&${filterExpression}`;
+    const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&pageSize${pageSize}`;
+    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
@@ -110,17 +107,14 @@ export class EventsService {
   private async formatEvents(events: Array<EventResponse>) {
     let formattedEvents = [];
     try {
-      const requiredEvents = this.getEventsWithMoreThanOneSymptomDataElement(
-        events,
-      );
-      const ouArr = map(requiredEvents || [], (event) => event.orgUnit);
+      const ouArr = map(events || [], (event) => event.orgUnit);
       const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
         ouArr,
       );
       const orgUnitWithAncestors = await this.promiseService.getPromiseFromObservable(
         orgUnitWithAncenstorsObservable,
       );
-      formattedEvents = map(requiredEvents || [], (eventItem) => {
+      formattedEvents = map(events || [], (eventItem) => {
         const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
@@ -164,6 +158,9 @@ export class EventsService {
   }
   private getValueByHeader(rowValue, header) {
     if (header?.valueType === 'BOOLEAN') {
+      if(header?.name == 'g7EpCKIysgQ'){
+        console.log(header,rowValue);
+      }
       return rowValue === '1' || rowValue === 'true' ? 'Yes' : 'No';
     }
     if (header?.name === commonUsedIds.PHONE_NUMBER) {
@@ -172,13 +169,7 @@ export class EventsService {
         : convertExponentialToDecimal(rowValue);
     }
     if (header?.name === commonUsedIds.SEX) {
-      if (rowValue === '01') {
-        return 'Male';
-      } else if (rowValue === '02') {
-        return 'Female';
-      } else {
-        return rowValue;
-      }
+      return rowValue === '01' ? 'Male' : rowValue ==='02' ? 'Female' : rowValue;
     }
     if (header?.name === commonUsedIds.AGE) {
       const birthDate = new Date(rowValue);
@@ -191,21 +182,21 @@ export class EventsService {
   private getEventsWithMoreThanOneSymptomDataElement(
     events: Array<EventResponse>,
   ): Array<EventResponse> {
-    return filter(events || [], (eventItem: EventResponse) => {
-      if (eventItem?.dataValues) {
-        const symptomsDataValues = filter(
-          eventItem?.dataValues || [],
-          (dataValue) => {
-            if (SYMPTOM_IDS?.includes(dataValue?.dataElement)) {
-              return dataValue;
-            }
-          },
-        );
-        if (symptomsDataValues?.length > 1) {
-          return eventItem;
-        }
-      }
-    });
+    return events;
+    //TODO enable filtering by symptom values count
+    // return filter(events || [], (eventItem: EventResponse) => {
+    //   if (eventItem?.dataValues) {
+    //     const symptomsDataValues = filter(
+    //       eventItem?.dataValues || [],
+    //       (dataValue) => {
+    //         if (SYMPTOM_IDS?.includes(dataValue?.dataElement)) {
+    //           return dataValue;
+    //         }
+    //       },
+    //     );
+    //    return  symptomsDataValues?.length > 1;
+    //   }
+    // });
   }
 
   async getEventPromise(eventId: string) {
