@@ -6,7 +6,7 @@ import {
   state,
   style,
   transition,
-  animate
+  animate,
 } from '@angular/animations';
 import { Observable } from 'rxjs';
 
@@ -19,23 +19,23 @@ import { Observable } from 'rxjs';
       state(
         'in',
         style({
-          opacity: 1
-        })
+          opacity: 1,
+        }),
       ),
       transition('void => *', [
         style({
-          opacity: 0
+          opacity: 0,
         }),
-        animate(700)
+        animate(700),
       ]),
       transition('* => void', [
         animate(400),
         style({
-          opacity: 0
-        })
-      ])
-    ])
-  ]
+          opacity: 0,
+        }),
+      ]),
+    ]),
+  ],
 })
 export class MenuComponent implements OnInit {
   rootUrl: string;
@@ -50,8 +50,10 @@ export class MenuComponent implements OnInit {
   showSidebar: boolean;
   contextPath: string;
 
-  constructor(private menuService: fromServices.MenuService,
-    private systemStatusService: fromServices.SystemStateService) {
+  constructor(
+    private menuService: fromServices.MenuService,
+    private systemStatusService: fromServices.SystemStateService,
+  ) {
     this.rootUrl = '../../../';
     this.menuLoading = true;
     this.menuLoadingFail = false;
@@ -84,7 +86,6 @@ export class MenuComponent implements OnInit {
           this.menuLoading = true;
           this.getSystemSettings();
         }
-
       } else if (!this.online) {
         this.menuNotification = 'You are offline';
         this.wasOffline = true;
@@ -110,12 +111,14 @@ export class MenuComponent implements OnInit {
           const colorName = settings.hasOwnProperty('currentStyle')
             ? settings['currentStyle'].split('/')[0]
             : settings.hasOwnProperty('keyStyle')
-                              ? settings['keyStyle'].split('/')[0]
-                              : 'blue';
+            ? settings['keyStyle'].split('/')[0]
+            : 'blue';
           this.backgroundColor =
             fromConstants.MENU_BACKGROUND_COLORS[colorName];
 
-          this.contextPath = settings.contextPath ? settings.contextPath + '/' : '';
+          this.contextPath = settings.contextPath
+            ? settings.contextPath + '/'
+            : '';
         }
         this.menuLoading = false;
         this.menuLoadingFail = false;
@@ -123,7 +126,7 @@ export class MenuComponent implements OnInit {
       () => {
         this.menuLoading = false;
         this.menuLoadingFail = true;
-      }
+      },
     );
   }
 }

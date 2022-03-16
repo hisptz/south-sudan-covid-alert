@@ -1,178 +1,127 @@
 <div *ngIf="currentUser$ | async as currentUser">
-  <div
-    class="w-100 text-center"
-    *ngIf="
+    <div class="w-100 text-center" *ngIf="
       !isAuthorised(currentUser, authorities.VIEW_REGISTERED_CALLS) &&
       !isAuthorised(currentUser, authorities.VIEW_REPORTED_TO_RRT)
-    "
-  >
-    <h2>
-      You can not view contents of this application, Please contact System
-      Adminstrator
-    </h2>
-  </div>
-  <mat-tab-group (selectedTabChange)="eventToShow = null">
-    <mat-tab
-      label="All Registered"
-      *ngIf="isAuthorised(currentUser, authorities.VIEW_REGISTERED_CALLS)"
-    >
-      <div class="container-fluid px-0">
-        <div class="row mx-0 w-100">
-          <!-- Search field with buttons -->
-          <div class="row w-100 mx-0 mb-2 mt-2">
-            <div class="col-sm">
-              <div class="input-group">
-                <div class="form-group w-50" appearance="outline">
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Search using First Name, Last Name, Reason for calling, Case number, State, County, Boma and Signs and Sysmptoms"
-                    (keyup)="searchingItems($event)"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Search field with buttons -->
-          <!-- Table card section  -->
-          <div
-            class="ml-2"
-            [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
-            *ngIf="eventsByProgramId$ | async"
-          >
-            <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-              <div
-                class="table-responsive"
-                [ngClass]="{ 'overflow-hidden': !eventToShow }"
-              >
-                <table class="table table-bordered table-hover w-100">
-                  <thead>
-                    <tr class="text-muted">
-                      <th>SN</th>
-                      <th *ngFor="let header of allRegisteredHeaders">
-                        {{ header?.column }}
-                      </th>
-                      <th
-                        *ngIf="
+    ">
+        <h2>
+            You can not view contents of this application, Please contact System Adminstrator
+        </h2>
+    </div>
+    <mat-tab-group (selectedTabChange)="eventToShow = null">
+        <mat-tab label="All Registered" *ngIf="isAuthorised(currentUser, authorities.VIEW_REGISTERED_CALLS)">
+            <div class="container-fluid px-0">
+                <div class="row mx-0 w-100">
+                    <!-- Search field with buttons -->
+                    <div class="row w-100 mx-0 mb-2 mt-2">
+                        <div class="col-sm">
+                            <div class="input-group">
+                                <div class="form-group w-50" appearance="outline">
+                                    <input class="form-control" type="text" placeholder="Search using First Name, Last Name, Reason for calling, Case number, State, County, Boma and Signs and Sysmptoms" (keyup)="searchingItems($event)" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm" *ngIf="!eventToShow">
+                            <button style="
+                                float: right;
+                                border: 1px solid lightgray;
+                                border-radius: 5px;
+                                margin-bottom: 1em;
+                              " (click)="onDownloadAllAlert()" [disabled]="(this.eventsLoading$ | async)" mat-icon-button>
+                              <mat-icon>download</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Search field with buttons -->
+                    <!-- Table card section  -->
+                    <div class="ml-2" [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }" *ngIf="eventsByProgramId$ | async">
+                        <mat-card class="w-100 mb-4 p-0 overflow-auto">
+                            <div class="table-responsive" [ngClass]="{ 'overflow-auto': !eventToShow }">
+                                <table class="table table-bordered table-hover w-100">
+                                    <thead>
+                                        <tr class="text-muted">
+                                            <th>SN</th>
+                                            <th *ngFor="let header of allRegisteredHeaders">
+                                                {{ header?.column }}
+                                            </th>
+                                            <th *ngIf="
                           isAuthorised(currentUser, authorities.REPORT_TO_RRT)
-                        "
-                      >
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody
-                    *ngIf="
+                        ">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody *ngIf="
                       !(eventsLoading$ | async) && eventsByProgramId$
                         | async as eventAnalytics
-                    "
-                  >
-                    <tr
-                      *ngFor="
+                    ">
+                                        <tr *ngFor="
                         let row of eventAnalytics
                           | search: allRegisteredFilters:searchText
                           | slice: lowValue:highValue;
                         let i = index;
                         trackBy: trackByFn
-                      "
-                    >
-                      <td (click)="showEventData(row)">
-                        {{ getRowNumber(row, eventAnalytics) }}
-                      </td>
-                      <td
-                        *ngFor="let header of allRegisteredHeaders"
-                        (click)="
+                      ">
+                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" (click)="showEventData(row)">
+                                                {{ getRowNumber(row, eventAnalytics) }}
+                                            </td>
+                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" *ngFor="let header of allRegisteredHeaders" (click)="
                           showEventData(
                             row,
-                            header?.name,
-                            row[header?.name]?.value
+                            header?.name
                           )
-                        "
-                      >
-                        <p *ngIf="header?.name !== commonIds.CASE_NUMBER">
-                          {{
-                            header.valueType === 'DATE'
-                              ? (row[header?.name]?.value | date)
-                              : row[header?.name]?.value
-                          }}
-                        </p>
-                        <div
-                          class="position-relative"
-                          style="width: 120px"
-                          *ngIf="header?.name === commonIds.CASE_NUMBER"
-                        >
-                          <div class="w-75" style="word-wrap: break-word">
-                            <i
-                              class="color-gray"
-                              *ngIf="!row[header?.name]?.value"
-                            >
+                        ">
+                                                <p *ngIf="header?.name !== commonIds.CASE_NUMBER">
+                                                    {{ header.valueType === 'DATE' ? (row[header?.name]?.value | date) : row[header?.name]?.value }}
+                                                </p>
+                                                <div class="position-relative" style="width: 120px" *ngIf="header?.name === commonIds.CASE_NUMBER">
+                                                    <div class="w-75" style="word-wrap: break-word">
+                                                        <i class="color-gray" *ngIf="!row[header?.name]?.value">
                               There is no case number for this case
                             </i>
-                            <p *ngIf="row[header?.name]?.value">
-                              {{ row[header?.name]?.value }}
-                            </p>
-                          </div>
+                                                        <p *ngIf="row[header?.name]?.value">
+                                                            {{ row[header?.name]?.value }}
+                                                        </p>
+                                                    </div>
 
-                          <button
-                            *ngIf="
+                                                    <button *ngIf="
                               isAuthorised(
                                 currentUser,
                                 authorities.UPDATE_CASE_NUMBER
                               )
-                            "
-                            class="position-absolute color-gray top-0 right-0"
-                            mat-icon-button
-                            (click)="
+                            " class="position-absolute color-gray top-0 right-0" mat-icon-button (click)="
                               addCaseNumber(row, row[header?.name]?.value)
-                            "
-                          >
+                            ">
                             <mat-icon>edit</mat-icon>
                           </button>
-                        </div>
-                      </td>
+                                                </div>
+                                            </td>
 
-                      <td
-                        *ngIf="
+                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" *ngIf="
                           isAuthorised(currentUser, authorities.REPORT_TO_RRT)
-                        "
-                      >
-                        <button
-                          mat-stroked-button
-                          color="primary"
-                          class="mt-2 ml-2 button-height"
-                          [disabled]="!row[commonIds.CASE_NUMBER]?.value"
-                          *ngIf="
+                        ">
+                                                <button mat-stroked-button color="primary" class="mt-2 ml-2 button-height" [disabled]="!row[commonIds.CASE_NUMBER]?.value" *ngIf="
                             row[reportedToRRTId]?.value === 'No' ||
                             !row[reportedToRRTId]?.value
-                          "
-                          (click)="updateReportToRRT(row)"
-                        >
+                          " (click)="updateReportToRRT(row)">
                           Report to RRT
                         </button>
-                        <p
-                          *ngIf="
+                                                <p *ngIf="
                             row[reportedToRRTId]?.value === 'Yes' ||
                             row[reportedToRRTId]?.value === 'true'
-                          "
-                        >
-                          <i class="color-gray">
+                          ">
+                                                    <i class="color-gray">
                             This case has already been reported to RRT
                           </i>
-                        </p>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tbody *ngIf="eventsLoadingErrorStatus$ | async">
-                    <td
-                      colspan="100%"
-                      style="border-right: 1px solid #dee2e6"
-                      class="color-gray"
-                    >
-                      <i>There is no data to show at the moment.</i>
-                    </td>
-                  </tbody>
-                  <tbody
-                    *ngIf="
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="eventsLoadingErrorStatus$ | async">
+                                        <td colspan="100%" style="border-right: 1px solid #dee2e6" class="color-gray">
+                                            <i>There is no data to show at the moment.</i>
+                                        </td>
+                                    </tbody>
+                                    <tbody *ngIf="
                       !(eventsLoading$ | async) &&
                       (!(eventsByProgramId$ | async).length ||
                         !(
@@ -180,34 +129,27 @@
                           | async
                           | search: allRegisteredFilters:searchText
                         )?.length)
-                    "
-                  >
-                    <td
-                      colspan="100%"
-                      style="border-right: 1px solid #dee2e6"
-                      class="color-gray"
-                    >
-                      <i>There is no case to show</i>
-                    </td>
-                  </tbody>
-                  <tbody *ngIf="eventsLoading$ | async">
-                    <td colspan="100%" style="border-right: 1px solid #dee2e6">
-                      <div class="color-gray">Loading data</div>
-                      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                    </td>
-                  </tbody>
-                  <tbody
-                    *ngIf="
+                    ">
+                                        <td colspan="100%" style="border-right: 1px solid #dee2e6" class="color-gray">
+                                            <i>There is no case to show</i>
+                                        </td>
+                                    </tbody>
+                                    <tbody *ngIf="eventsLoading$ | async">
+                                        <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                                            <div class="color-gray">Loading data</div>
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                        </td>
+                                    </tbody>
+                                    <tbody *ngIf="
                       (
                         eventsByProgramId$
                         | async
                         | search: allRegisteredFilters:searchText
                       )?.length < 1 && (eventsByProgramId$ | async)?.length > 0
-                    "
-                  >
-                    <tr>
-                      <td colspan="10">
-                        <label class="text-center w-100 color-gray">
+                    ">
+                                        <tr>
+                                            <td colspan="10">
+                                                <label class="text-center w-100 color-gray">
                           Session not found</label
                         >
                       </td>
@@ -250,7 +192,7 @@
     </mat-tab>
 
     <mat-tab
-      class="overflow-hidden"
+      class="overflow-auto"
       label="Reported to RRT"
       *ngIf="isAuthorised(currentUser, authorities.VIEW_REPORTED_TO_RRT)"
     >
@@ -269,6 +211,19 @@
                   />
                 </div>
               </div>
+              <div class="col-sm" *ngIf="!eventToShow">
+                <button style="
+                    float: right;
+                    border: 1px solid lightgray;
+                    border-radius: 5px;
+                    margin-bottom: 1em;
+
+                  " (click)="onDownloadConfirmedAlert()"
+                  [disabled]="(this.eventsLoading$ | async)"
+                  mat-icon-button>
+                  <mat-icon>download</mat-icon>
+                </button>
+            </div>
             </div>
           </div>
           <!-- Search field with buttons -->
@@ -276,12 +231,12 @@
 
           <!-- Table card section  -->
           <div
-            class="row w-100 ml-2 overflow-hidden"
+            class="row w-100 ml-2 overflow-auto"
             [ngClass]="{ 'table-section': eventToShow, 'w-100': !eventToShow }"
             *ngIf="eventsByProgramId$ | async"
           >
-            <mat-card class="w-100 mb-4 p-0 overflow-hidden">
-              <table class="table table-bordered overflow-hidden">
+            <mat-card class="w-100 mb-4 p-0 overflow-auto">
+              <table class="table table-bordered overflow-auto">
                 <thead>
                   <tr class="text-muted">
                     <th>SN</th>
@@ -318,7 +273,7 @@
                       let i = index
                     "
                   >
-                    <td>
+                    <td class=" {{ row == eventToShow ?'highlight-row' : ''}}"  (click)="showEventData(row)">
                       {{
                         getRowNumber(
                           row,
@@ -326,7 +281,7 @@
                         )
                       }}
                     </td>
-                    <td *ngFor="let header of reportedToRRTHeaders">
+                    <td class=" {{ row == eventToShow ?'highlight-row' : ''}}"  *ngFor="let header of reportedToRRTHeaders"(click)="showEventData(row)" >
                       <p>
                         {{
                           header.valueType === 'DATE'
@@ -384,7 +339,7 @@
           <div class="info-section mr-2 ml-4" *ngIf="eventToShow">
             <app-view-event
               [event]="eventToShow"
-              [headers]="reportedToRRTHeaders"
+              [headers]="defaultAllRegisteredHeaders"
               (closeEvent)="closeEventDataSection($event)"
             ></app-view-event>
           </div>

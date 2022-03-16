@@ -1,10 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'convertToLighterColor'
+  name: 'convertToLighterColor',
 })
 export class ConvertToLighterColor implements PipeTransform {
-
   transform(hexColor: string): any {
     const hex = hexColor.replace('#', '');
     const r = parseInt(hex.substring(0, 2), 16) + 30;
@@ -12,5 +11,4 @@ export class ConvertToLighterColor implements PipeTransform {
     const b = parseInt(hex.substring(4, 6), 16) + 30;
     return 'rgb(' + r + ',' + g + ',' + b + ')';
   }
-
 }

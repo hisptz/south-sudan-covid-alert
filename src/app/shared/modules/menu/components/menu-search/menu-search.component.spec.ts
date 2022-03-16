@@ -6,12 +6,13 @@ describe('MenuSearchComponent', () => {
   let component: MenuSearchComponent;
   let fixture: ComponentFixture<MenuSearchComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MenuSearchComponent ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MenuSearchComponent],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MenuSearchComponent);

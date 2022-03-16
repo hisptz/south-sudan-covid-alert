@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import {
   PROGRAM_ID,
   ORGUNIT_ID,
-  REASON_FOR_CALLING_ID,
-  REASON_FOR_CALLING_VALUE,
   SYMPTOM_IDS,
   ALL_TABLE_HEADERS,
 } from '../models/config.model';
@@ -13,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
-import { filter, map, find } from 'lodash';
+import { flattenDeep, map, find } from 'lodash';
 import { EventResponse } from '../models/events.model';
 import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
@@ -41,8 +39,9 @@ export class EventsService {
       .put(url, data)
       .pipe(catchError((error) => throwError(error)));
   }
+
   getEventByIdObservable(eventId: string): Observable<any> {
-    const fields = `fields=program,orgUnit,eventDate,status,completedDate,storedBy,coordinate,dataValues[dataElement,value]`;
+    const fields = `fields=program,event,eventDate,orgUnit,orgUnitName,dataValues[dataElement,value]`;
     const url = apiLink + `events/${eventId}.json?${fields}`;
     return this.httpClient
       .get(url)
@@ -55,9 +54,8 @@ export class EventsService {
     fields,
     pageSize = 50,
   }): Observable<any> {
-    const filterExpression = `filter=${REASON_FOR_CALLING_ID}:EQ:${REASON_FOR_CALLING_VALUE}`;
-    const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&${pageSize}`;
-    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}&${filterExpression}`;
+    const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&pageSize${pageSize}`;
+    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
@@ -80,12 +78,7 @@ export class EventsService {
             eventsObservable,
           );
           events = eventsResult?.events?.length
-            ? [
-                ...events,
-                ...this.getEventsWithMoreThanOneSymptomDataElement(
-                  eventsResult?.events,
-                ),
-              ]
+            ? [...events, ...(eventsResult?.events ?? [])]
             : [...events];
         }
       }
@@ -110,17 +103,14 @@ export class EventsService {
   private async formatEvents(events: Array<EventResponse>) {
     let formattedEvents = [];
     try {
-      const requiredEvents = this.getEventsWithMoreThanOneSymptomDataElement(
-        events,
-      );
-      const ouArr = map(requiredEvents || [], (event) => event.orgUnit);
+      const ouArr = map(events || [], (event) => event.orgUnit);
       const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
         ouArr,
       );
       const orgUnitWithAncestors = await this.promiseService.getPromiseFromObservable(
         orgUnitWithAncenstorsObservable,
       );
-      formattedEvents = map(requiredEvents || [], (eventItem) => {
+      formattedEvents = map(events || [], (eventItem) => {
         const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
@@ -172,13 +162,11 @@ export class EventsService {
         : convertExponentialToDecimal(rowValue);
     }
     if (header?.name === commonUsedIds.SEX) {
-      if (rowValue === '01') {
-        return 'Male';
-      } else if (rowValue === '02') {
-        return 'Female';
-      } else {
-        return rowValue;
-      }
+      return rowValue === '01'
+        ? 'Male'
+        : rowValue === '02'
+        ? 'Female'
+        : rowValue;
     }
     if (header?.name === commonUsedIds.AGE) {
       const birthDate = new Date(rowValue);
@@ -186,26 +174,6 @@ export class EventsService {
     }
 
     return rowValue;
-  }
-
-  private getEventsWithMoreThanOneSymptomDataElement(
-    events: Array<EventResponse>,
-  ): Array<EventResponse> {
-    return filter(events || [], (eventItem: EventResponse) => {
-      if (eventItem?.dataValues) {
-        const symptomsDataValues = filter(
-          eventItem?.dataValues || [],
-          (dataValue) => {
-            if (SYMPTOM_IDS?.includes(dataValue?.dataElement)) {
-              return dataValue;
-            }
-          },
-        );
-        if (symptomsDataValues?.length > 1) {
-          return eventItem;
-        }
-      }
-    });
   }
 
   async getEventPromise(eventId: string) {
@@ -216,18 +184,32 @@ export class EventsService {
     let response = null;
     try {
       const eventPayload = await this.getEventPromise(eventId);
-      const formattedPayload = getFormattedPayloadForUpdate(
+      const formattedCaseNumberPayload = getFormattedPayloadForUpdate(
         eventPayload,
         commonUsedIds.CASE_NUMBER,
         data[commonUsedIds.CASE_NUMBER],
       );
-
-      const updateEventObservable = await this.updateEventBySingleDataValue(
-        formattedPayload,
+      let updateEventObservable = await this.updateEventBySingleDataValue(
+        formattedCaseNumberPayload,
         eventId,
         commonUsedIds.CASE_NUMBER,
       );
-      response = await this.promiseService.getPromiseFromObservable(updateEventObservable);
+      response = await this.promiseService.getPromiseFromObservable(
+        updateEventObservable,
+      );
+      const formattedCaseApprovalPayload = getFormattedPayloadForUpdate(
+        eventPayload,
+        commonUsedIds.CASE_APPROVER,
+        data[commonUsedIds.CASE_APPROVER],
+      );
+      updateEventObservable = await this.updateEventBySingleDataValue(
+        formattedCaseApprovalPayload,
+        eventId,
+        commonUsedIds.CASE_APPROVER,
+      );
+      response = await this.promiseService.getPromiseFromObservable(
+        updateEventObservable,
+      );
     } catch (e) {
       response = e;
       throw new Error(e?.message || `Failed to format events`);

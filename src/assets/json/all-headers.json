@@ -10,6 +10,16 @@
     "valueType": "TEXT"
   },
   {
+    "name": "oQSKqGcOGNe",
+    "column": "First name of the patient",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "TwGiy51IM8t",
+    "column": "Last Name of the patient",
+    "valueType": "TEXT"
+  },
+  {
     "name": "K6ciAYeQKWL",
     "column": "Sex",
     "valueType": "TEXT",
@@ -29,7 +39,7 @@
     "name": "EicmBDTb8Zm",
     "column": "Reason for calling 6666",
     "valueType": "LONG_TEXT"
-  }, 
+  },
   {
     "name": "symptoms",
     "column": "Signs and symptoms",
@@ -52,6 +62,12 @@
     "column": "Alert case for other outbreak prone  diseases",
     "valueType": "BOOLEAN"
   },
+  {
+    "name": "cAR4cU2Csdq",
+    "column": "Sought Information",
+    "valueType": "TEXT"
+  },
+  { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "TEXT" },
   {
     "name": "state",
     "column": "State",
@@ -84,16 +100,6 @@
     "optionSet": "pEhRt4LEOKM"
   },
   {
-    "name": "oQSKqGcOGNe",
-    "column": "First Name of person the call made for",
-    "valueType": "TEXT"
-  },
-  {
-    "name": "TwGiy51IM8t",
-    "column": "Last Name of person the call made for",
-    "valueType": "TEXT"
-  },
-  {
     "name": "UATjIK2KUVd",
     "column": "First Name of Phone Call Handler",
     "valueType": "TEXT"
@@ -111,6 +117,11 @@
   {
     "name": "CEjSf5UFrHP",
     "column": "Case number",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "xrzgJTi81es",
+    "column": "Case Approver",
     "valueType": "TEXT"
   }
 ]

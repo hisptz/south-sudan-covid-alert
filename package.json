@@ -3,12 +3,12 @@
   "version": "0.0.17-alpha",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot",
+    "start": "ng serve",
     "build": "ng build --prod --aot --build-optimizer && cd dist/covid-alert && zip -r -D covid-alert.zip .",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "format": "prettier --write \"*.json\" \"src/**/*.ts\""
+    "format": "prettier --write \"*.json\" \"src/assets/json/*.json\" \"src/**/*.ts\""
   },
   "private": true,
   "dependencies": {
@@ -44,6 +44,7 @@
     "prettier": "^2.1.2",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
+    "xlsx": "^0.18.4",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

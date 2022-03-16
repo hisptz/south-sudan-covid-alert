@@ -1,30 +1,31 @@
 <div class="w-100">
-  <div class="w-100">
-    <button
-      style="
+    <div class="w-100">
+        <button style="
         float: right;
         border: 1px solid lightgray;
-        border-radius: 0;
+        border-radius: 5px;
         margin-bottom: 1em;
-      "
-      (click)="closeSection()"
-      mat-icon-button
-    >
+      " (click)="closeSection()" mat-icon-button>
       <mat-icon>close</mat-icon>
     </button>
-  </div>
-  <table class="table table-bordered">
-    <tbody>
-      <tr *ngFor="let header of headers">
-        <th>{{ header?.column }}</th>
-        <td>
-          {{
-            header.valueType === 'DATE'
-              ? (event[header?.name]?.value | date)
-              : event[header?.name]?.value
-          }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        <button style="
+        float: right;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        margin-bottom: 1em;
+        margin-right: 1rem;
+      " (click)="onPrint()" mat-icon-button>
+        <mat-icon>print</mat-icon>
+    </button>
+    </div>
+    <table class="table table-bordered">
+        <tbody>
+            <tr *ngFor="let header of headers">
+                <th>{{ header?.column }}</th>
+                <td>
+                    {{ header.valueType === 'DATE' ? (event[header?.name]?.value | date) : event[header?.name]?.value }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

@@ -10,7 +10,7 @@ export class RouterEffects {
   constructor(
     private actions$: Actions,
     private router: Router,
-    private location: Location
+    private location: Location,
   ) {}
 
   navigate$ = createEffect(
@@ -19,11 +19,11 @@ export class RouterEffects {
         ofType(go),
         tap(({ path, query: queryParams, extras }) => {
           this.router.navigate(path, { queryParams, ...extras });
-        })
+        }),
       ),
     {
       dispatch: false,
-    }
+    },
   );
 
   navigateBack$ = createEffect(
@@ -32,11 +32,11 @@ export class RouterEffects {
         ofType(back),
         tap(() => {
           this.location.back();
-        })
+        }),
       ),
     {
       dispatch: false,
-    }
+    },
   );
 
   navigateForward$ = createEffect(
@@ -45,10 +45,10 @@ export class RouterEffects {
         ofType(forward),
         tap(() => {
           this.location.forward();
-        })
+        }),
       ),
     {
       dispatch: false,
-    }
+    },
   );
 }

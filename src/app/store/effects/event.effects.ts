@@ -22,7 +22,7 @@ export class EventEffects {
           this.eventsService.getEvents().pipe(
             map((response: any) => {
               return this.store.dispatch(
-                fromActions.loadEventsByProgramIdSuccess({events: response}),
+                fromActions.loadEventsByProgramIdSuccess({ events: response }),
               );
             }),
             catchError((error: Error) => {
