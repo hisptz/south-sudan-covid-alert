@@ -34,7 +34,6 @@ const pageStateReducer = createReducer(
     notification: action.payload,
     notificationStatus: true,
   })),
-
 );
 
 export function reducer(state: State | undefined, action: Action) {

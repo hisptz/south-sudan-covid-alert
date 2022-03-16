@@ -38,21 +38,21 @@ export const currentUserReducer = createReducer(
     loading: false,
   })),
   on(CurrentUserActions.upsertCurrentUsers, (state, action) =>
-    adapter.upsertMany(action.currentUsers, state)
+    adapter.upsertMany(action.currentUsers, state),
   ),
   on(CurrentUserActions.updateCurrentUser, (state, action) =>
-    adapter.updateOne(action.currentUser, state)
+    adapter.updateOne(action.currentUser, state),
   ),
   on(CurrentUserActions.updateCurrentUsers, (state, action) =>
-    adapter.updateMany(action.currentUsers, state)
+    adapter.updateMany(action.currentUsers, state),
   ),
   on(CurrentUserActions.deleteCurrentUser, (state, action) =>
-    adapter.removeOne(action.id, state)
+    adapter.removeOne(action.id, state),
   ),
   on(CurrentUserActions.deleteCurrentUsers, (state, action) =>
-    adapter.removeMany(action.ids, state)
+    adapter.removeMany(action.ids, state),
   ),
-  on(CurrentUserActions.clearCurrentUsers, (state) => adapter.removeAll(state))
+  on(CurrentUserActions.clearCurrentUsers, (state) => adapter.removeAll(state)),
 );
 
 export function reducer(state: State | undefined, action: Action) {

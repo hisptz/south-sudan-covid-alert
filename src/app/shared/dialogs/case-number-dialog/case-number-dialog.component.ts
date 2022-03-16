@@ -26,9 +26,12 @@ export class CaseNumberDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data)
+    console.log(this.data);
     this.addCaseNumberForm = this.fb.group({
-      [this.commonIds?.CASE_NUMBER]: [this.data?.caseNumber, [Validators.required]],
+      [this.commonIds?.CASE_NUMBER]: [
+        this.data?.caseNumber,
+        [Validators.required],
+      ],
     });
   }
   closeDialog(): void {
@@ -42,7 +45,7 @@ export class CaseNumberDialogComponent implements OnInit {
     this.store.dispatch(
       fromActions.addCaseNumber({ data: value, id: this.data?.eventId }),
     );
- 
+
     this.dialogRef.close();
   }
 }

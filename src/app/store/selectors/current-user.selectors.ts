@@ -5,21 +5,18 @@ import {
   getCurrentUserLoadedState,
   getCurrentUserLoadingState,
   getUserState,
-  getUserSystemInfoState
+  getUserSystemInfoState,
 } from '../reducers/current-user.reducer';
 
 export const getCurrentUserState = createSelector(
   getRootState,
-  (state: AppState) => state.currentUser
+  (state: AppState) => state.currentUser,
 );
 
-export const getCurrentUser = createSelector(
-  getCurrentUserState,
-  getUserState
-);
+export const getCurrentUser = createSelector(getCurrentUserState, getUserState);
 export const getSystemInfo = createSelector(
   getCurrentUserState,
-  getUserSystemInfoState
+  getUserSystemInfoState,
 );
 
 export const getLastSuccessfulAnalyticsDate = createSelector(
@@ -33,10 +30,10 @@ export const getLastSuccessfulAnalyticsDate = createSelector(
       _.reverse(
         _.split(
           _.head(_.split(unformatedLastSuccessfulAnalyticsDate, 'T')),
-          '-'
-        )
+          '-',
+        ),
       ),
-      '-'
+      '-',
     );
     if (
       unformatedLastSuccessfulAnalyticsDate &&
@@ -44,32 +41,38 @@ export const getLastSuccessfulAnalyticsDate = createSelector(
     ) {
       return `This data is reflection of last analytics time ${formatedLastSuccessfulAnalyticsDate}`;
     }
-  }
+  },
 );
 
 export const getCurrentUserLoading = createSelector(
   getCurrentUserState,
-  getCurrentUserLoadingState
+  getCurrentUserLoadingState,
 );
 
 export const getCurrentUserLoaded = createSelector(
   getCurrentUserState,
-  getCurrentUserLoadedState
+  getCurrentUserLoadedState,
 );
 
-export const authorityValidation = (sectionName: string) => createSelector(
-  getCurrentUser,
-  (user: any) => {
+export const authorityValidation = (sectionName: string) =>
+  createSelector(getCurrentUser, (user: any) => {
     let authorize = false;
-    const authorities = user ? (user.userCredentials ? (user.userCredentials.userRoles ?
-      (user.userCredentials.userRoles[0] ? user.userCredentials.userRoles[0].authorities : []) : []) : []) : [];
-    const filteredAuth = authorities.filter(auth => auth.includes(sectionName));
+    const authorities = user
+      ? user.userCredentials
+        ? user.userCredentials.userRoles
+          ? user.userCredentials.userRoles[0]
+            ? user.userCredentials.userRoles[0].authorities
+            : []
+          : []
+        : []
+      : [];
+    const filteredAuth = authorities.filter((auth) =>
+      auth.includes(sectionName),
+    );
     if (filteredAuth.includes(sectionName + '_EDIT')) {
       authorize = true;
     } else if (filteredAuth.includes(sectionName + '_VIEW')) {
       authorize = false;
     }
     return authorize;
-  }
-);
-
+  });

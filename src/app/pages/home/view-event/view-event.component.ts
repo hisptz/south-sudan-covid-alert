@@ -17,7 +17,7 @@ export class ViewEventComponent implements OnInit {
     this.closeEvent.emit({ closeView: true });
   }
 
-  onPrint(){
-    console.log("On print");
+  onPrint() {
+    console.log('On print');
   }
 }

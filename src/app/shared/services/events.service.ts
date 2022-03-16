@@ -158,8 +158,8 @@ export class EventsService {
   }
   private getValueByHeader(rowValue, header) {
     if (header?.valueType === 'BOOLEAN') {
-      if(header?.name == 'g7EpCKIysgQ'){
-        console.log(header,rowValue);
+      if (header?.name == 'g7EpCKIysgQ') {
+        console.log(header, rowValue);
       }
       return rowValue === '1' || rowValue === 'true' ? 'Yes' : 'No';
     }
@@ -169,7 +169,11 @@ export class EventsService {
         : convertExponentialToDecimal(rowValue);
     }
     if (header?.name === commonUsedIds.SEX) {
-      return rowValue === '01' ? 'Male' : rowValue ==='02' ? 'Female' : rowValue;
+      return rowValue === '01'
+        ? 'Male'
+        : rowValue === '02'
+        ? 'Female'
+        : rowValue;
     }
     if (header?.name === commonUsedIds.AGE) {
       const birthDate = new Date(rowValue);
@@ -218,7 +222,9 @@ export class EventsService {
         eventId,
         commonUsedIds.CASE_NUMBER,
       );
-      response = await this.promiseService.getPromiseFromObservable(updateEventObservable);
+      response = await this.promiseService.getPromiseFromObservable(
+        updateEventObservable,
+      );
     } catch (e) {
       response = e;
       throw new Error(e?.message || `Failed to format events`);

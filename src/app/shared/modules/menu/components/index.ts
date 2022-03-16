@@ -2,7 +2,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { MenuSearchComponent } from './menu-search/menu-search.component';
 import { MenuProfileComponent } from './menu-profile/menu-profile.component';
 import { MenuLoaderComponent } from './menu-loader/menu-loader.component';
-import {MenuSideBarComponent} from './menu-side-bar/menu-side-bar.component';
+import { MenuSideBarComponent } from './menu-side-bar/menu-side-bar.component';
 import { MenuNotificationComponent } from './menu-notification/menu-notification.component';
 export const components: any[] = [
   MenuLoaderComponent,
@@ -10,7 +10,7 @@ export const components: any[] = [
   MenuSearchComponent,
   LoginFormComponent,
   MenuSideBarComponent,
-  MenuNotificationComponent
+  MenuNotificationComponent,
 ];
 
 export * from './menu-search/menu-search.component';

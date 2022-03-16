@@ -53,10 +53,7 @@ export class HomeComponent implements OnInit {
   rPageSize = 10;
   rLowValue = 0;
   rHighValue = 10;
-  constructor(
-    private store: Store<AppState>,
-    public dialog: MatDialog,
-  ) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog) {
     this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
     this.allRegisteredFilters = ALL_REGISTERED_FILTERS;
     this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
@@ -156,18 +153,18 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onDownloadAllAlert(){
+  onDownloadAllAlert() {
     console.log(this.allRegisteredHeaders);
-    this.eventsByProgramId$.pipe(take(1)).subscribe(data=>{
+    this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
       console.log(data);
-    })
+    });
   }
 
-  onDownloadConfirmedAlert(){
+  onDownloadConfirmedAlert() {
     console.log(this.reportedToRRTHeaders);
-    this.eventsByProgramId$.pipe(take(1)).subscribe(data=>{
+    this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
       console.log(this.getReportedToRRTEvents(data));
-    })
+    });
   }
 
   showEventData(event, header = null, value = null) {

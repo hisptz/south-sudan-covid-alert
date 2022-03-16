@@ -15,7 +15,7 @@ export class CurrentUserEffects {
   constructor(
     private actions$: Actions,
     private store: Store<AppState>,
-    private currentUserService: CurrentUserService
+    private currentUserService: CurrentUserService,
   ) {}
 
   loadCurrentUser$ = createEffect(
@@ -26,22 +26,22 @@ export class CurrentUserEffects {
           this.currentUserService.loadUser().pipe(
             map((currentUser: CurrentUser) =>
               this.store.dispatch(
-                fromActions.addCurrentUser({ payload: currentUser })
-              )
+                fromActions.addCurrentUser({ payload: currentUser }),
+              ),
             ),
             catchError((error: Error) =>
               of(
                 this.store.dispatch(
                   fromActions.updateNotification({
                     payload: { message: error.message, statusCode: 500 },
-                  })
-                )
-              )
-            )
-          )
-        )
+                  }),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 
   loadSytemInfo$ = createEffect(
@@ -52,21 +52,21 @@ export class CurrentUserEffects {
           this.currentUserService.loadSystemInfo().pipe(
             map((systemInfo) =>
               this.store.dispatch(
-                fromActions.addSystemInfo({ payload: systemInfo })
-              )
+                fromActions.addSystemInfo({ payload: systemInfo }),
+              ),
             ),
             catchError((error: Error) =>
               of(
                 this.store.dispatch(
                   fromActions.updateNotification({
                     payload: { message: error.message, statusCode: 500 },
-                  })
-                )
-              )
-            )
-          )
-        )
+                  }),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }

@@ -10,7 +10,6 @@ export class SearchPipe implements PipeTransform {
     filters: Array<any>,
     searchText: string,
   ): Array<any> {
-   
     if (!searchText) {
       return items;
     }
@@ -29,15 +28,12 @@ export class SearchPipe implements PipeTransform {
           return valueItem;
         }
       });
-    
+
       if (filteredValueArr?.length) {
         return item;
       }
     });
-   
 
     return filteredItems;
-
-
   }
 }

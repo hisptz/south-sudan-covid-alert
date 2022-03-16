@@ -6,12 +6,13 @@ describe('ViewEventComponent', () => {
   let component: ViewEventComponent;
   let fixture: ComponentFixture<ViewEventComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ViewEventComponent ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ViewEventComponent],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewEventComponent);

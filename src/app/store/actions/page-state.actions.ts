@@ -10,7 +10,7 @@ export const loadNotification = createAction(
 
 export const showNotification = createAction(
   '[PageState/API] Show notification',
-  props<{ message: string; notificationType?: NotificationType }>()
+  props<{ message: string; notificationType?: NotificationType }>(),
 );
 
 export const updateNotification = createAction(

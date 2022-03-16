@@ -8,9 +8,8 @@ describe('ConfirmReportToRrtDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConfirmReportToRrtDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [ConfirmReportToRrtDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

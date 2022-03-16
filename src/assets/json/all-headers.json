@@ -1,117 +1,122 @@
-[{
-        "name": "a0C28yEISxc",
-        "column": "First name of the caller",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "cQkocmeqivx",
-        "column": "Last Name of the Caller",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "oQSKqGcOGNe",
-        "column": "First name of the patient",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "TwGiy51IM8t",
-        "column": "Last Name of the patient",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "K6ciAYeQKWL",
-        "column": "Sex",
-        "valueType": "TEXT",
-        "optionSet": "spf71vPDh54"
-    },
-    {
-        "name": "Pe3CHmZicqT",
-        "column": "Age",
-        "valueType": "NUMBER"
-    },
-    {
-        "name": "dxyEuWRce8l",
-        "column": "Phone number",
-        "valueType": "NUMBER"
-    },
-    {
-        "name": "EicmBDTb8Zm",
-        "column": "Reason for calling 6666",
-        "valueType": "LONG_TEXT"
-    },
-    {
-        "name": "symptoms",
-        "column": "Signs and symptoms",
-        "valueType": "TEXT",
-        "optionSet": "ya0NeYQ84cy"
-    },
-    {
-        "name": "aVm8pmWxIWX",
-        "column": "Suspected disease",
-        "valueType": "TEXT",
-        "optionSet": "wJTig3W6ETw"
-    },
-    {
-        "name": "g7EpCKIysgQ",
-        "column": "Caller meet case definition of COVID19 Cases",
-        "valueType": "BOOLEAN"
-    },
-    {
-        "name": "HkqxOfRr51f",
-        "column": "Alert case for other outbreak prone  diseases",
-        "valueType": "BOOLEAN"
-    },
-    { "name": "cAR4cU2Csdq", "column": "Sought Information", "valueType": "" },
-    { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "" },
-    {
-        "name": "state",
-        "column": "State",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "county",
-        "column": "County",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "payam",
-        "column": "Payam",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "ouname",
-        "column": "Boma",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "snEoCW6OmBH",
-        "column": "Call Center Time of Call",
-        "valueType": "TIME"
-    },
-    {
-        "name": "UVb0n05eXrb",
-        "column": "Call center: Meridium time",
-        "valueType": "TEXT",
-        "optionSet": "pEhRt4LEOKM"
-    },
-    {
-        "name": "UATjIK2KUVd",
-        "column": "First Name of Phone Call Handler",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "gYjZ1iTGNlg",
-        "column": "Last Name of Phone Call Handler",
-        "valueType": "TEXT"
-    },
-    {
-        "name": "s4jPdjTj69G",
-        "column": "COVID-19 alert case reported to RRT",
-        "valueType": "BOOLEAN"
-    },
-    {
-        "name": "CEjSf5UFrHP",
-        "column": "Case number",
-        "valueType": "TEXT"
-    }
+[
+  {
+    "name": "a0C28yEISxc",
+    "column": "First name of the caller",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "cQkocmeqivx",
+    "column": "Last Name of the Caller",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "oQSKqGcOGNe",
+    "column": "First name of the patient",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "TwGiy51IM8t",
+    "column": "Last Name of the patient",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "K6ciAYeQKWL",
+    "column": "Sex",
+    "valueType": "TEXT",
+    "optionSet": "spf71vPDh54"
+  },
+  {
+    "name": "Pe3CHmZicqT",
+    "column": "Age",
+    "valueType": "NUMBER"
+  },
+  {
+    "name": "dxyEuWRce8l",
+    "column": "Phone number",
+    "valueType": "NUMBER"
+  },
+  {
+    "name": "EicmBDTb8Zm",
+    "column": "Reason for calling 6666",
+    "valueType": "LONG_TEXT"
+  },
+  {
+    "name": "symptoms",
+    "column": "Signs and symptoms",
+    "valueType": "TEXT",
+    "optionSet": "ya0NeYQ84cy"
+  },
+  {
+    "name": "aVm8pmWxIWX",
+    "column": "Suspected disease",
+    "valueType": "TEXT",
+    "optionSet": "wJTig3W6ETw"
+  },
+  {
+    "name": "g7EpCKIysgQ",
+    "column": "Caller meet case definition of COVID19 Cases",
+    "valueType": "BOOLEAN"
+  },
+  {
+    "name": "HkqxOfRr51f",
+    "column": "Alert case for other outbreak prone  diseases",
+    "valueType": "BOOLEAN"
+  },
+  {
+    "name": "cAR4cU2Csdq",
+    "column": "Sought Information",
+    "valueType": "TEXT"
+  },
+  { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "TEXT" },
+  {
+    "name": "state",
+    "column": "State",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "county",
+    "column": "County",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "payam",
+    "column": "Payam",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "ouname",
+    "column": "Boma",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "snEoCW6OmBH",
+    "column": "Call Center Time of Call",
+    "valueType": "TIME"
+  },
+  {
+    "name": "UVb0n05eXrb",
+    "column": "Call center: Meridium time",
+    "valueType": "TEXT",
+    "optionSet": "pEhRt4LEOKM"
+  },
+  {
+    "name": "UATjIK2KUVd",
+    "column": "First Name of Phone Call Handler",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "gYjZ1iTGNlg",
+    "column": "Last Name of Phone Call Handler",
+    "valueType": "TEXT"
+  },
+  {
+    "name": "s4jPdjTj69G",
+    "column": "COVID-19 alert case reported to RRT",
+    "valueType": "BOOLEAN"
+  },
+  {
+    "name": "CEjSf5UFrHP",
+    "column": "Case number",
+    "valueType": "TEXT"
+  }
 ]

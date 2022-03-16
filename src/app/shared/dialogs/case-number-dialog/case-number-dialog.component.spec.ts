@@ -8,9 +8,8 @@ describe('CaseNumberDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CaseNumberDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [CaseNumberDialogComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

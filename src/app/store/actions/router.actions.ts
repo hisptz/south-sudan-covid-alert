@@ -7,7 +7,7 @@ export const go = createAction(
     path: any[];
     query?: object;
     extras?: NavigationExtras;
-  }>()
+  }>(),
 );
 
 export const back = createAction('[Router] Back');

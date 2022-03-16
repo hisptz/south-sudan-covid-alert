@@ -6,12 +6,13 @@ describe('MenuSideBarComponent', () => {
   let component: MenuSideBarComponent;
   let fixture: ComponentFixture<MenuSideBarComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ MenuSideBarComponent ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [MenuSideBarComponent],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MenuSideBarComponent);

@@ -3,5 +3,5 @@ export const MENU_BACKGROUND_COLORS = {
   light_blue: '#276696',
   india: '#ea5911',
   myanmar: '#276696',
-  vietnam: '#b40303'
+  vietnam: '#b40303',
 };

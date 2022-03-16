@@ -5,7 +5,7 @@ import * as fromConstants from '../../constants';
 @Component({
   selector: 'app-menu-profile',
   templateUrl: './menu-profile.component.html',
-  styleUrls: ['./menu-profile.component.css']
+  styleUrls: ['./menu-profile.component.css'],
 })
 export class MenuProfileComponent implements OnInit {
   @Input()
