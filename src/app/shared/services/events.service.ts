@@ -54,8 +54,8 @@ export class EventsService {
     fields,
     pageSize = 50,
   }): Observable<any> {
-    const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&pageSize${pageSize}`;
-    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}`;
+    const queries = `program=${programId}&ouMode=ACCESSIBLE&order=eventDate:DESC&pageSize=${pageSize}`;
+    const url = `${apiLink}events.json?${pageFilter}&${queries}&fields=${fields}`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
