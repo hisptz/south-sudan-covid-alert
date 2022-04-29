@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   PROGRAM_ID,
-  ORGUNIT_ID,
-  SYMPTOM_IDS,
   ALL_TABLE_HEADERS,
 } from '../models/config.model';
 import { apiLink } from '../../../assets/configurations/apiLink';
@@ -67,7 +65,7 @@ export class EventsService {
     try {
       const fields = `fields=program,event,eventDate,orgUnit,orgUnitName,dataValues[dataElement,value]`;
       const pagingDetails = await this.geteventsPagingDetails();
-      const pagingFilters = getDataPaginationFilters(pagingDetails, 50);
+      const pagingFilters = getDataPaginationFilters(pagingDetails, 1000);
       if (pagingFilters?.length) {
         for (const pageFilter of pagingFilters) {
           const eventsObservable: Observable<Function> = this.getEventsByProgramIdObservable(
@@ -96,7 +94,7 @@ export class EventsService {
 
   async geteventsPagingDetails() {
     const eventsObservable: Observable<any> = this.getEventsByProgramIdObservable(
-      { fields: 'none' },
+      { fields: 'none' ,pageFilter : 'totalPages=true'},
     );
     return await this.promiseService.getPromiseFromObservable(eventsObservable);
   }
@@ -104,6 +102,7 @@ export class EventsService {
   private async formatEvents(events: Array<EventResponse>) {
     let formattedEvents = [];
     try {
+      //TODO chunch list of organisations unirs
       const ouArr = map(events || [], (event) => event.orgUnit);
       const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
         ouArr,
@@ -130,6 +129,7 @@ export class EventsService {
       return formattedEvents;
     }
   }
+
   formatDataValues(dataValues: Array<any>): Array<any> {
     let sysmptoms = '';
     return [
@@ -181,6 +181,7 @@ export class EventsService {
     const eventObservable = this.getEventByIdObservable(eventId);
     return await this.promiseService.getPromiseFromObservable(eventObservable);
   }
+
   async updateCaseNumberPromise({ data, eventId }) {
     let response = null;
     try {
