@@ -12,22 +12,24 @@ export class OrgUnitsService {
 
   constructor(private httpClient: HttpClient) {}
 
-  loadOrgUnitDataWithAncestors(orgUnitIdArr: Array<any>): Observable<any> {
-    const formattedOrgUnitArr = uniq(orgUnitIdArr);
+  loadOrgUnitDataWithAncestors(orgUnitIds: Array<string>): Observable<any> {
+    const formattedOrgUnitArr = uniq(orgUnitIds);
     const orgUnitArrStr = formattedOrgUnitArr.toString();
     const url =
       this.apiUrl +
-      `organisationUnits.json?fields=id,name,ancestors[id,name]&filter=id:in:[${orgUnitArrStr}]&paging=false`;
+      `organisationUnits.json?fields=id,name,ancestors[id,name,level]&filter=id:in:[${orgUnitArrStr}]&paging=false`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
   }
-  getAncestors(ou: string, ouName: string, ancestorsOrgUnitData: any) {
+
+  getAncestors(ou: string, ouName: string, organisationUnits: any[]) {
     const orgUnit = find(
-      ancestorsOrgUnitData.organisationUnits || [],
-      (obj) => obj.id === ou,
+      organisationUnits || [],
+      (organisationUnit: any) => organisationUnit.id === ou,
     );
     const ancestors = orgUnit && orgUnit.ancestors ? orgUnit.ancestors : [];
+    console.log({ ancestors, ouName, ou, organisationUnits });
     //TODO improve logics for get value for ancestors
     return [
       {

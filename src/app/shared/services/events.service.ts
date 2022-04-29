@@ -1,15 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  PROGRAM_ID,
-  ALL_TABLE_HEADERS,
-} from '../models/config.model';
+import { PROGRAM_ID, ALL_TABLE_HEADERS } from '../models/config.model';
 import { apiLink } from '../../../assets/configurations/apiLink';
 import { catchError } from 'rxjs/operators';
 import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
-import { flattenDeep, map, find } from 'lodash';
+import { flattenDeep, uniq, chunk, map, find } from 'lodash';
 import { EventResponse } from '../models/events.model';
 import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
@@ -52,7 +49,7 @@ export class EventsService {
     fields,
     pageSize = 50,
   }): Observable<any> {
-    pageSize = fields === "none" ? 1 : pageSize;
+    pageSize = fields === 'none' ? 1 : pageSize;
     const queries = `program=${programId}&ouMode=ACCESSIBLE&order=eventDate:DESC&pageSize=${pageSize}`;
     const url = `${apiLink}events.json?${pageFilter}&${queries}&fields=${fields}`;
     return this.httpClient
@@ -94,7 +91,7 @@ export class EventsService {
 
   async geteventsPagingDetails() {
     const eventsObservable: Observable<any> = this.getEventsByProgramIdObservable(
-      { fields: 'none' ,pageFilter : 'totalPages=true'},
+      { fields: 'none', pageFilter: 'totalPages=true' },
     );
     return await this.promiseService.getPromiseFromObservable(eventsObservable);
   }
@@ -102,19 +99,24 @@ export class EventsService {
   private async formatEvents(events: Array<EventResponse>) {
     let formattedEvents = [];
     try {
-      //TODO chunch list of organisations unirs
-      const ouArr = map(events || [], (event) => event.orgUnit);
-      const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
-        ouArr,
+      const orgUnitWithAncestors = [];
+      const ouIds = uniq(
+        flattenDeep(map(events || [], (event: any) => event.orgUnit || [])),
       );
-      const orgUnitWithAncestors = await this.promiseService.getPromiseFromObservable(
-        orgUnitWithAncenstorsObservable,
-      );
+      for (const orgUnitIds of chunk(ouIds, 2)) {
+        const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
+          orgUnitIds,
+        );
+        const response = await this.promiseService.getPromiseFromObservable(
+          orgUnitWithAncenstorsObservable,
+        );
+        orgUnitWithAncestors.push(response.organisationUnits || []);
+      }
       formattedEvents = map(events || [], (eventItem) => {
         const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
-          orgUnitWithAncestors,
+          flattenDeep(orgUnitWithAncestors),
         );
         const dataValues = [
           ...this.formatDataValues(eventItem?.dataValues),
