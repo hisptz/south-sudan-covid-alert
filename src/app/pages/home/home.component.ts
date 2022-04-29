@@ -23,6 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmReportToRrtDialogComponent } from 'src/app/shared/dialogs/confirm-report-to-rrt-dialog/confirm-report-to-rrt-dialog.component';
 import { CaseNumberDialogComponent } from 'src/app/shared/dialogs/case-number-dialog/case-number-dialog.component';
 import { take } from 'rxjs/operators';
+import { getFormattedAlertPrintOut } from 'src/app/shared/helpers/get-print-out-content.helper';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -34,6 +35,7 @@ export class HomeComponent implements OnInit {
   eventsLoading$: Observable<any>;
   eventsLoadingErrorStatus$: Observable<any>;
   currentUser$: Observable<any>;
+  alertsToPrint: any[];
   authorities = AUTHORITIES;
   page = 1;
   itemsPerPage = 10;
@@ -56,6 +58,7 @@ export class HomeComponent implements OnInit {
   rPageSize = 10;
   rLowValue = 0;
   rHighValue = 10;
+
   constructor(private store: Store<AppState>, public dialog: MatDialog) {
     this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
     this.defaultAllRegisteredHeaders = ALL_REGISTERED_HEADERS;
@@ -70,6 +73,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.alertsToPrint = [];
     this.store.dispatch(fromActions.loadEventsByProgramId());
     this.eventsLoadingErrorStatus$ = this.store.select(
       fromSelectors.getEventsByProgramIdErrorStatus,
@@ -148,6 +152,47 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  selectAlertForPrint(eventObj: any) {
+    if (this.eventToShow === null) {
+      if (this.alertsToPrint.includes(eventObj)) {
+        this.alertsToPrint = _.filter(
+          this.alertsToPrint,
+          (event) => event !== eventObj,
+        );
+      } else {
+        this.alertsToPrint.push(eventObj);
+      }
+    }
+  }
+
+  selectedTabChange() {
+    this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
+    this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
+    this.eventToShow = null;
+    this.alertsToPrint = [];
+  }
+
+  onPrintAlerts() {
+    var WinPrint = window.open(
+      '',
+      '',
+      'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0',
+    );
+    console.log(this.alertsToPrint.length);
+    const contents = getFormattedAlertPrintOut(
+      this.allHeaders,
+      this.alertsToPrint,
+    );
+    WinPrint.document.write(contents);
+    WinPrint.document.close();
+    WinPrint.focus();
+    WinPrint.print();
+    setTimeout(() => {
+      WinPrint.close();
+    }, 2 * 1000);
+    this.alertsToPrint = [];
+  }
+
   onDownloadAllAlert() {
     this.eventsByProgramId$.pipe(take(1)).subscribe((data) => {
       this.onDownloadDataInExcel(
@@ -196,14 +241,13 @@ export class HomeComponent implements OnInit {
     } else {
       this.allRegisteredHeaders = this.allRegisteredHeaders.slice(0, 6);
       this.eventToShow = event;
+      this.alertsToPrint = [event];
     }
   }
 
   closeEventDataSection(data: any) {
     if (data && data.closeView) {
-      this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
-      this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
-      this.eventToShow = null;
+      this.selectedTabChange();
     }
   }
 
