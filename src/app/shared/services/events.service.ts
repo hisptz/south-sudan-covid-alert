@@ -1,17 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  PROGRAM_ID,
-  ORGUNIT_ID,
-  SYMPTOM_IDS,
-  ALL_TABLE_HEADERS,
-} from '../models/config.model';
+import { PROGRAM_ID, ALL_TABLE_HEADERS } from '../models/config.model';
 import { apiLink } from '../../../assets/configurations/apiLink';
 import { catchError } from 'rxjs/operators';
 import { from, Observable, throwError } from 'rxjs';
 import { PromiseService } from './promise.service';
 import { getDataPaginationFilters } from '../helpers/request.helper';
-import { flattenDeep, map, find } from 'lodash';
+import { flattenDeep, uniq, chunk, map, find } from 'lodash';
 import { EventResponse } from '../models/events.model';
 import { OrgUnitsService } from './org-units.service';
 import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-decimal.helper';
@@ -54,8 +49,9 @@ export class EventsService {
     fields,
     pageSize = 50,
   }): Observable<any> {
-    const queries = `program=${programId}&ou=${ORGUNIT_ID}&ouMode=DESCENDANTS&order=eventDate:DESC&pageSize${pageSize}`;
-    const url = `${apiLink}events.json?${pageFilter}&${queries}&${fields}`;
+    pageSize = fields === 'none' ? 1 : pageSize;
+    const queries = `program=${programId}&ouMode=ACCESSIBLE&order=eventDate:DESC&pageSize=${pageSize}`;
+    const url = `${apiLink}events.json?${pageFilter}&${queries}&fields=${fields}`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
@@ -66,7 +62,7 @@ export class EventsService {
     try {
       const fields = `fields=program,event,eventDate,orgUnit,orgUnitName,dataValues[dataElement,value]`;
       const pagingDetails = await this.geteventsPagingDetails();
-      const pagingFilters = getDataPaginationFilters(pagingDetails, 50);
+      const pagingFilters = getDataPaginationFilters(pagingDetails, 1000);
       if (pagingFilters?.length) {
         for (const pageFilter of pagingFilters) {
           const eventsObservable: Observable<Function> = this.getEventsByProgramIdObservable(
@@ -95,7 +91,7 @@ export class EventsService {
 
   async geteventsPagingDetails() {
     const eventsObservable: Observable<any> = this.getEventsByProgramIdObservable(
-      { fields: 'none' },
+      { fields: 'none', pageFilter: 'totalPages=true' },
     );
     return await this.promiseService.getPromiseFromObservable(eventsObservable);
   }
@@ -103,18 +99,24 @@ export class EventsService {
   private async formatEvents(events: Array<EventResponse>) {
     let formattedEvents = [];
     try {
-      const ouArr = map(events || [], (event) => event.orgUnit);
-      const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
-        ouArr,
+      const orgUnitWithAncestors = [];
+      const ouIds = uniq(
+        flattenDeep(map(events || [], (event: any) => event.orgUnit || [])),
       );
-      const orgUnitWithAncestors = await this.promiseService.getPromiseFromObservable(
-        orgUnitWithAncenstorsObservable,
-      );
+      for (const orgUnitIds of chunk(ouIds, 2)) {
+        const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
+          orgUnitIds,
+        );
+        const response = await this.promiseService.getPromiseFromObservable(
+          orgUnitWithAncenstorsObservable,
+        );
+        orgUnitWithAncestors.push(response.organisationUnits || []);
+      }
       formattedEvents = map(events || [], (eventItem) => {
         const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,
           eventItem?.orgUnitName,
-          orgUnitWithAncestors,
+          flattenDeep(orgUnitWithAncestors),
         );
         const dataValues = [
           ...this.formatDataValues(eventItem?.dataValues),
@@ -129,6 +131,7 @@ export class EventsService {
       return formattedEvents;
     }
   }
+
   formatDataValues(dataValues: Array<any>): Array<any> {
     let sysmptoms = '';
     return [
@@ -180,6 +183,7 @@ export class EventsService {
     const eventObservable = this.getEventByIdObservable(eventId);
     return await this.promiseService.getPromiseFromObservable(eventObservable);
   }
+
   async updateCaseNumberPromise({ data, eventId }) {
     let response = null;
     try {

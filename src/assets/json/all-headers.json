@@ -36,11 +36,6 @@
     "valueType": "NUMBER"
   },
   {
-    "name": "EicmBDTb8Zm",
-    "column": "Reason for calling 6666",
-    "valueType": "LONG_TEXT"
-  },
-  {
     "name": "symptoms",
     "column": "Signs and symptoms",
     "valueType": "TEXT",
@@ -63,19 +58,13 @@
     "valueType": "BOOLEAN"
   },
   {
-    "name": "cAR4cU2Csdq",
-    "column": "Sought Information",
-    "valueType": "TEXT"
-  },
-  { "name": "Jhxp9OZ19TD", "column": "Sought Assistance", "valueType": "TEXT" },
-  {
     "name": "state",
     "column": "State",
     "valueType": "TEXT"
   },
   {
-    "name": "county",
-    "column": "County",
+    "name": "country",
+    "column": "Country",
     "valueType": "TEXT"
   },
   {

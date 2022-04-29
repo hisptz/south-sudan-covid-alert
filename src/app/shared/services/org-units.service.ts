@@ -1,55 +1,58 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { apiLink } from '../../../assets/configurations/apiLink';
-import { find, uniq } from 'lodash';
+import { find } from 'lodash';
 
-import { catchError, take } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class OrgUnitsService {
-  apiUrl = apiLink;
-
   constructor(private httpClient: HttpClient) {}
 
-  loadOrgUnitDataWithAncestors(orgUnitIdArr: Array<any>): Observable<any> {
-    const formattedOrgUnitArr = uniq(orgUnitIdArr);
-    const orgUnitArrStr = formattedOrgUnitArr.toString();
+  loadOrgUnitDataWithAncestors(orgUnitIds: Array<string>): Observable<any> {
     const url =
-      this.apiUrl +
-      `organisationUnits.json?fields=id,name,ancestors[id,name]&filter=id:in:[${orgUnitArrStr}]&paging=false`;
+      apiLink +
+      `organisationUnits.json?fields=id,name,ancestors[id,name,level]&filter=id:in:[${orgUnitIds.join(
+        ',',
+      )}]&paging=false`;
     return this.httpClient
       .get(url)
       .pipe(catchError((error) => throwError(error)));
   }
-  getAncestors(ou: string, ouName: string, ancestorsOrgUnitData: any) {
+
+  getAncestors(ou: string, ouName: string, organisationUnits: any[]) {
     const orgUnit = find(
-      ancestorsOrgUnitData.organisationUnits || [],
-      (obj) => obj.id === ou,
+      organisationUnits || [],
+      (organisationUnit: any) => organisationUnit.id === ou,
     );
-    const ancestors = orgUnit && orgUnit.ancestors ? orgUnit.ancestors : [];
-    //TODO improve logics for get value for ancestors
+    const country = this.getAncestorByLevel(orgUnit.ancestors || [], 3);
+    const state = this.getAncestorByLevel(orgUnit.ancestors || [], 2);
+    const payam = this.getAncestorByLevel(orgUnit.ancestors || [], 4);
     return [
       {
         dataElement: 'country',
-        value: ancestors[0]?.name || '',
+        value: country.name || '',
       },
       {
         dataElement: 'state',
-        value: ancestors[1]?.name || '',
-      },
-      {
-        dataElement: 'county',
-        value: ancestors[2]?.name || '',
+        value: state.name || '',
       },
       {
         dataElement: 'payam',
-        value: ancestors[3]?.name || '',
+        value: payam.name || '',
       },
       {
         dataElement: 'ouname',
         value: ouName || '',
       },
     ];
+  }
+
+  getAncestorByLevel(ancestors: any[], level: number) {
+    return find(
+      ancestors,
+      (ancestor: any) => ancestor.level && ancestor.level === level,
+    );
   }
 }
