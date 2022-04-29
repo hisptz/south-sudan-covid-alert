@@ -202,6 +202,7 @@ export class HomeComponent implements OnInit {
   closeEventDataSection(data: any) {
     if (data && data.closeView) {
       this.allRegisteredHeaders = ALL_REGISTERED_HEADERS;
+      this.reportedToRRTHeaders = REPORTED_TO_RRT_HEADERS;
       this.eventToShow = null;
     }
   }

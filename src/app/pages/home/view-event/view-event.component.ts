@@ -31,7 +31,7 @@ export class ViewEventComponent implements OnInit {
     WinPrint.print();
     setTimeout(() => {
       WinPrint.close();
-    }, 2*1000);
+    }, 2 * 1000);
   }
 
   getTableData() {
