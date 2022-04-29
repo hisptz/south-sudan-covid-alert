@@ -63,8 +63,8 @@
     "valueType": "TEXT"
   },
   {
-    "name": "county",
-    "column": "County",
+    "name": "country",
+    "column": "Country",
     "valueType": "TEXT"
   },
   {

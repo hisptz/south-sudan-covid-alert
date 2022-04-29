@@ -69,8 +69,8 @@
       "valueType": "TEXT"
     },
     {
-      "name": "county",
-      "column": "County",
+      "name": "country",
+      "column": "Country",
       "valueType": "TEXT"
     },
     {
@@ -104,7 +104,7 @@
     "sbwDPRnLzYY",
     "ouname",
     "state",
-    "county",
+    "country",
     "payam",
     "symptoms",
     "CEjSf5UFrHP"
