@@ -7,7 +7,7 @@
             You can not view contents of this application, Please contact System Adminstrator
         </h2>
     </div>
-    <mat-tab-group (selectedTabChange)="eventToShow = null">
+    <mat-tab-group (selectedTabChange)="selectedTabChange()">
         <mat-tab label="All Registered" *ngIf="isAuthorised(currentUser, authorities.VIEW_REGISTERED_CALLS)">
             <div class="container-fluid px-0">
                 <div class="row mx-0 w-100">
@@ -21,6 +21,7 @@
                             </div>
                         </div>
                         <div class="col-sm" *ngIf="!eventToShow">
+
                             <button style="
                                 float: right;
                                 border: 1px solid lightgray;
@@ -28,6 +29,15 @@
                                 margin-bottom: 1em;
                               " (click)="onDownloadAllAlert()" [disabled]="(this.eventsLoading$ | async)" mat-icon-button>
                               <mat-icon>download</mat-icon>
+                            </button>
+                            <button style="
+                                float: right;
+                                border: 1px solid lightgray;
+                                border-radius: 5px;
+                                margin-bottom: 1em;
+                                margin-right: 1rem;
+                                " [disabled]="(alertsToPrint.length === 0)" (click)="onPrintAlerts()" mat-icon-button>
+                                <mat-icon>print</mat-icon>
                             </button>
                         </div>
                     </div>
@@ -39,6 +49,7 @@
                                 <table class="table table-bordered table-hover w-100">
                                     <thead>
                                         <tr class="text-muted">
+                                            <th></th>
                                             <th>SN</th>
                                             <th *ngFor="let header of allRegisteredHeaders">
                                                 {{ header?.column }}
@@ -61,10 +72,13 @@
                         let i = index;
                         trackBy: trackByFn
                       ">
-                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" (click)="showEventData(row)">
+                                            <td class=" {{ row == eventToShow || alertsToPrint.includes(row)  ?'highlight-row' : ''}}" (click)="selectAlertForPrint(row)">
+                                                <mat-checkbox [checked]="alertsToPrint.includes(row)" [disabled]="true"></mat-checkbox>
+                                            </td>
+                                            <td class=" {{ row == eventToShow || alertsToPrint.includes(row)  ?'highlight-row' : ''}}" (click)="showEventData(row)">
                                                 {{ getRowNumber(row, eventAnalytics) }}
                                             </td>
-                                            <td class=" {{ row == eventToShow ?'highlight-row' : ''}}" *ngFor="let header of allRegisteredHeaders" (click)="
+                                            <td class=" {{ row == eventToShow || alertsToPrint.includes(row) ?'highlight-row' : ''}}" *ngFor="let header of allRegisteredHeaders" (click)="
                           showEventData(
                             row,
                             header?.name
@@ -212,6 +226,7 @@
                 </div>
               </div>
               <div class="col-sm" *ngIf="!eventToShow">
+               
                 <button style="
                     float: right;
                     border: 1px solid lightgray;
@@ -223,11 +238,21 @@
                   mat-icon-button>
                   <mat-icon>download</mat-icon>
                 </button>
+                <button style="
+                  float: right;
+                  border: 1px solid lightgray;
+                  border-radius: 5px;
+                  margin-bottom: 1em;
+                  margin-right: 1rem;
+                  " 
+                  [disabled]="(alertsToPrint.length === 0)"
+                  (click)="onPrintAlerts()" mat-icon-button>
+                  <mat-icon>print</mat-icon>
+                </button>
             </div>
             </div>
           </div>
           <!-- Search field with buttons -->
-          <!-- {{eventsAnalytics$ | async | json }} -->
 
           <!-- Table card section  -->
           <div
@@ -239,6 +264,7 @@
               <table class="table table-bordered overflow-auto">
                 <thead>
                   <tr class="text-muted">
+                    <th></th>
                     <th>SN</th>
                     <th *ngFor="let header of reportedToRRTHeaders">
                       {{ header?.column }}
@@ -273,6 +299,9 @@
                       let i = index
                     "
                   >
+                  <td class=" {{ row == eventToShow || alertsToPrint.includes(row)  ?'highlight-row' : ''}}" (click)="selectAlertForPrint(row)">
+                    <mat-checkbox [checked]="alertsToPrint.includes(row)" [disabled]="true"></mat-checkbox>
+                </td>
                     <td class=" {{ row == eventToShow ?'highlight-row' : ''}}"  (click)="showEventData(row)">
                       {{
                         getRowNumber(
