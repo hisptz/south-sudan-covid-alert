@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 export const materialModules: any[] = [
   MatRippleModule,
@@ -36,4 +37,5 @@ export const materialModules: any[] = [
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
+  MatCheckboxModule,
 ];

@@ -103,7 +103,7 @@ export class EventsService {
       const ouIds = uniq(
         flattenDeep(map(events || [], (event: any) => event.orgUnit || [])),
       );
-      for (const orgUnitIds of chunk(ouIds, 2)) {
+      for (const orgUnitIds of chunk(ouIds, 50)) {
         const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
           orgUnitIds,
         );
