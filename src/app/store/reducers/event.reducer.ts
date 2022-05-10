@@ -33,12 +33,14 @@ export const eventReducer = createReducer(
     ...state,
     eventsLoading: true,
   })),
-  on(loadEventsByProgramIdSuccess, (state, { events }) => ({
-    ...state,
-    eventsLoading: false,
-    hasError: false,
-    events,
-  })),
+  on(loadEventsByProgramIdSuccess, (state, { events, isCompleted }) =>{
+    return ({
+      ...state,
+      eventsLoading: isCompleted ?  false : true,
+      hasError: false,
+      events,
+    });
+  }),
   on(loadEventsByProgramIdFailure, (state, action) => ({
     ...state,
     eventsLoading: false,

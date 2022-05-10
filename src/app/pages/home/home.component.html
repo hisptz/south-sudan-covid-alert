@@ -61,8 +61,12 @@
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody *ngIf="
-                      !(eventsLoading$ | async) && eventsByProgramId$
+                                    <tbody *ngIf="eventsLoading$ | async">
+                                        <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                        </td>
+                                    </tbody>
+                                    <tbody *ngIf="eventsByProgramId$
                         | async as eventAnalytics
                     ">
                                         <tr *ngFor="
@@ -136,8 +140,7 @@
                                         </td>
                                     </tbody>
                                     <tbody *ngIf="
-                      !(eventsLoading$ | async) &&
-                      (!(eventsByProgramId$ | async).length ||
+                                    !(eventsLoading$ | async) &&(!(eventsByProgramId$ | async).length ||
                         !(
                           eventsByProgramId$
                           | async
@@ -148,12 +151,7 @@
                                             <i>There is no case to show</i>
                                         </td>
                                     </tbody>
-                                    <tbody *ngIf="eventsLoading$ | async">
-                                        <td colspan="100%" style="border-right: 1px solid #dee2e6">
-                                            <div class="color-gray">Loading data</div>
-                                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                                        </td>
-                                    </tbody>
+
                                     <tbody *ngIf="
                       (
                         eventsByProgramId$
@@ -179,7 +177,7 @@
                     "
                   >
                     <tr>
-                      <td [attr.colspan]="18">
+                      <td colspan="100%">
                         <mat-paginator
                           [length]="(eventsByProgramId$ | async).length"
                           [pageSize]="pageSize"
@@ -271,6 +269,11 @@
                     </th>
                   </tr>
                 </thead>
+                <tbody *ngIf="eventsLoading$ | async">
+                  <td colspan="100%" style="border-right: 1px solid #dee2e6">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                  </td>
+                </tbody>
                 <tbody
                   *ngIf="
                     !(eventsLoading$ | async) &&
@@ -326,12 +329,6 @@
                     <i>There is no data to show at the moment.</i>
                   </td>
                 </tbody>
-                <tbody *ngIf="eventsLoading$ | async">
-                  <td colspan="100%" style="border-right: 1px solid #dee2e6">
-                    <div>Loading data</div>
-                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                  </td>
-                </tbody>
                 <tbody
                   *ngIf="
                     (
@@ -351,7 +348,7 @@
                 </tbody>
                 <tfoot>
                   <tr *ngIf="eventsByProgramId$ | async as eventAnalytics">
-                    <td [attr.colspan]="13">
+                    <td colspan="100%">
                       <mat-paginator
                         [length]="getReportedToRRTEvents(eventAnalytics).length"
                         [pageSize]="rPageSize"

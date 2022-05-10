@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import * as XLSX from 'xlsx';
 import { Observable } from 'rxjs';
 import { FilterByPipe } from 'ngx-pipes';
-import { map, flattenDeep, findIndex, filter } from 'lodash';
+import { map, flattenDeep, findIndex,  } from 'lodash';
 import { updateReportToRRT } from 'src/app/store/actions/report.actions';
 import { convertExponentialToDecimal } from 'src/app/shared/helpers/convert-exponential-to-decimal.helper';
 import { commonUsedIds } from '../../shared/models/alert.model';
