@@ -7,7 +7,7 @@ export const loadEventsByProgramId = createAction(
 
 export const loadEventsByProgramIdSuccess = createAction(
   '[Events] Load Events Success By Program ID',
-  props<{ events: Array<EventResponse> }>(),
+  props<{ events: Array<EventResponse>, isCompleted : boolean }>(),
 );
 
 export const loadEventsByProgramIdFailure = createAction(
