@@ -13,6 +13,9 @@ import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-d
 import { commonUsedIds, definedSysmptoms } from '../models/alert.model';
 import { calculateAge } from '../helpers/calculate-age.helper';
 import { getFormattedPayloadForUpdate } from '../helpers/get-formatted-payload.helper';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/reducers';
+import { loadEventsByProgramIdSuccess } from 'src/app/store/actions';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +25,7 @@ export class EventsService {
     private httpClient: HttpClient,
     private promiseService: PromiseService,
     private orgUnitsService: OrgUnitsService,
+    private store: Store<AppState>,
   ) {}
 
   updateEventBySingleDataValue(
@@ -76,6 +80,9 @@ export class EventsService {
           events = eventsResult?.events?.length
             ? [...events, ...(eventsResult?.events ?? [])]
             : [...events];
+          const response = await this.formatEvents(events);
+          this.store.dispatch(loadEventsByProgramIdSuccess({ events:response , isCompleted: false }));
+
         }
       }
     } catch (e) {
