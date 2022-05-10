@@ -13,6 +13,9 @@ import { convertExponentialToDecimal } from '../helpers/convert-exponential-to-d
 import { commonUsedIds, definedSysmptoms } from '../models/alert.model';
 import { calculateAge } from '../helpers/calculate-age.helper';
 import { getFormattedPayloadForUpdate } from '../helpers/get-formatted-payload.helper';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/reducers';
+import { loadEventsByProgramIdSuccess } from 'src/app/store/actions';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +25,7 @@ export class EventsService {
     private httpClient: HttpClient,
     private promiseService: PromiseService,
     private orgUnitsService: OrgUnitsService,
+    private store: Store<AppState>,
   ) {}
 
   updateEventBySingleDataValue(
@@ -57,10 +61,13 @@ export class EventsService {
       .pipe(catchError((error) => throwError(error)));
   }
 
-  async getEventsByProgramIdPromise() {
+  async getEventsByProgramIdPromise( ) {
+    const fields = `fields=program,event,eventDate,orgUnit,orgUnitName,dataValues[dataElement,value]`;
     let events: Array<EventResponse> = [];
+    let  orgUnitWithAncestors : Array<any> = [];
     try {
-      const fields = `fields=program,event,eventDate,orgUnit,orgUnitName,dataValues[dataElement,value]`;
+      orgUnitWithAncestors =  await this.orgUnitsService.discoveringOrganisationUnitsWithAncestors();
+      console.log(orgUnitWithAncestors);
       const pagingDetails = await this.geteventsPagingDetails();
       const pagingFilters = getDataPaginationFilters(pagingDetails, 1000);
       if (pagingFilters?.length) {
@@ -76,12 +83,15 @@ export class EventsService {
           events = eventsResult?.events?.length
             ? [...events, ...(eventsResult?.events ?? [])]
             : [...events];
+          const response = await this.formatEvents(events, orgUnitWithAncestors);
+          this.store.dispatch(loadEventsByProgramIdSuccess({ events:response , isCompleted: false }));
+
         }
       }
     } catch (e) {
       throw new Error(e?.message || `Failed to fetch events`);
     } finally {
-      return await this.formatEvents(events);
+      return await this.formatEvents(events,orgUnitWithAncestors);
     }
   }
 
@@ -96,22 +106,9 @@ export class EventsService {
     return await this.promiseService.getPromiseFromObservable(eventsObservable);
   }
 
-  private async formatEvents(events: Array<EventResponse>) {
+  private async formatEvents(events: Array<EventResponse>, orgUnitWithAncestors : any[]) {
     let formattedEvents = [];
     try {
-      const orgUnitWithAncestors = [];
-      const ouIds = uniq(
-        flattenDeep(map(events || [], (event: any) => event.orgUnit || [])),
-      );
-      for (const orgUnitIds of chunk(ouIds, 50)) {
-        const orgUnitWithAncenstorsObservable = this.orgUnitsService.loadOrgUnitDataWithAncestors(
-          orgUnitIds,
-        );
-        const response = await this.promiseService.getPromiseFromObservable(
-          orgUnitWithAncenstorsObservable,
-        );
-        orgUnitWithAncestors.push(response.organisationUnits || []);
-      }
       formattedEvents = map(events || [], (eventItem) => {
         const orgUnitData = this.orgUnitsService.getAncestors(
           eventItem?.orgUnit,

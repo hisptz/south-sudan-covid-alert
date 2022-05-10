@@ -1,24 +1,45 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { apiLink } from '../../../assets/configurations/apiLink';
-import { find } from 'lodash';
-
-import { catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { find,flattenDeep } from 'lodash';
+import {  take } from 'rxjs/operators';
+import { getDataPaginationFilters } from '../helpers/request.helper';
 
 @Injectable()
 export class OrgUnitsService {
   constructor(private httpClient: HttpClient) {}
 
-  loadOrgUnitDataWithAncestors(orgUnitIds: Array<string>): Observable<any> {
-    const url =
-      apiLink +
-      `organisationUnits.json?fields=id,name,ancestors[id,name,level]&filter=id:in:[${orgUnitIds.join(
-        ',',
-      )}]&paging=false`;
-    return this.httpClient
-      .get(url)
-      .pipe(catchError((error) => throwError(error)));
+  async discoveringOrganisationUnitsWithAncestors( ): Promise<any[]>{
+    const organisationUnits: any = [];
+    const pagingFilters =  await this.discoveringOrganisationUnitPaginations();
+    for(const pagingFilter of pagingFilters){
+      const response = await this.discoveringOrganisationUnitByPagination(pagingFilter);
+      organisationUnits.push(response);
+    }
+    return flattenDeep(organisationUnits);
+  }
+
+  discoveringOrganisationUnitPaginations() : Promise<Array<String>>{
+    const url = `${apiLink}organisationUnits.json`;
+    return new Promise((resolve,reject)=>{
+      this.httpClient.get(`${url}?fields=none&pageSize=1`).pipe(take(1)).subscribe(pagingDetails=>{
+        const pagingFilters = getDataPaginationFilters(pagingDetails, 1000);
+        resolve(pagingFilters);
+      },()=>{
+        resolve([]);
+      })
+    })
+  }
+
+  discoveringOrganisationUnitByPagination(pageFilter : any) : Promise<Array<String>>{
+    const url = `${apiLink}organisationUnits.json?fields=id,name,ancestors[id,name,level]&${pageFilter}`;
+    return new Promise((resolve,reject)=>{
+      this.httpClient.get(`${url}`).pipe(take(1)).subscribe((response:any)=>{
+        resolve(response.organisationUnits || []);
+      },()=>{
+        resolve([]);
+      })
+    })
   }
 
   getAncestors(ou: string, ouName: string, organisationUnits: any[]) {
